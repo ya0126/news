@@ -1,0 +1,20 @@
+package com.heima.model.wemedia.dtos;
+
+import com.heima.model.common.dtos.PageRequestDto;
+import com.heima.model.wemedia.pojos.WmMaterial;
+import lombok.Data;
+
+/**
+ * TODO
+ *
+ * @author yaoh
+ */
+@Data
+public class WmMaterialDto extends PageRequestDto {
+
+    /**
+     * 1 收藏
+     * 0 未收藏
+     */
+    private Short isCollection;
+}

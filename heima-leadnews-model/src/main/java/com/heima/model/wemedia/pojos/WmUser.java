@@ -10,9 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>
  * 自媒体用户信息表
- * </p>
  *
  * @author itheima
  */
@@ -78,9 +76,9 @@ public class WmUser implements Serializable {
 
     /**
      * 状态
-            0 暂时不可用
-            1 永久不可用
-            9 正常可用
+     * 0 暂时不可用
+     * 1 永久不可用
+     * 9 正常可用
      */
     @TableField("status")
     private Integer status;
@@ -93,9 +91,9 @@ public class WmUser implements Serializable {
 
     /**
      * 账号类型
-            0 个人 
-            1 企业
-            2 子账号
+     * 0 个人
+     * 1 企业
+     * 2 子账号
      */
     @TableField("type")
     private Integer type;

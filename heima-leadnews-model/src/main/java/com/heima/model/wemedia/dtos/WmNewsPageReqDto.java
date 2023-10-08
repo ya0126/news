@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * TODO
+ * 自媒体图文dto
  *
  * @author yaoh
  */

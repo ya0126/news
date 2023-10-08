@@ -71,7 +71,7 @@ public class MinIOFileStorageService implements FileStorageService {
 
         try {
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
-                    .object(filename)
+                    .object(filePath)
                     .contentType("image/jpg")
                     .bucket(minIOConfigProperties.getBucket())
                     .stream(inputStream, inputStream.available(), -1)

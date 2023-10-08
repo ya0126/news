@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.model.wemedia.pojos.WmUser;
@@ -27,6 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Transactional
 public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> implements WmNewsService {
+
+    /**
+     * 查询所有自媒体图文
+     *
+     * @param dto
+     * @return
+     */
     @Override
     public ResponseResult findAll(WmNewsPageReqDto dto) {
 
@@ -79,5 +87,24 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         ResponseResult responseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         responseResult.setData(page.getRecords());
         return responseResult;
+    }
+
+    @Override
+    public ResponseResult addNews(WmNewsDto dto) {
+
+        WmUser user = WmThreadLocalUtil.getUser();
+        if (user == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+        }
+
+        WmNews wmNews = new WmNews();
+
+
+        return null;
+    }
+
+    @Override
+    public ResponseResult updateNews(WmNewsDto dto) {
+        return null;
     }
 }

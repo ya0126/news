@@ -42,5 +42,6 @@ public interface FileStorageService {
      * @param pathUrl 文件全路径
      * @return
      */
-    public byte[] downLoadFile(String pathUrl);
+    public <T> T downLoadFile(String pathUrl, Class<T> retutnType);
+
 }

@@ -151,7 +151,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         //获取到文章内容中的图片信息
         List<String> materials = ectractUrlInfo(dto.getContent());
         saveRelativeInfoForContent(materials, wmNews.getId());
-        return null;
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
     /**

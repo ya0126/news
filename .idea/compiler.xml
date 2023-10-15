@@ -16,6 +16,7 @@
         <module name="heima-leadnews-feign-api" />
         <module name="heima-leadnews-user" />
         <module name="heima-leadnews-article" />
+        <module name="heima-leadnews-app-gateway" />
         <module name="heima-leadnews-common" />
         <module name="heima-leadnews-model" />
       </profile>
@@ -31,6 +32,7 @@
       <module name="heima-file-starter" options="-parameters" />
       <module name="heima-leadnews" options="-parameters" />
       <module name="heima-leadnews-apis" options="-parameters" />
+      <module name="heima-leadnews-app-gateway" options="-parameters" />
       <module name="heima-leadnews-article" options="-parameters" />
       <module name="heima-leadnews-basic" options="-parameters" />
       <module name="heima-leadnews-common" options="-parameters" />

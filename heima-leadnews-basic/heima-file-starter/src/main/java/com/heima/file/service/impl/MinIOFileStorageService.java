@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -150,34 +149,37 @@ public class MinIOFileStorageService implements FileStorageService {
     }
 
     @Override
-    public byte[] downLoadFile(String pathUrl) {
+    public <T> T downLoadFile(String pathUrl, Class<T> returnType) {
         String key = pathUrl.replace(minIOConfigProperties.getEndpoint() + "/", "");
         int index = key.indexOf(separator);
         String bucket = key.substring(0, index);
         String filePath = key.substring(index + 1);
 
-        InputStream inputStream = null;
         try {
-            inputStream = minioClient.getObject(GetObjectArgs.builder()
-                    .bucket(bucket).object(filePath).build());
+            InputStream inputStream = minioClient.getObject(GetObjectArgs.builder().bucket(bucket).object(filePath).build());
+
+            if (returnType == InputStream.class) {
+                return returnType.cast(inputStream);
+            }
+
+            if (returnType == byte[].class) {
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+
+                return returnType.cast(outputStream);
+            }
+
         } catch (Exception e) {
-            log.error("minio down file error.  pathUrl:{}", pathUrl);
+            log.error("minio文件下载失败.  pathUrl:{}", pathUrl);
             e.printStackTrace();
         }
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buff = new byte[100];
-        int rc = 0;
-
-        while (true) {
-            try {
-                if ((rc = inputStream.read(buff, 0, 100)) > 0) break;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            outputStream.write(buff, 0, rc);
-        }
-        return outputStream.toByteArray();
+        return null;
     }
+
 }

@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author yaoh
  */
 @RestController
-@RequestMapping("/api/v1/material/")
+@RequestMapping("/api/v1/material")
 public class WmMaterialController {
 
     private WmMaterialService wmMaterialService;

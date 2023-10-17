@@ -150,7 +150,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         WmMaterial wmMaterial = getById(materialId);
 
         if (wmMaterial != null && wmMaterial.getIsCollection() != null) {
-            wmMaterial.setIsCollection((short) );
+            wmMaterial.setIsCollection((short) 1);
             updateById(wmMaterial);
         }
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);

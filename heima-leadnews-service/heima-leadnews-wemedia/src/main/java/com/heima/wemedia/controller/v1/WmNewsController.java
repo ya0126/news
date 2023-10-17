@@ -4,10 +4,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.wemedia.service.WmNewsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 自媒体图文引用素材信息接口
@@ -33,6 +30,22 @@ public class WmNewsController {
     @PostMapping("/list")
     public ResponseResult findAll(@RequestBody WmNewsPageReqDto dto) {
         return wmNewsService.findAll(dto);
+    }
+
+    /**
+     * 根据id获取文章
+     *
+     * @param newsId
+     * @return ResponseResult
+     */
+    @GetMapping("/one/{newsId}")
+    public ResponseResult getOne(@PathVariable("newsId") Integer newsId) {
+        return ResponseResult.okResult(wmNewsService.getById(newsId));
+    }
+
+    @GetMapping("/del_news/{newsId}")
+    public ResponseResult deleteNews(@PathVariable("newsId") Integer newsId){
+        return wmNewsService.deleteNewsById(newsId);
     }
 
     /**

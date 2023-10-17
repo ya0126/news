@@ -152,12 +152,34 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         }
 
         //3.不是草稿，保存文章内容图片与素材的关系
-        //获取到文章内容中的图片信息
+        // 获取到文章内容中的图片信息
         List<String> materials = ectractUrlInfo(dto.getContent());
         saveRelativeInfoForContent(materials, wmNews.getId());
 
         // 审核代码
         wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
+
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 根据id删除文章
+     *
+     * @param newsId
+     * @return
+     */
+    @Override
+    public ResponseResult deleteNewsById(Integer newsId) {
+
+        if (newsId == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
+        // 删除文章
+        removeById(newsId);
+
+        // 删除文章关联的素材信息
+        wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId,newsId));
 
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }

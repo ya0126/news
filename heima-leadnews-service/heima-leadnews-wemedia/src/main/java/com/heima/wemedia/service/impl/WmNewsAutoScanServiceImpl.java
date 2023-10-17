@@ -1,6 +1,7 @@
 package com.heima.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.apis.article.IArticleClient;
 import com.heima.common.aliyun.ImageScan;
 import com.heima.common.aliyun.TextScan;
@@ -11,9 +12,12 @@ import com.heima.model.common.enums.AliImageServiceCode;
 import com.heima.model.common.enums.AliTextServiceCode;
 import com.heima.model.wemedia.pojos.WmChannel;
 import com.heima.model.wemedia.pojos.WmNews;
+import com.heima.model.wemedia.pojos.WmSensitive;
 import com.heima.model.wemedia.pojos.WmUser;
+import com.heima.utils.common.SensitiveWordUtil;
 import com.heima.wemedia.mapper.WmChannelMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
+import com.heima.wemedia.mapper.WmSensitiveMapper;
 import com.heima.wemedia.mapper.WmUserMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
 import lombok.extern.slf4j.Slf4j;
@@ -63,15 +67,20 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             // 1.从内容中提取纯文本内容和图片
             Map<String, Object> textAndImages = handleTextAndImages(wmNews);
 
-            // 2.审核文本内容
+
+            // 2.自管理的敏感词过滤
+            boolean isSensitive = handleSensitiveScan((String) textAndImages.get("content"), wmNews);
+            if (!isSensitive) return;
+
+            // 3.审核文本内容
             boolean isTextScan = handleTextScan((String) textAndImages.get("content"), wmNews);
             if (!isTextScan) return;
 
-            // 3.审核图片
+            // 4.审核图片
             boolean isImageScan = handleImageScan((List<String>) textAndImages.get("images"), wmNews);
             if (!isImageScan) return;
 
-            // 4.审核成功，保存app端的相关的文章数据
+            // 5.审核成功，保存app端的相关的文章数据
             ResponseResult responseResult = saveAppArticle(wmNews);
 
             // 回填article_id
@@ -80,6 +89,36 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         }
 
 
+    }
+
+    @Autowired
+    private WmSensitiveMapper wmSensitiveMapper;
+
+    /**
+     * 自管理的敏感词审核
+     *
+     * @param content
+     * @param wmNews
+     * @return boolean
+     */
+    private boolean handleSensitiveScan(String content, WmNews wmNews) {
+
+        boolean flag = true;
+
+        // 查询所有敏感词
+        List<WmSensitive> wmSensitives = wmSensitiveMapper.selectList(Wrappers.<WmSensitive>lambdaQuery().select(WmSensitive::getSensitives));
+        List<String> sensitives = wmSensitives.stream().map(WmSensitive::getSensitives).collect(Collectors.toList());
+
+        //初始化敏感词库
+        SensitiveWordUtil.initMap(sensitives);
+
+        //查看文章中是否包含敏感词
+        Map<String, Integer> map = SensitiveWordUtil.matchWords(content);
+        if (map.size() > 0) {
+            updateWmNews(wmNews, (short) 2, "当前文章中存在违规内容" + map);
+            flag = false;
+        }
+        return flag;
     }
 
     @Autowired

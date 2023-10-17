@@ -23,6 +23,7 @@ import com.heima.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,6 +111,9 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         return responseResult;
     }
 
+    @Autowired
+    private WmNewsAutoScanServiceImpl wmNewsAutoScanService;
+
     /**
      * 发布文章或保存草稿
      *
@@ -151,6 +155,10 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         //获取到文章内容中的图片信息
         List<String> materials = ectractUrlInfo(dto.getContent());
         saveRelativeInfoForContent(materials, wmNews.getId());
+
+        // 审核代码
+        wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
+
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 

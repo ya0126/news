@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 /**
- * TODO
+ * wmToken拦截器
  *
  * @author yaoh
  */
@@ -35,8 +35,6 @@ public class WmTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("清理ThreadLocal...");
         WmThreadLocalUtil.clear();
     }
-
 }

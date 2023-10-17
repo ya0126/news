@@ -13,6 +13,7 @@ import com.heima.model.wemedia.pojos.WmMaterial;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.service.WmMaterialService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -105,5 +106,73 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         ResponseResult responseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         responseResult.setData(page.getRecords());
         return responseResult;
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param materialId
+     * @return
+     */
+    @Override
+    public ResponseResult deletePicture(Integer materialId) {
+
+        if (materialId == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
+        WmMaterial wmMaterial = getById(materialId);
+
+        String url = wmMaterial.getUrl();
+        if (StringUtils.isNoneBlank(url)) {
+            // 删除文件系统图片
+            fileStorageService.delete(url);
+        }
+
+        // 删除数据库保存的图片信息
+        removeById(materialId);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 图片收藏
+     *
+     * @param materialId
+     * @return
+     */
+    @Override
+    public ResponseResult collect(Integer materialId) {
+
+        if (materialId == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
+        WmMaterial wmMaterial = getById(materialId);
+
+        if (wmMaterial != null && wmMaterial.getIsCollection() != null) {
+            wmMaterial.setIsCollection((short) );
+            updateById(wmMaterial);
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 取消收藏图片
+     * @param materialId
+     * @return
+     */
+    @Override
+    public ResponseResult cancelCollect(Integer materialId) {
+        if (materialId == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
+        WmMaterial wmMaterial = getById(materialId);
+
+        if (wmMaterial != null && wmMaterial.getIsCollection() != null) {
+            wmMaterial.setIsCollection((short) 0);
+            updateById(wmMaterial);
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

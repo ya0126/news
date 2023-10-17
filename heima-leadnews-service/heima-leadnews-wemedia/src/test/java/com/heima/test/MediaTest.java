@@ -29,9 +29,6 @@ import java.util.Map;
 public class MediaTest {
 
     @Autowired
-    private ImageScan imageScan;
-
-    @Autowired
     private TextScan textScan;
 
     @Test
@@ -41,17 +38,20 @@ public class MediaTest {
     }
 
     @Autowired
-    private WmNewsAutoScanService wmNewsAutoScanService;
-
-    @Test
-    public void autoScanWmNews() {
-        wmNewsAutoScanService.autoScanWmNews(6241);
-    }
+    private ImageScan imageScan;
 
     @Test
     public void imageScan() throws Exception {
         Map result = imageScan.scan("test", new FileInputStream(new File("/Users/yaoh/test.jpg")), AliImageServiceCode.BASELINE_CHECK.getServiceCode());
         System.out.println(result);
+    }
+
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
+
+    @Test
+    public void autoScanWmNews() {
+        wmNewsAutoScanService.autoScanWmNews(6243);
     }
 
     @Autowired

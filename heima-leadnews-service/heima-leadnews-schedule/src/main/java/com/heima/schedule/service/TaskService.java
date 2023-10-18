@@ -3,7 +3,7 @@ package com.heima.schedule.service;
 import com.heima.model.schedule.dtos.Task;
 
 /**
- * TODO
+ * 任务服务类
  *
  * @author yaoh
  */
@@ -24,4 +24,13 @@ public interface TaskService {
      * @return boolean
      */
     public boolean cancelTask(long taskId);
+
+    /**
+     * 按照类型和优先级来拉取任务
+     *
+     * @param type
+     * @param priority
+     * @return
+     */
+    public Task poll(int type, int priority);
 }

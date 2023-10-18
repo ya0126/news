@@ -10,6 +10,7 @@ import com.heima.schedule.mapper.TaskInfoLogsMapper;
 import com.heima.schedule.mapper.TaskInfoMapper;
 import com.heima.schedule.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * TODO
+ * 任务服务实现类
  *
  * @author yaoh
  */
@@ -40,8 +41,9 @@ public class TaskServiceImpl implements TaskService {
         // 添加任务至数据库
         boolean success = addTaskToDB(task);
 
+        // 添加任务到redis
         if (success) addTaskToCache(task);
-        return 0;
+        return task.getTaskId();
     }
 
     /**
@@ -62,6 +64,33 @@ public class TaskServiceImpl implements TaskService {
             flag = true;
         }
         return flag;
+    }
+
+    /**
+     * 按类型和权重拉取任务
+     *
+     * @param type
+     * @param priority
+     * @return
+     */
+    @Override
+    public Task poll(int type, int priority) {
+
+        Task task = null;
+        try {
+            String key = type + "_" + priority;
+            // 从redis中获取任务信息
+            String task_json = cacheService.lRightPop(ScheduleConstants.TOPIC + key);
+            if (StringUtils.isNoneBlank(task_json)) {
+                task = JSON.parseObject(task_json, Task.class);
+                // 修改数据库中的任务信息
+                updateDB(task.getTaskId(), ScheduleConstants.EXECUTED);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("poll task exception");
+        }
+        return task;
     }
 
     /**

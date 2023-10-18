@@ -66,7 +66,7 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
 
             // 把html文件上传到minio中
             InputStream in = new ByteArrayInputStream(out.toString().getBytes());
-            String path = fileStorageService.uploadHtmlFile("", apArticle.getId() + ".html", in);
+            String path = fileStorageService.uploadHtmlFile("html", apArticle.getId() + ".html", in);
 
             // 修改ap_article表，保存static_url字段
             apArticleService.update(Wrappers.<ApArticle>lambdaUpdate().eq(ApArticle::getId, apArticle.getId())

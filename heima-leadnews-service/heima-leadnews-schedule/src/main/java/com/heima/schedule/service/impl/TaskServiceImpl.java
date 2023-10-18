@@ -201,19 +201,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh() {
-        log.info("{}执行了定时任务",System.currentTimeMillis());
+        log.info("{}执行了定时任务", System.currentTimeMillis());
 
-        // 获取所有未来数据集合的key值
-        Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");// future_*
-        for (String futureKey : futureKeys) { // future_250_250
+        String token = cacheService.tryLock("FUTURE_TASK_SYNC", 1000 * 30);
+        if (StringUtils.isNoneBlank(token)) {
+            // 获取所有未来数据集合的key值
+            Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");// future_*
+            for (String futureKey : futureKeys) { // future_250_250
 
-            String topicKey = ScheduleConstants.TOPIC + futureKey.split(ScheduleConstants.FUTURE)[1];
-            //获取该组key下当前需要消费的任务数据
-            Set<String> tasks = cacheService.zRangeByScore(futureKey, 0, System.currentTimeMillis());
-            if (!tasks.isEmpty()) {
-                //将这些任务数据添加到消费者队列中
-                cacheService.refreshWithPipeline(futureKey, topicKey, tasks);
-                log.info("成功的将{},下的当前需要执行的任务数据刷新到{}下",futureKey,topicKey);
+                String topicKey = ScheduleConstants.TOPIC + futureKey.split(ScheduleConstants.FUTURE)[1];
+                // 获取该组key下当前需要消费的任务数据
+                Set<String> tasks = cacheService.zRangeByScore(futureKey, 0, System.currentTimeMillis());
+                if (!tasks.isEmpty()) {
+                    // 将这些任务数据添加到消费者队列中
+                    cacheService.refreshWithPipeline(futureKey, topicKey, tasks);
+                    log.info("成功的将{},下的当前需要执行的任务数据刷新到{}下", futureKey, topicKey);
+                }
             }
         }
     }

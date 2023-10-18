@@ -1,6 +1,7 @@
 package com.heima.schedule.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.common.constants.ScheduleConstants;
 import com.heima.common.redis.CacheService;
 import com.heima.model.schedule.dtos.Task;
@@ -17,8 +18,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -219,5 +222,37 @@ public class TaskServiceImpl implements TaskService {
                 }
             }
         }
+    }
+
+
+    @Scheduled(cron = "0 */5 * * * ?")
+    @PostConstruct
+    public void reloadData() {
+        clearCache();
+        log.info("数据库数据同步到缓存");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 5);
+
+        //查看小于未来5分钟的所有任务
+        List<TaskInfo> taskInfos = taskInfoMapper.selectList(Wrappers
+                .<TaskInfo>lambdaQuery()
+                .lt(TaskInfo::getExecuteTime, calendar.getTime()));
+        if (taskInfos != null && !taskInfos.isEmpty()) {
+            for (TaskInfo taskInfo : taskInfos) {
+                Task task = new Task();
+                BeanUtils.copyProperties(taskInfo, task);
+                task.setExecuteTime(taskInfo.getExecuteTime().getTime());
+                addTaskToCache(task);
+            }
+        }
+    }
+
+    public void clearCache() {
+        // 删除缓存中未来数据集合和当前消费者队列的所有key
+        Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");
+        Set<String> topicKeys = cacheService.scan(ScheduleConstants.TOPIC + "*");
+        cacheService.delete(futureKeys);
+        cacheService.delete(topicKeys);
     }
 }

@@ -150,6 +150,7 @@ public class MinIOFileStorageService implements FileStorageService {
 
     @Override
     public <T> T downLoadFile(String pathUrl, Class<T> returnType) {
+
         String key = pathUrl.replace(minIOConfigProperties.getEndpoint() + "/", "");
         int index = key.indexOf(separator);
         String bucket = key.substring(0, index);
@@ -171,11 +172,11 @@ public class MinIOFileStorageService implements FileStorageService {
                     outputStream.write(buffer, 0, bytesRead);
                 }
 
-                return returnType.cast(outputStream);
+                return returnType.cast(outputStream.toByteArray());
             }
 
         } catch (Exception e) {
-            log.error("minio文件下载失败.  pathUrl:{}", pathUrl);
+            log.error("minio文件下载失败,pathUrl:{}", pathUrl);
             e.printStackTrace();
         }
 

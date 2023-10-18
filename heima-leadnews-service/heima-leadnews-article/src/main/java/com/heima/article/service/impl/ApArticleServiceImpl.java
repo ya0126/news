@@ -6,6 +6,7 @@ import com.heima.article.mapper.ApArticleConfigMapper;
 import com.heima.article.mapper.ApArticleContentMapper;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.ApArticleService;
+import com.heima.article.service.ArticleFreemarkerService;
 import com.heima.common.constants.ArticleConstants;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
@@ -83,6 +84,9 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         return responseResult;
     }
 
+    @Autowired
+    private ArticleFreemarkerService articleFreemarkerService;
+
     /**
      * 保存app端相关文章
      *
@@ -99,23 +103,31 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         ApArticle apArticle = new ApArticle();
         BeanUtils.copyProperties(dto, apArticle);
         if (apArticle.getId() == null) {
+            // 保存文章
             save(apArticle);
 
+            // 保存文章配置
             ApArticleConfig apArticleConfig = new ApArticleConfig(apArticle.getId());
             apArticleConfigMapper.insert(apArticleConfig);
 
+            // 保存文章内容
             ApArticleContent apArticleContent = new ApArticleContent();
             apArticleContent.setArticleId(apArticle.getId());
             apArticleContent.setContent(dto.getContent());
             apArticleContentMapper.insert(apArticleContent);
         } else {
+            // 修改文章
             updateById(apArticle);
 
+            // 修改文章内容
             ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, dto.getId()));
             apArticleContent.setContent(dto.getContent());
             apArticleContentMapper.updateById(apArticleContent);
 
         }
+
+        //异步调用 生成静态文件上传到minio中
+        articleFreemarkerService.buildArticleToMinIO(apArticle,dto.getContent());
         return ResponseResult.okResult(apArticle.getId());
     }
 

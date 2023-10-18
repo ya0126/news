@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.apis.article.IArticleClient;
 import com.heima.common.aliyun.ImageScan;
 import com.heima.common.aliyun.TextScan;
+import com.heima.common.tess4j.Tess4jClient;
 import com.heima.file.service.FileStorageService;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.common.dtos.ResponseResult;
@@ -28,6 +29,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -66,7 +69,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         if (wmNews.getStatus().equals(WmNews.Status.SUBMIT.getCode())) {
             // 1.从内容中提取纯文本内容和图片
             Map<String, Object> textAndImages = handleTextAndImages(wmNews);
-
 
             // 2.自管理的敏感词过滤
             boolean isSensitive = handleSensitiveScan((String) textAndImages.get("content"), wmNews);
@@ -173,6 +175,9 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Autowired
     private ImageScan imageScan;
 
+    @Autowired
+    private Tess4jClient tess4jClient;
+
     /**
      * 审核图片内容 阿里云
      *
@@ -184,28 +189,27 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
 
         boolean flag = true;
 
-        if (images == null || images.size() == 0) {
+        if (images == null || images.isEmpty()) {
             return flag;
         }
-
         // 图片去重
-        List<String> imagesUrlList = images.stream().distinct().collect(Collectors.toList());
-
-        for (String imageUrl : imagesUrlList) {
-
+        HashSet<String> imageUrls = new HashSet<>(images);
+        for (String imageUrl : imageUrls) {
             InputStream inputStream = fileStorageService.downLoadFile(imageUrl, InputStream.class);
-            String fileName = imageUrl.substring(imageUrl.lastIndexOf("/"), imageUrl.length() - 1);
-
             try {
-                Map result = imageScan.scan(fileName, inputStream, AliImageServiceCode.BASELINE_CHECK.getServiceCode());
+                /*BufferedImage imageFile = ImageIO.read(inputStream);
+                // 识别图片的文字
+                String ocrResult = tess4jClient.doOCR(imageFile);
+                boolean isSensitive = handleSensitiveScan(ocrResult, wmNews);
+                if (!isSensitive) return isSensitive;*/
+                String fileName = imageUrl.substring(imageUrl.lastIndexOf("/"), imageUrl.length() - 1);
+                Map scanResult = imageScan.scan(fileName, inputStream, AliImageServiceCode.BASELINE_CHECK.getServiceCode());
 
-                if (result.get("suggestion").equals("block")) {
+                if (scanResult.get("suggestion").equals("block")) {
                     flag = false;
                     updateWmNews(wmNews, (short) 3, "当前文章中存在违规内容");
                 }
-
             } catch (Exception e) {
-
                 throw new RuntimeException(e);
             } finally {
                 try {

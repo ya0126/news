@@ -86,24 +86,27 @@
         </dependency>
     </dependencies>
     <dependencyManagement>
-
         <dependencies>
             <!--内部依赖工程-->
+            <!--feign模块-->
             <dependency>
                 <artifactId>heima-leadnews-feign-api</artifactId>
                 <groupId>com.heima</groupId>
                 <version>${project.version}</version>
             </dependency>
+            <!--common模块-->
             <dependency>
                 <artifactId>heima-leadnews-common</artifactId>
                 <groupId>com.heima</groupId>
                 <version>${project.version}</version>
             </dependency>
+            <!--model模块-->
             <dependency>
                 <artifactId>heima-leadnews-model</artifactId>
                 <groupId>com.heima</groupId>
                 <version>${project.version}</version>
             </dependency>
+            <!--utils模块-->
             <dependency>
                 <artifactId>heima-leadnews-utils</artifactId>
                 <groupId>com.heima</groupId>
@@ -345,17 +348,17 @@
         </testResources>
     </build>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>spring</id>-->
-<!--            <url>https://maven.aliyun.com/repository/spring</url>-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>spring</id>-->
+    <!--            <url>https://maven.aliyun.com/repository/spring</url>-->
+    <!--            <releases>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </releases>-->
+    <!--            <snapshots>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </snapshots>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
 
 </project>

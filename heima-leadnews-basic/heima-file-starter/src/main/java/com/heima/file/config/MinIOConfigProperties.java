@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.io.Serializable;
 
 /**
- * TODO
+ * 读取minio配置文件
  *
  * @author yaoh
  */

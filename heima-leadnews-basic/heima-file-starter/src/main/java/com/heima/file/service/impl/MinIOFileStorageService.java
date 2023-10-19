@@ -19,28 +19,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * TODO
+ * 文件存储服务实现类
  *
  * @author yaoh
  */
-@Slf4j
 @EnableConfigurationProperties(MinIOConfigProperties.class)
 @Import(MinIOConfig.class)
+@Slf4j
 public class MinIOFileStorageService implements FileStorageService {
 
     @Autowired
     private MinioClient minioClient;
-
     @Autowired
     private MinIOConfigProperties minIOConfigProperties;
-
     private final static String separator = "/";
 
     /**
      * 构建文件路径
      *
      * @param dirPath
-     * @param fileName yyyy/mm/dd/file.jpg
+     * @param fileName eg:yyyy/mm/dd/file.jpg
      * @return String
      */
     public String builderFilePath(String dirPath, String fileName) {

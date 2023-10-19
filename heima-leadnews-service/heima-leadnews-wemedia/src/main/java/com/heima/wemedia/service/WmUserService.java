@@ -13,5 +13,4 @@ public interface WmUserService extends IService<WmUser> {
      * @return
      */
     public ResponseResult login(WmLoginDto dto);
-
 }

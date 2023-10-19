@@ -9,6 +9,7 @@ import com.heima.model.wemedia.pojos.WmUser;
 import com.heima.utils.common.AppJwtUtil;
 import com.heima.wemedia.mapper.WmUserMapper;
 import com.heima.wemedia.service.WmUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class WmUserServiceImpl extends ServiceImpl<WmUserMapper, WmUser> implements WmUserService {
 
     @Override
@@ -43,6 +45,8 @@ public class WmUserServiceImpl extends ServiceImpl<WmUserMapper, WmUser> impleme
             wmUser.setSalt("");
             wmUser.setPassword("");
             map.put("user",wmUser);
+
+            log.info("登录成功");
             return ResponseResult.okResult(map);
         }else {
             return ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_PASSWORD_ERROR);

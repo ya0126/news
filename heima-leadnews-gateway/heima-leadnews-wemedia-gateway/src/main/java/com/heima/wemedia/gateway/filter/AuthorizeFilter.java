@@ -1,7 +1,7 @@
 package com.heima.wemedia.gateway.filter;
 
 
-import com.heima.wemedia.gateway.util.AppJwtUtil;
+import com.heima.utils.common.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -42,9 +42,9 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
 
         // 5.判断token是否有效
         try {
-            Claims claimsBody = AppJwtUtil.getClaimsBody(token);
+            Claims claimsBody = JwtUtil.getClaimsBody(token);
             //是否是过期
-            int result = AppJwtUtil.verifyToken(claimsBody);
+            int result = JwtUtil.verifyToken(claimsBody);
             if (result == 1 || result == 2) {
                 log.error("token无效，未认证");
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);

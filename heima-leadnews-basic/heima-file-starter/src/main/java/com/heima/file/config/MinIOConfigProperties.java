@@ -13,9 +13,14 @@ import java.io.Serializable;
 @Data
 @ConfigurationProperties(prefix = "minio")
 public class MinIOConfigProperties implements Serializable {
+
     private String accessKey;
+
     private String secretKey;
+
     private String bucket;
+
     private String endpoint;
+
     private String readPath;
 }

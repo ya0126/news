@@ -5,7 +5,7 @@ import com.heima.model.wemedia.pojos.WmChannel;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * TODO
+ * 文章频道mapper
  *
  * @author yaoh
  */

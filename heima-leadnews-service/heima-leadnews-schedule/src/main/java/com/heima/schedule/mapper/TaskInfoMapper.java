@@ -9,9 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Mapper 接口
+ * 任务信息mapper
  *
- * @author itheima
+ * @author yaoh
  */
 @Mapper
 public interface TaskInfoMapper extends BaseMapper<TaskInfo> {

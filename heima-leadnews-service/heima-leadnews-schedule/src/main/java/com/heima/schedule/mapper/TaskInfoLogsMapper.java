@@ -5,9 +5,9 @@ import com.heima.model.schedule.pojos.TaskinfoLogs;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * Mapper 接口
+ * 任务日志mapper
  *
- * @author itheima
+ * @author yaoh
  */
 @Mapper
 public interface TaskInfoLogsMapper extends BaseMapper<TaskinfoLogs> {

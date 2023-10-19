@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
 
@@ -120,7 +119,7 @@ public class ImageScan {
 
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("阿里云图片审核失败",e);
         }
         return null;
     }

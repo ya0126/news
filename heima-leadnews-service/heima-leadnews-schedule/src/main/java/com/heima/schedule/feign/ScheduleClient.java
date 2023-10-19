@@ -1,6 +1,6 @@
 package com.heima.schedule.feign;
 
-import com.heima.apis.article.IScheduleClient;
+import com.heima.apis.schedule.IScheduleClient;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.schedule.dtos.Task;
 import com.heima.schedule.service.TaskService;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO
+ * 计划FeignClient
  *
  * @author yaoh
  */

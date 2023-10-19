@@ -7,7 +7,7 @@ import com.heima.model.common.enums.AppHttpCodeEnum;
 import org.springframework.stereotype.Component;
 
 /**
- * feign失败配置
+ * feign失败配置-ArticleClient
  *
  * @author yaoh
  */

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * TODO
+ * 频道信息业务层service实现类
  *
  * @author yaoh
  */

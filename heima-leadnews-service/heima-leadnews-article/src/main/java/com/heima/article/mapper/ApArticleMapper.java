@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * TODO
+ * 文章mapper
  *
  * @author yaoh
  */

@@ -12,12 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-
-@SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.heima.apis")
 @EnableScheduling
 @EnableAsync
+@SpringBootApplication
 @MapperScan("com.heima.wemedia.mapper")
 public class WemediaApplication {
     public static void main(String[] args) {

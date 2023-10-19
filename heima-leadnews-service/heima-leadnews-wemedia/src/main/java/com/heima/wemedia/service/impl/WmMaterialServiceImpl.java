@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * TODO
+ * 自媒体图文素材信息-业务层service实现类
  *
  * @author yaoh
  */

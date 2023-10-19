@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 自媒体文章和素材关联表mapper
+ * 自媒体文章和素材关联mapper
  *
  * @author yaoh
  */

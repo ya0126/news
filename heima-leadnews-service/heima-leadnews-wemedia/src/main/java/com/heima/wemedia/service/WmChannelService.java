@@ -5,7 +5,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.pojos.WmChannel;
 
 /**
- * TODO
+ * 频道信息业务层service
  *
  * @author yaoh
  */

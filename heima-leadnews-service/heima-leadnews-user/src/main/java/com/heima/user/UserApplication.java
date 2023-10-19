@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * TODO
+ * 用户服务引导类
  *
  * @author yaoh
  */
-@SpringBootApplication
 @EnableDiscoveryClient
+@SpringBootApplication
 @MapperScan("com.heima.user.mapper")
 public class UserApplication {
     public static void main(String[] args) {

@@ -3,7 +3,7 @@ package com.heima.article.service;
 import com.heima.model.article.pojos.ApArticle;
 
 /**
- * TODO
+ * 文章生成静态文件并上传至minio服务
  *
  * @author yaoh
  */
@@ -15,5 +15,5 @@ public interface ArticleFreemarkerService {
      * @param apArticle
      * @param content
      */
-    public void buildArticleToMinIO(ApArticle apArticle, String content);
+    void buildArticleToMinIO(ApArticle apArticle, String content);
 }

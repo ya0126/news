@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * @author yaoh
  */
 @Configuration
-@ComponentScan("com.heima.apis.article.fallback")
+@ComponentScan({"com.heima.apis.article.fallback","com.heima.apis.schedule.fallback"})
 public class InitConfig {
 }

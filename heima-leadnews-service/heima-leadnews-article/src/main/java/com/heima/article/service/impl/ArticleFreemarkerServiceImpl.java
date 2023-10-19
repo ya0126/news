@@ -23,55 +23,49 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO
+ * 文章生成静态文件并上传至minio服务实现类
  *
  * @author yaoh
  */
-@Service
 @Transactional
+@Service
 @Slf4j
 public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
 
     @Autowired
-    private ApArticleContentMapper apArticleContentMapper;
-
-    @Autowired
     private Configuration configuration;
-
     @Autowired
     private FileStorageService fileStorageService;
-
     @Autowired
     private ApArticleService apArticleService;
 
     @Async
     @Override
     public void buildArticleToMinIO(ApArticle apArticle, String content) {
-        // 获取文章内容
+        // 1.获取文章内容
         if (StringUtils.isNoneBlank(content)) {
-            // 文章内容通过freemarker生成html文件
+            // 2.文章内容通过freemarker生成html文件
             Template template = null;
             StringWriter out = new StringWriter();
 
             try {
                 template = configuration.getTemplate("article.ftl");
-                //数据模型
+                // 2.1 数据模型
                 Map<String, Object> contentDataModel = new HashMap<>();
                 contentDataModel.put("content", JSONArray.parseArray(content));
-                //合成
+                // 2.2 合成
                 template.process(contentDataModel, out);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            // 把html文件上传到minio中
+            // 3.把html文件上传到minio中
             InputStream in = new ByteArrayInputStream(out.toString().getBytes());
             String path = fileStorageService.uploadHtmlFile("html", apArticle.getId() + ".html", in);
 
-            // 修改ap_article表，保存static_url字段
+            // 4.修改ap_article表，保存static_url字段
             apArticleService.update(Wrappers.<ApArticle>lambdaUpdate().eq(ApArticle::getId, apArticle.getId())
                     .set(ApArticle::getStaticUrl, path));
         }
-
     }
 }

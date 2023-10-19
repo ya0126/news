@@ -117,7 +117,7 @@ public class TextScan {
 
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("阿里云文本审核失败", e);
         }
         return null;
     }

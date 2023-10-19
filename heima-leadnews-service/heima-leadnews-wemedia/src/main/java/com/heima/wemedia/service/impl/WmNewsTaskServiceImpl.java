@@ -1,7 +1,7 @@
 package com.heima.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.heima.apis.article.IScheduleClient;
+import com.heima.apis.schedule.IScheduleClient;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.TaskTypeEnum;
 import com.heima.model.schedule.dtos.Task;

@@ -17,7 +17,6 @@ public class PageResponseResult extends ResponseResult implements Serializable {
 
     }
 
-
     public int getCurrentPage() {
         return currentPage;
     }

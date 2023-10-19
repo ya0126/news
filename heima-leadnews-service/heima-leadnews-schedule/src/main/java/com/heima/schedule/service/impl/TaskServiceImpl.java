@@ -29,9 +29,9 @@ import java.util.Set;
  *
  * @author yaoh
  */
+@Transactional
 @Service
 @Slf4j
-@Transactional
 public class TaskServiceImpl implements TaskService {
 
     /**
@@ -49,6 +49,67 @@ public class TaskServiceImpl implements TaskService {
         // 添加任务到redis
         if (success) addTaskToCache(task);
         return task.getTaskId();
+    }
+
+    @Autowired
+    private TaskInfoMapper taskInfoMapper;
+    @Autowired
+    private TaskInfoLogsMapper taskInfoLogsMapper;
+
+    /**
+     * 添加任务到数据库
+     *
+     * @param task
+     * @return boolean
+     */
+    private boolean addTaskToDB(Task task) {
+
+        boolean flag = false;
+        try {
+            // 1.保存任务信息
+            TaskInfo taskInfo = new TaskInfo();
+            BeanUtils.copyProperties(task, taskInfo);
+            taskInfo.setExecuteTime(new Date(task.getExecuteTime()));
+            taskInfoMapper.insert(taskInfo);
+
+            // 2.设置taskId
+            task.setTaskId(taskInfo.getTaskId());
+
+            // 3.保存任务日志信息
+            TaskinfoLogs taskinfoLogs = new TaskinfoLogs();
+            BeanUtils.copyProperties(taskInfo, taskinfoLogs);
+            taskinfoLogs.setVersion(1);
+            taskinfoLogs.setStatus(ScheduleConstants.SCHEDULED);
+            taskInfoLogsMapper.insert(taskinfoLogs);
+            flag = true;
+        } catch (Exception e) {
+            log.error("添加任务至数据库失败", e);
+        }
+        return flag;
+    }
+
+    @Autowired
+    private CacheService cacheService;
+
+    /**
+     * 添加任务至redis
+     *
+     * @param task
+     */
+    private void addTaskToCache(Task task) {
+        String key = task.getTaskType() + "_" + task.getPriority();
+        // 获取5分钟之后的 时间  毫秒值
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 5);
+        long nextScheduleTime = calendar.getTimeInMillis();
+
+        // 如果任务的执行时间小于等于当前时间，存入list(任务队列)
+        if (task.getExecuteTime() <= System.currentTimeMillis()) {
+            cacheService.lLeftPush(ScheduleConstants.TOPIC + key, JSON.toJSONString(task));
+        } else if (task.getExecuteTime() <= nextScheduleTime) {
+            // 如果任务的执行时间大于当前时间 && 小于等于预设时间（未来5分钟） 存入Zset中(存储未来任务，以执行时间排序)
+            cacheService.zAdd(ScheduleConstants.FUTURE + key, JSON.toJSONString(task), task.getExecuteTime());
+        }
     }
 
     /**
@@ -72,28 +133,28 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 按类型和权重拉取任务
+     * 删除任务的数据库信息，更新任务的日志的数据库信息
      *
-     * @param type
-     * @param priority
-     * @return
+     * @param taskId
+     * @param status
+     * @return boolean
      */
-    @Override
-    public Task poll(int type, int priority) {
-
+    private Task updateDB(long taskId, int status) {
         Task task = null;
         try {
-            String key = type + "_" + priority;
-            // 从redis中获取任务信息
-            String task_json = cacheService.lRightPop(ScheduleConstants.TOPIC + key);
-            if (StringUtils.isNoneBlank(task_json)) {
-                task = JSON.parseObject(task_json, Task.class);
-                // 修改数据库中的任务信息
-                updateDB(task.getTaskId(), ScheduleConstants.EXECUTED);
-            }
+            // 1.删除任务信息
+            taskInfoMapper.deleteById(taskId);
+
+            // 2.修改任务日志
+            TaskinfoLogs taskinfoLogs = taskInfoLogsMapper.selectById(taskId);
+            taskinfoLogs.setStatus(status);
+            taskInfoLogsMapper.deleteById(taskId);
+
+            task = new Task();
+            BeanUtils.copyProperties(taskinfoLogs, task);
+            task.setExecuteTime(taskinfoLogs.getExecuteTime().getTime());
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("poll task exception");
+            log.error("删除任务的数据库信息，更新任务的日志的数据库信息失败",e);
         }
         return task;
     }
@@ -113,95 +174,33 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 删除任务的数据库信息，更新任务的日志的数据库信息
+     * 按类型和权重拉取任务
      *
-     * @param taskId
-     * @param status
-     * @return boolean
+     * @param type
+     * @param priority
+     * @return
      */
-    private Task updateDB(long taskId, int status) {
-
+    @Override
+    public Task poll(int type, int priority) {
         Task task = null;
         try {
-            // 删除任务
-            taskInfoMapper.deleteById(taskId);
-
-            TaskinfoLogs taskinfoLogs = taskInfoLogsMapper.selectById(taskId);
-            taskinfoLogs.setStatus(status);
-            taskInfoLogsMapper.deleteById(taskId);
-
-            task = new Task();
-            BeanUtils.copyProperties(taskinfoLogs, task);
-            task.setExecuteTime(taskinfoLogs.getExecuteTime().getTime());
+            String key = type + "_" + priority;
+            // 从redis中获取任务信息
+            String task_json = cacheService.lRightPop(ScheduleConstants.TOPIC + key);
+            if (StringUtils.isNoneBlank(task_json)) {
+                task = JSON.parseObject(task_json, Task.class);
+                // 修改数据库中的任务信息
+                updateDB(task.getTaskId(), ScheduleConstants.EXECUTED);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("拉取任务失败",e);
         }
         return task;
     }
 
-    @Autowired
-    private CacheService cacheService;
-
     /**
-     * 添加任务至redis
-     *
-     * @param task
+     * 将即将执行的任务从zset刷新到list中，每分钟执行一次
      */
-    private void addTaskToCache(Task task) {
-
-        String key = task.getTaskType() + "_" + task.getPriority();
-        //获取5分钟之后的时间  毫秒值
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
-        long timeInMillis = calendar.getTimeInMillis();
-
-        // 如果任务的执行时间小于等于当前时间，存入list
-        if (task.getExecuteTime() <= System.currentTimeMillis()) {
-            cacheService.lLeftPush(ScheduleConstants.TOPIC + key, JSON.toJSONString(task));
-        } else {
-            // 如果任务的执行时间大于当前时间 && 小于等于预设时间（未来5分钟） 存入zset中
-            cacheService.zAdd(ScheduleConstants.FUTURE + key, JSON.toJSONString(task), task.getExecuteTime());
-        }
-    }
-
-    @Autowired
-    private TaskInfoMapper taskInfoMapper;
-
-    @Autowired
-    private TaskInfoLogsMapper taskInfoLogsMapper;
-
-    /**
-     * 添加任务到数据库
-     *
-     * @param task
-     * @return boolean
-     */
-    private boolean addTaskToDB(Task task) {
-
-        boolean flag = false;
-        try {
-            // 保存任务信息
-            TaskInfo taskInfo = new TaskInfo();
-            BeanUtils.copyProperties(task, taskInfo);
-            taskInfo.setExecuteTime(new Date(task.getExecuteTime()));
-            taskInfoMapper.insert(taskInfo);
-
-            // 设置taskId
-            task.setTaskId(taskInfo.getTaskId());
-
-            // 保存任务日志信息
-            TaskinfoLogs taskinfoLogs = new TaskinfoLogs();
-            BeanUtils.copyProperties(taskInfo, taskinfoLogs);
-            taskinfoLogs.setVersion(1);
-            taskinfoLogs.setStatus(ScheduleConstants.SCHEDULED);
-            taskInfoLogsMapper.insert(taskinfoLogs);
-            flag = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return flag;
-    }
-
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh() {
         log.info("{}执行了定时任务", System.currentTimeMillis());
@@ -211,7 +210,6 @@ public class TaskServiceImpl implements TaskService {
             // 获取所有未来数据集合的key值
             Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");// future_*
             for (String futureKey : futureKeys) { // future_250_250
-
                 String topicKey = ScheduleConstants.TOPIC + futureKey.split(ScheduleConstants.FUTURE)[1];
                 // 获取该组key下当前需要消费的任务数据
                 Set<String> tasks = cacheService.zRangeByScore(futureKey, 0, System.currentTimeMillis());
@@ -224,7 +222,9 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-
+    /**
+     * 数据库数据同步到缓存,每五分钟执行一次
+     */
     @Scheduled(cron = "0 */5 * * * ?")
     @PostConstruct
     public void reloadData() {
@@ -248,6 +248,9 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    /**
+     * 清除缓存
+     */
     public void clearCache() {
         // 删除缓存中未来数据集合和当前消费者队列的所有key
         Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");

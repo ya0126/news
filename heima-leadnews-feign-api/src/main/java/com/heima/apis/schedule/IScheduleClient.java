@@ -1,5 +1,6 @@
-package com.heima.apis.article;
+package com.heima.apis.schedule;
 
+import com.heima.apis.schedule.fallback.IScheduleClientFallback;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.schedule.dtos.Task;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author yaoh
  */
-@FeignClient("leadnews-schedule")
+@FeignClient(value = "leadnews-schedule",fallback = IScheduleClientFallback.class)
 public interface IScheduleClient {
     /**
      * 添加任务

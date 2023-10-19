@@ -15,7 +15,7 @@ public interface TaskService {
      * @param task
      * @return long
      */
-    public long addTask(Task task);
+    long addTask(Task task);
 
     /**
      * 取消任务
@@ -23,7 +23,7 @@ public interface TaskService {
      * @param taskId
      * @return boolean
      */
-    public boolean cancelTask(long taskId);
+    boolean cancelTask(long taskId);
 
     /**
      * 按照类型和优先级来拉取任务
@@ -32,5 +32,5 @@ public interface TaskService {
      * @param priority
      * @return
      */
-    public Task poll(int type, int priority);
+    Task poll(int type, int priority);
 }

@@ -20,6 +20,7 @@
         <module name="heima-leadnews-schedule" />
         <module name="heima-leadnews-utils" />
         <module name="heima-leadnews-app-gateway" />
+        <module name="simple-demo" />
         <module name="heima-leadnews-common" />
         <module name="heima-leadnews-model" />
       </profile>
@@ -51,6 +52,7 @@
       <module name="heima-leadnews-wemedia" options="-parameters" />
       <module name="heima-leadnews-wemedia-gateway" options="-parameters" />
       <module name="minio-demo" options="-parameters" />
+      <module name="simple-demo" options="-parameters" />
       <module name="tess4j-demo" options="-parameters" />
       <module name="test" options="-parameters" />
     </option>

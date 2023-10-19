@@ -19,16 +19,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * TODO
+ * 文章服务实现类
  *
  * @author yaoh
  */
+@Transactional
 @Service
 @Slf4j
 public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle> implements ApArticleService {
@@ -39,21 +41,10 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     @Autowired
     private ApArticleMapper apArticleMapper;
 
-    @Autowired
-    private ApArticleConfigMapper apArticleConfigMapper;
-
-    @Autowired
-    private ApArticleContentMapper apArticleContentMapper;
-
-
-    public ApArticleServiceImpl(ApArticleMapper apArticleMapper) {
-        this.apArticleMapper = apArticleMapper;
-    }
-
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short loadType) {
 
-        //1.校验参数
+        // 1.校验参数
         Integer size = dto.getSize();
         if (size == null || size == 0) {
             size = 10;
@@ -62,7 +53,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         size = Math.min(size, MAX_PAGE_SIZE);
         dto.setSize(size);
 
-        //类型参数检验
+        // 2.类型参数检验
         if (!loadType.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !loadType.equals(ArticleConstants.LOADTYPE_LOAD_NEW)) {
             loadType = ArticleConstants.LOADTYPE_LOAD_MORE;
         }
@@ -72,18 +63,22 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             dto.setTag(ArticleConstants.DEFAULT_TAG);
         }
 
-        //时间校验
+        // 3.时间校验
         if (dto.getMaxBehotTime() == null) dto.setMaxBehotTime(new Date());
         if (dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
 
-        //2.查询数据
+        // 4.查询数据
         List<ApArticle> apArticles = apArticleMapper.loadArticleList(dto, loadType);
 
-        //3.结果封装
+        //5.结果封装
         ResponseResult responseResult = ResponseResult.okResult(apArticles);
         return responseResult;
     }
 
+    @Autowired
+    private ApArticleConfigMapper apArticleConfigMapper;
+    @Autowired
+    private ApArticleContentMapper apArticleContentMapper;
     @Autowired
     private ArticleFreemarkerService articleFreemarkerService;
 
@@ -96,39 +91,40 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     @Override
     public ResponseResult saveArticle(ArticleDto dto) {
 
+        // 1.参数校验
         if (dto == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
         ApArticle apArticle = new ApArticle();
         BeanUtils.copyProperties(dto, apArticle);
+        // 2.保存文章
         if (apArticle.getId() == null) {
-            // 保存文章
+            // 2.1保存文章
             save(apArticle);
 
-            // 保存文章配置
+            // 2.2保存文章配置
             ApArticleConfig apArticleConfig = new ApArticleConfig(apArticle.getId());
             apArticleConfigMapper.insert(apArticleConfig);
 
-            // 保存文章内容
+            // 2.3保存文章内容
             ApArticleContent apArticleContent = new ApArticleContent();
             apArticleContent.setArticleId(apArticle.getId());
             apArticleContent.setContent(dto.getContent());
             apArticleContentMapper.insert(apArticleContent);
         } else {
-            // 修改文章
+            // 2.1修改文章
             updateById(apArticle);
 
-            // 修改文章内容
+            // 2.2修改文章内容
             ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, dto.getId()));
             apArticleContent.setContent(dto.getContent());
             apArticleContentMapper.updateById(apArticleContent);
 
         }
 
-        //异步调用 生成静态文件上传到minio中
-        articleFreemarkerService.buildArticleToMinIO(apArticle,dto.getContent());
+        // 3.异步调用 生成静态文件上传到minio中
+        articleFreemarkerService.buildArticleToMinIO(apArticle, dto.getContent());
         return ResponseResult.okResult(apArticle.getId());
     }
-
 }

@@ -4,6 +4,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.wemedia.service.WmNewsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,11 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/news")
 public class WmNewsController {
 
+    @Autowired
     private WmNewsService wmNewsService;
-
-    public WmNewsController(WmNewsService wmNewsService) {
-        this.wmNewsService = wmNewsService;
-    }
 
     /**
      * 列表查询
@@ -44,7 +42,7 @@ public class WmNewsController {
     }
 
     @GetMapping("/del_news/{newsId}")
-    public ResponseResult deleteNews(@PathVariable("newsId") Integer newsId){
+    public ResponseResult deleteNews(@PathVariable("newsId") Integer newsId) {
         return wmNewsService.deleteNewsById(newsId);
     }
 

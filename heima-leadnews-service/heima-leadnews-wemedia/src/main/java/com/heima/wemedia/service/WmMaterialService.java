@@ -7,14 +7,14 @@ import com.heima.model.wemedia.pojos.WmMaterial;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * TODO
+ * 自媒体图文素材信息-业务层service
  *
  * @author yaoh
  */
 public interface WmMaterialService extends IService<WmMaterial> {
 
     /**
-     * 文件上传
+     * 上传素材
      *
      * @param multipartFile
      * @return ResponseResult
@@ -30,7 +30,7 @@ public interface WmMaterialService extends IService<WmMaterial> {
     ResponseResult findList(WmMaterialDto dto);
 
     /**
-     * 删除文件
+     * 删除素材
      *
      * @param materialId
      * @return ResponseResult
@@ -38,14 +38,14 @@ public interface WmMaterialService extends IService<WmMaterial> {
     ResponseResult deletePicture(Integer materialId);
 
     /**
-     * 收藏图片
+     * 收藏素材
      * @param materialId
      * @return ResponseResult
      */
     ResponseResult collect(Integer materialId);
 
     /**
-     * 取消收藏图片
+     * 取消收藏素材
      * @param materialId
      * @return ResponseResult
      */

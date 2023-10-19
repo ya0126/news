@@ -10,14 +10,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * minio文件服务配置
+ * minio配置
+ *
  *
  * @author yaoh
  */
 @Data
 @Configuration
+// 开启minio...这个配置类，只有这样minio...这个配置类才会生效。当然，直接在minio...配置类上加上@component注解也可以
 @EnableConfigurationProperties(MinIOConfigProperties.class)
-//当引入FileStorageService接口时
+// 这个注解的意思是，只有存在file...的类MinioConfig配置类才会生效
 @ConditionalOnClass(FileStorageService.class)
 public class MinIOConfig {
 

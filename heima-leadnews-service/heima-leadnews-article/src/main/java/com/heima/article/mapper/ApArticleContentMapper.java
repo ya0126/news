@@ -5,7 +5,7 @@ import com.heima.model.article.pojos.ApArticleContent;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * TODO
+ * 文章内容mapper
  *
  * @author yaoh
  */

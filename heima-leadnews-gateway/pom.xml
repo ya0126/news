@@ -36,8 +36,8 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <groupId>com.heima</groupId>
+            <artifactId>heima-leadnews-utils</artifactId>
         </dependency>
     </dependencies>
 

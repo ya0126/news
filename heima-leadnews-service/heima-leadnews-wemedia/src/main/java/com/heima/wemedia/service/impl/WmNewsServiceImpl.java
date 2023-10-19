@@ -35,22 +35,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * TODO
+ * 自媒体图文内容信息业务层service实现类
  *
  * @author yaoh
  */
+@Transactional
 @Service
 @Slf4j
-@Transactional
 public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> implements WmNewsService {
 
+    @Autowired
     private WmMaterialMapper wmMaterialMapper;
+    @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
-
-    public WmNewsServiceImpl(WmMaterialMapper wmMaterialMapper, WmNewsMaterialMapper wmNewsMaterialMapper) {
-        this.wmMaterialMapper = wmMaterialMapper;
-        this.wmNewsMaterialMapper = wmNewsMaterialMapper;
-    }
 
     /**
      * 查询所有自媒体图文
@@ -113,9 +110,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     @Autowired
-    private WmNewsAutoScanServiceImpl wmNewsAutoScanService;
-
-    @Autowired
     private WmNewsTaskService wmNewsTaskService;
 
     /**
@@ -126,36 +120,32 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      */
     @Override
     public ResponseResult submitNews(WmNewsDto dto) {
-
-        // 参数检查
+        // 1.参数检查
         if (dto == null || dto.getContent() == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
-
         WmNews wmNews = new WmNews();
-
         BeanUtils.copyProperties(dto, wmNews);
 
-        // 封面图片 list->string
+        // 2.封面图片处理
         if (dto.getImages() != null && dto.getImages().size() > 0) {
-            //[a.jpg,b.jpg]-->   a.jpg,b.jpg
             String imageStr = StringUtils.join(dto.getImages(), ",");
             wmNews.setImages(imageStr);
         }
 
-        //如果当前封面类型为自动 -1
+        // 3.如果当前封面类型为自动 -1
         if (dto.getType().equals(WemediaConstants.WM_NEWS_TYPE_AUTO)) {
             wmNews.setType(null);
         }
 
         saveOrUpdateWmNews(wmNews);
 
-        //2.判断是否为草稿  如果为草稿结束当前方法
+        // 4.判断是否为草稿  如果为草稿结束当前方法
         if (dto.getStatus().equals(WmNews.Status.NORMAL.getCode())) {
             return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
         }
 
-        //3.不是草稿，保存文章内容图片与素材的关系
+        // 5.不是草稿，保存文章内容图片与素材的关系
         // 获取到文章内容中的图片信息
         List<String> materials = ectractUrlInfo(dto.getContent());
         saveRelativeInfoForContent(materials, wmNews.getId());
@@ -167,66 +157,26 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     /**
-     * 根据id删除文章
+     * 保存或修改文章
      *
-     * @param newsId
-     * @return
+     * @param wmNews
      */
-    @Override
-    public ResponseResult deleteNewsById(Integer newsId) {
+    private void saveOrUpdateWmNews(WmNews wmNews) {
+        // 补全属性
+        // wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
+        wmNews.setCreatedTime(new Date());
+        wmNews.setSubmitedTime(new Date());
+        wmNews.setEnable((short) 1);//默认上架
 
-        if (newsId == null) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        if (wmNews.getId() == null) {
+            // 保存
+            save(wmNews);
+        } else {
+            // 修改
+            // 删除文章图片与素材的关系
+            wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, wmNews.getId()));
+            updateById(wmNews);
         }
-
-        // 删除文章
-        removeById(newsId);
-
-        // 删除文章关联的素材信息
-        wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, newsId));
-
-        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
-    }
-
-    /**
-     * 处理文章内容图片与素材的关系
-     *
-     * @param materials
-     * @param newsId
-     */
-    private void saveRelativeInfoForContent(List<String> materials, Integer newsId) {
-        saveRelativeInfo(materials, newsId, WemediaConstants.WM_CONTENT_REFERENCE);
-    }
-
-
-    /**
-     * 保存文章图片与素材的关系到数据库中
-     *
-     * @param materials
-     * @param newsId
-     * @param type
-     */
-    private void saveRelativeInfo(List<String> materials, Integer newsId, Short type) {
-        if (materials != null && !materials.isEmpty()) {
-            //通过图片的url查询素材的id
-            List<WmMaterial> dbMaterials = wmMaterialMapper.selectList(Wrappers.<WmMaterial>lambdaQuery().in(WmMaterial::getUrl, materials));
-
-            //判断素材是否有效
-            if (dbMaterials == null || dbMaterials.size() == 0) {
-                //手动抛出异常   第一个功能：能够提示调用者素材失效了，第二个功能，进行数据的回滚
-                throw new CustomException(AppHttpCodeEnum.MATERIASL_REFERENCE_FAIL);
-            }
-
-            if (materials.size() != dbMaterials.size()) {
-                throw new CustomException(AppHttpCodeEnum.MATERIASL_REFERENCE_FAIL);
-            }
-
-            List<Integer> idList = dbMaterials.stream().map(WmMaterial::getId).collect(Collectors.toList());
-
-            //批量保存
-            wmNewsMaterialMapper.saveRelations(idList, newsId, type);
-        }
-
     }
 
     /**
@@ -250,25 +200,57 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     /**
-     * 保存或修改文章
+     * 处理文章内容图片与素材的关系
      *
-     * @param wmNews
+     * @param materials
+     * @param newsId
      */
-    private void saveOrUpdateWmNews(WmNews wmNews) {
-        //补全属性
-        //wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
-        wmNews.setCreatedTime(new Date());
-        wmNews.setSubmitedTime(new Date());
-        wmNews.setEnable((short) 1);//默认上架
+    private void saveRelativeInfoForContent(List<String> materials, Integer newsId) {
+        saveRelativeInfo(materials, newsId, WemediaConstants.WM_CONTENT_REFERENCE);
+    }
 
-        if (wmNews.getId() == null) {
-            //保存
-            save(wmNews);
-        } else {
-            //修改
-            //删除文章图片与素材的关系
-            wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, wmNews.getId()));
-            updateById(wmNews);
+    /**
+     * 保存文章图片与素材的关系到数据库中
+     *
+     * @param materials
+     * @param newsId
+     * @param type
+     */
+    private void saveRelativeInfo(List<String> materials, Integer newsId, Short type) {
+        if (materials != null && !materials.isEmpty()) {
+            //通过图片的url查询素材的id
+            List<WmMaterial> dbMaterials = wmMaterialMapper.selectList(Wrappers.<WmMaterial>lambdaQuery().in(WmMaterial::getUrl, materials));
+
+            //判断素材是否有效
+            if (dbMaterials == null || dbMaterials.isEmpty()) {
+                //手动抛出异常   第一个功能：能够提示调用者素材失效了，第二个功能，进行数据的回滚
+                throw new CustomException(AppHttpCodeEnum.MATERIASL_REFERENCE_FAIL);
+            }
+            if (materials.size() != dbMaterials.size()) {
+                throw new CustomException(AppHttpCodeEnum.MATERIASL_REFERENCE_FAIL);
+            }
+            List<Integer> idList = dbMaterials.stream().map(WmMaterial::getId).collect(Collectors.toList());
+            //批量保存
+            wmNewsMaterialMapper.saveRelations(idList, newsId, type);
         }
+    }
+
+    /**
+     * 根据id删除文章
+     *
+     * @param newsId
+     * @return
+     */
+    @Override
+    public ResponseResult deleteNewsById(Integer newsId) {
+        // 1.参数检查
+        if (newsId == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        // 2.删除文章
+        removeById(newsId);
+        // 3.删除文章关联的素材信息
+        wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, newsId));
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

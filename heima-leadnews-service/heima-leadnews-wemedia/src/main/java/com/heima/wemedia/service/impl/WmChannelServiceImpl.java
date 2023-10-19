@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author yaoh
  */
 @Service
-@Transactional
 @Slf4j
 public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel> implements WmChannelService {
 

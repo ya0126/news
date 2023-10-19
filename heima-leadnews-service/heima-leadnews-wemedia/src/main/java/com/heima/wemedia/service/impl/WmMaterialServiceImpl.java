@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.util.UUID;
  *
  * @author yaoh
  */
+@Transactional
 @Service
 @Slf4j
 public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMaterial> implements WmMaterialService {
@@ -35,7 +37,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
     private FileStorageService fileStorageService;
 
     /**
-     * 文件上传
+     * 上传素材
      *
      * @param multipartFile
      * @return
@@ -43,10 +45,9 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
     @Override
     public ResponseResult uploadPicture(MultipartFile multipartFile) {
 
-        if (multipartFile == null || multipartFile.getSize() == 0) {
+        if (multipartFile == null || multipartFile.isEmpty()) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
-
         String fileName = UUID.randomUUID().toString().replace("-", "");
 
         String originalFilename = multipartFile.getOriginalFilename();
@@ -54,11 +55,10 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         String fileId = null;
 
         try {
-            fileId = fileStorageService.uploadImgFile("", fileName + postfix, multipartFile.getInputStream());
-            log.info("上传图片到MinIO中，fileId:{}", fileId);
+            fileId = fileStorageService.uploadImgFile("material", fileName + postfix, multipartFile.getInputStream());
+            log.info("上传素材到MinIO中，fileId:{}", fileId);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("WmMaterialServiceImpl-上传文件失败");
+            log.error("WmMaterialServiceImpl-上传文件失败", e);
         }
 
         WmMaterial wmMaterial = new WmMaterial();
@@ -83,10 +83,8 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
     public ResponseResult findList(WmMaterialDto dto) {
 
         dto.checkParam();
-
         // 分页查询
         IPage page = new Page(dto.getPage(), dto.getSize());
-
         LambdaQueryWrapper<WmMaterial> queryWrapper = new LambdaQueryWrapper<>();
 
         // 是否收藏
@@ -109,7 +107,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
     }
 
     /**
-     * 删除文件
+     * 删除素材
      *
      * @param materialId
      * @return
@@ -135,29 +133,24 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
     }
 
     /**
-     * 图片收藏
+     * 收藏素材
      *
      * @param materialId
      * @return
      */
     @Override
     public ResponseResult collect(Integer materialId) {
-
         if (materialId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
-        WmMaterial wmMaterial = getById(materialId);
-
-        if (wmMaterial != null && wmMaterial.getIsCollection() != null) {
-            wmMaterial.setIsCollection((short) 1);
-            updateById(wmMaterial);
-        }
+        updateMaterial(materialId, (short) 1);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
     /**
-     * 取消收藏图片
+     * 取消收藏素材
+     *
      * @param materialId
      * @return
      */
@@ -167,12 +160,22 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
-        WmMaterial wmMaterial = getById(materialId);
+        updateMaterial(materialId, (short) 0);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
 
-        if (wmMaterial != null && wmMaterial.getIsCollection() != null) {
-            wmMaterial.setIsCollection((short) 0);
+    /**
+     * 修改素材信息
+     *
+     * @param materialId
+     * @param isCollection
+     * @return boolean
+     */
+    public void updateMaterial(Integer materialId, short isCollection) {
+        WmMaterial wmMaterial = getById(materialId);
+        if (wmMaterial != null) {
+            wmMaterial.setIsCollection(isCollection);
             updateById(wmMaterial);
         }
-        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

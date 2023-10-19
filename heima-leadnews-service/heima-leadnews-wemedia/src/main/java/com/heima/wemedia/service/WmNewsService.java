@@ -7,7 +7,7 @@ import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmNews;
 
 /**
- * TODO
+ * 自媒体图文内容信息业务层service
  *
  * @author yaoh
  */
@@ -27,7 +27,7 @@ public interface WmNewsService extends IService<WmNews> {
      * @param dto
      * @return
      */
-    public ResponseResult submitNews(WmNewsDto dto);
+    ResponseResult submitNews(WmNewsDto dto);
 
     /**
      * 根据id删除文章

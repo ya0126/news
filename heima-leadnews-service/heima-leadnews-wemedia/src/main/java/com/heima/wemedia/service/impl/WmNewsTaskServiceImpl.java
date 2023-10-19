@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 /**
- * TODO
+ * 自媒体文章任务业务层实现类
  *
  * @author yaoh
  */
@@ -54,6 +54,9 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
     @Autowired
     private WmNewsAutoScanService wmNewsAutoScanService;
 
+    /**
+     * 文章审核
+     */
     @Scheduled(fixedRate = 1000)
     @Override
     @SneakyThrows

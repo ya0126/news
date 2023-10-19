@@ -1,7 +1,7 @@
 package com.heima.wemedia.service;
 
 /**
- * TODO
+ * 自媒体文章发布自动审核业务层service
  *
  * @author yaoh
  */
@@ -12,5 +12,5 @@ public interface WmNewsAutoScanService {
      *
      * @param id 自媒体文章id
      */
-    public void autoScanWmNews(Integer id);
+    void autoScanWmNews(Integer id);
 }

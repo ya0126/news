@@ -5,12 +5,16 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.dtos.WmLoginDto;
 import com.heima.model.wemedia.pojos.WmUser;
 
+/**
+ * 自媒体用户业务层service
+ */
 public interface WmUserService extends IService<WmUser> {
 
     /**
      * 自媒体端登录
+     *
      * @param dto
      * @return
      */
-    public ResponseResult login(WmLoginDto dto);
+    ResponseResult login(WmLoginDto dto);
 }

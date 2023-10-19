@@ -24,7 +24,7 @@ public class ApArticleConfigServiceImpl extends ServiceImpl<ApArticleConfigMappe
     @Override
     public void updateByMap(Map map) {
         Object enable = map.get("enable");
-        boolean isDown = false;
+        boolean isDown = true;
         if (enable.equals(1)) {
             isDown = false;
         }

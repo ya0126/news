@@ -265,7 +265,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         if (wmNews == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST, "文章不存在");
         }
-        if (wmNews.getStatus().equals(WmNews.Status.PUBLISHED.getCode())) {
+        if (!wmNews.getStatus().equals(WmNews.Status.PUBLISHED.getCode())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "当前文章不是发布状态，不能上下架");
         }
         if (dto.getEnable() != null && dto.getEnable() > -1 && dto.getEnable() < 2) {

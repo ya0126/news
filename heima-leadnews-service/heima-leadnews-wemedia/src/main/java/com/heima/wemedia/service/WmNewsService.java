@@ -36,4 +36,12 @@ public interface WmNewsService extends IService<WmNews> {
      * @return ResponseResult
      */
     ResponseResult deleteNewsById(Integer newsId);
+
+    /**
+     * 文章的上下架
+     *
+     * @param dto
+     * @return
+     */
+    ResponseResult downOrUp(WmNewsDto dto);
 }

@@ -41,6 +41,12 @@ public class WmNewsController {
         return ResponseResult.okResult(wmNewsService.getById(newsId));
     }
 
+    /**
+     * 根据id删除文章
+     *
+     * @param newsId
+     * @return ResponseResult
+     */
     @GetMapping("/del_news/{newsId}")
     public ResponseResult deleteNews(@PathVariable("newsId") Integer newsId) {
         return wmNewsService.deleteNewsById(newsId);
@@ -55,5 +61,16 @@ public class WmNewsController {
     @PostMapping("/submit")
     public ResponseResult submitNews(@RequestBody WmNewsDto dto) {
         return wmNewsService.submitNews(dto);
+    }
+
+    /**
+     * 文章上下架
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/down_or_up")
+    public ResponseResult downOrUp(@RequestBody WmNewsDto dto) {
+        return wmNewsService.downOrUp(dto);
     }
 }

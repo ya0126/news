@@ -4,7 +4,7 @@ import com.heima.model.article.pojos.ApArticle;
 import lombok.Data;
 
 /**
- * 文章dto
+ * 文章信息dto
  *
  * @author yaoh
  */

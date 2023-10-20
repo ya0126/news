@@ -5,7 +5,7 @@ import com.heima.model.wemedia.pojos.WmMaterial;
 import lombok.Data;
 
 /**
- * TODO
+ * 自媒体图文素材信息dto
  *
  * @author yaoh
  */

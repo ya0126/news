@@ -137,7 +137,6 @@
                         <van-col class="comment-content" v-html="item.content"></van-col>
                     </van-row>
                     <van-row type="flex" align="center">
-                        <!-- TODO: js计算时间差 -->
                         <van-col span="10" class="comment-time">
                             {{ item.createdTime | timestampToDateTime }}
                         </van-col>

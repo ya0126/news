@@ -4,11 +4,6 @@ import lombok.Data;
 
 import java.util.Date;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 @Data
 public class Student {
     private String name;//姓名

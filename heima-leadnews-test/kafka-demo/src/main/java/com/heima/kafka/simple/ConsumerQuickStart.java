@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
- * TODO
+ * kafka消费者demo
  *
  * @author yaoh
  */

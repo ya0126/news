@@ -276,7 +276,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             articleDto.setChannelName(wmChannel.getName());
         }
         // 作者
-        //articleDto.setAuthorId(wmNews.getUserId().longValue());
+        articleDto.setAuthorId(wmNews.getUserId().longValue());
         WmUser wmUser = wmUserMapper.selectById(wmNews.getUserId());
         if (wmUser != null) {
             articleDto.setAuthorName(wmUser.getName());

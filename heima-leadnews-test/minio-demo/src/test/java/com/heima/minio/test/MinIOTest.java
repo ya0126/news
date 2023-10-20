@@ -8,11 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileInputStream;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 @SpringBootTest
 @RunWith(Runner.class)
 public class MinIOTest {

@@ -1,7 +1,7 @@
 package com.heima.model.common.enums;
 
 /**
- * TODO
+ * 阿里云图片审核服务码
  *
  * @author yaoh
  */

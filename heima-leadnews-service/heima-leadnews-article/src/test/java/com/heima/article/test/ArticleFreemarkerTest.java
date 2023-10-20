@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO
+ * freemarker测试类
  *
  * @author yaoh
  */

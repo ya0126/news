@@ -9,7 +9,7 @@ import java.util.Properties;
 import java.util.concurrent.Future;
 
 /**
- * TODO
+ * kafka生产者demo
  *
  * @author yaoh
  */

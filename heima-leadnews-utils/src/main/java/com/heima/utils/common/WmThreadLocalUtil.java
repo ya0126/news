@@ -3,7 +3,7 @@ package com.heima.utils.common;
 import com.heima.model.wemedia.pojos.WmUser;
 
 /**
- * TODO
+ * 自媒体ThreadLocal线程变量工具类
  *
  * @author yaoh
  */

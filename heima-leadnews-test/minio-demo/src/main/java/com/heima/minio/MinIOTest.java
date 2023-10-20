@@ -5,11 +5,6 @@ import io.minio.PutObjectArgs;
 
 import java.io.FileInputStream;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 public class MinIOTest {
 
     public static void main(String[] args) {

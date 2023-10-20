@@ -10,6 +10,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.wemedia.dtos.WmMaterialDto;
 import com.heima.model.wemedia.pojos.WmMaterial;
+import com.heima.utils.common.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.service.WmMaterialService;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +63,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         }
 
         WmMaterial wmMaterial = new WmMaterial();
-        // TODO 可能为空
-        //wmMaterial.setUserId(WmThreadLocalUtil.getUser().getId());
+        wmMaterial.setUserId(WmThreadLocalUtil.getUser().getId());
         wmMaterial.setUrl(fileId);
         wmMaterial.setIsCollection((short) 0);
         wmMaterial.setType((short) 0);
@@ -93,8 +93,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         }
 
         // 根据用户查找
-        // TODO 有bug待解决，threadLocal获取不到用户id，原因是拦截器没有从request请求头中获取到userId。可能是前端问题
-        //queryWrapper.eq(WmMaterial::getUserId, WmThreadLocalUtil.getUser().getId());
+        queryWrapper.eq(WmMaterial::getUserId, WmThreadLocalUtil.getUser().getId());
 
         // 根据时间排序
         queryWrapper.orderByDesc(WmMaterial::getCreatedTime);

@@ -17,6 +17,7 @@ import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmMaterial;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.model.wemedia.pojos.WmNewsMaterial;
+import com.heima.utils.common.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
@@ -163,7 +164,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      */
     private void saveOrUpdateWmNews(WmNews wmNews) {
         // 补全属性
-        // wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
+         wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
         wmNews.setCreatedTime(new Date());
         wmNews.setSubmitedTime(new Date());
         wmNews.setEnable((short) 1);//默认上架

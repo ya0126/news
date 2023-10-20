@@ -6,7 +6,7 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TODO
+ * Spring DelayedTask 延迟队列任务
  *
  * @author yaoh
  */

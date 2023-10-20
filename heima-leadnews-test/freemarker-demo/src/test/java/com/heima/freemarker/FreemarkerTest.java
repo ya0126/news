@@ -14,11 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class FreemarkerTest {

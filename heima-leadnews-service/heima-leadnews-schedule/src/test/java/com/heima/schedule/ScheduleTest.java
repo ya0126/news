@@ -17,11 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 @SpringBootTest(classes = ScheduleApplication.class)
 @RunWith(SpringRunner.class)
 public class ScheduleTest {

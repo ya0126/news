@@ -19,11 +19,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 @SpringBootTest(classes = WemediaApplication.class)
 @RunWith(SpringRunner.class)
 public class MediaTest {

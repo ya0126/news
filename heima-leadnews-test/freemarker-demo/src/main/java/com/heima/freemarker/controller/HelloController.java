@@ -10,11 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * TODO
- *
- * @author yaoh
- */
 @Controller
 public class HelloController {
 

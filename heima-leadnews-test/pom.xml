@@ -9,12 +9,14 @@
     </parent>
     <packaging>pom</packaging>
     <modules>
+        <module>DelayQueue-demo</module>
+        <module>es-init</module>
         <module>freemarker-demo</module>
+        <module>kafka-demo</module>
         <module>minio-demo</module>
+        <module>mongo-demo</module>
         <module>tess4j-demo</module>
         <module>simple-demo</module>
-        <module>kafka-demo</module>
-        <module>es-init</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 

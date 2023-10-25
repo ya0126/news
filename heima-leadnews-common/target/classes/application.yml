@@ -1,4 +1,3 @@
-#全局端口定义server:
 # 全局字符集设置
 spring:
   http:

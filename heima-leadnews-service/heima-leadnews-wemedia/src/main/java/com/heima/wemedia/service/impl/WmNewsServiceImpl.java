@@ -328,7 +328,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         if (StringUtils.isNotBlank(dto.getMessage())) {
             wrapper.set(WmNews::getReason, dto.getMessage());
         }
-        wrapper.set(WmNews::getStatus, (short) 0);
+        wrapper.set(WmNews::getStatus, (short) 2);
         wrapper.eq(WmNews::getId, dto.getId());
         update(wrapper);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
@@ -352,7 +352,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         if (StringUtils.isNotBlank(dto.getMessage())) {
             wrapper.set(WmNews::getReason, dto.getMessage());
         }
-        wrapper.set(WmNews::getStatus, (short) 1);
+        wrapper.set(WmNews::getStatus, (short) 8);
         wrapper.eq(WmNews::getId, dto.getId());
         update(wrapper);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);

@@ -2,6 +2,7 @@ package com.heima.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,18 +13,19 @@ import com.heima.common.exception.CustomException;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.wemedia.dtos.NewsAuthDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmMaterial;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.model.wemedia.pojos.WmNewsMaterial;
+import com.heima.model.wemedia.vos.NewAuthVo;
 import com.heima.utils.common.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
 import com.heima.wemedia.service.WmNewsService;
 import com.heima.wemedia.service.WmNewsTaskService;
-import javassist.runtime.DotClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -46,9 +48,17 @@ import java.util.stream.Collectors;
 public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> implements WmNewsService {
 
     @Autowired
+    private WmNewsMapper wmNewsMapper;
+    @Autowired
     private WmMaterialMapper wmMaterialMapper;
     @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
+
+    @Override
+    public ResponseResult newsAuthPageQuery(NewsAuthDto dto) {
+        List<NewAuthVo> newAuthVos = wmNewsMapper.newsAuthList(dto);
+        return ResponseResult.okResult(newAuthVos);
+    }
 
     /**
      * 查询所有自媒体图文
@@ -164,7 +174,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      */
     private void saveOrUpdateWmNews(WmNews wmNews) {
         // 补全属性
-         wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
+        wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
         wmNews.setCreatedTime(new Date());
         wmNews.setSubmitedTime(new Date());
         wmNews.setEnable((short) 1);//默认上架
@@ -256,7 +266,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     @Autowired
-    private KafkaTemplate<String,String> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
+
     @Override
     public ResponseResult downOrUp(WmNewsDto dto) {
         if (dto.getId() == null) {
@@ -275,12 +286,75 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
                     .eq(WmNews::getId, dto.getId()));
         }
         //发送消息，通知article端修改文章配置
-        if(wmNews.getArticleId() != null){
-            Map<String,Object> map = new HashMap<>();
-            map.put("articleId",wmNews.getArticleId());
-            map.put("enable",dto.getEnable());
-            kafkaTemplate.send(WmNewsMessageConstants.WM_NEWS_UP_OR_DOWN_TOPIC,JSON.toJSONString(map));
+        if (wmNews.getArticleId() != null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("articleId", wmNews.getArticleId());
+            map.put("enable", dto.getEnable());
+            kafkaTemplate.send(WmNewsMessageConstants.WM_NEWS_UP_OR_DOWN_TOPIC, JSON.toJSONString(map));
         }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 文章联合查询
+     *
+     * @param newsId
+     * @return
+     */
+    @Override
+    public ResponseResult getOneVo(Integer newsId) {
+        if (newsId == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        }
+        NewAuthVo newAuthVo = wmNewsMapper.getOneVo(newsId);
+        return ResponseResult.okResult(newAuthVo);
+    }
+
+    /**
+     * 审核未通过
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResponseResult authFail(NewsAuthDto dto) {
+        // 1.校验参数
+        if (dto == null || dto.getId() == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        }
+
+        // 2.修改
+        LambdaUpdateWrapper<WmNews> wrapper = new LambdaUpdateWrapper<>();
+        if (StringUtils.isNotBlank(dto.getMessage())) {
+            wrapper.set(WmNews::getReason, dto.getMessage());
+        }
+        wrapper.set(WmNews::getStatus, (short) 0);
+        wrapper.eq(WmNews::getId, dto.getId());
+        update(wrapper);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResponseResult authPass(NewsAuthDto dto) {
+        // 1.校验参数
+        if (dto == null || dto.getId() == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        }
+
+        // 2.修改
+        LambdaUpdateWrapper<WmNews> wrapper = new LambdaUpdateWrapper<>();
+        if (StringUtils.isNotBlank(dto.getMessage())) {
+            wrapper.set(WmNews::getReason, dto.getMessage());
+        }
+        wrapper.set(WmNews::getStatus, (short) 1);
+        wrapper.eq(WmNews::getId, dto.getId());
+        update(wrapper);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

@@ -2,6 +2,7 @@ package com.heima.wemedia.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.wemedia.dtos.NewsAuthDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmNews;
@@ -12,6 +13,14 @@ import com.heima.model.wemedia.pojos.WmNews;
  * @author yaoh
  */
 public interface WmNewsService extends IService<WmNews> {
+
+    /**
+     * 文章审核联合分页查询
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult newsAuthPageQuery(NewsAuthDto dto);
 
     /**
      * 查询所有文章
@@ -44,4 +53,25 @@ public interface WmNewsService extends IService<WmNews> {
      * @return
      */
     ResponseResult downOrUp(WmNewsDto dto);
+
+    /**
+     * 文章联合查询
+     * @param newsId
+     * @return ResponseResult
+     */
+    ResponseResult getOneVo(Integer newsId);
+
+    /**
+     * 审核未通过
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult authFail(NewsAuthDto dto);
+
+    /**
+     * 审核通过
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult authPass(NewsAuthDto dto);
 }

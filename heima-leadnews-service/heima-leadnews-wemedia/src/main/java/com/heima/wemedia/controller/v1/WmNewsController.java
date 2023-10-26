@@ -1,6 +1,7 @@
 package com.heima.wemedia.controller.v1;
 
 import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.wemedia.dtos.NewsAuthDto;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.wemedia.service.WmNewsService;
@@ -20,7 +21,7 @@ public class WmNewsController {
     private WmNewsService wmNewsService;
 
     /**
-     * 列表查询
+     * 文章列表查询
      *
      * @param dto
      * @return ResponseResult
@@ -29,6 +30,29 @@ public class WmNewsController {
     public ResponseResult findAll(@RequestBody WmNewsPageReqDto dto) {
         return wmNewsService.findAll(dto);
     }
+
+    /**
+     * 文章审核联合分页查询
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/list_vo")
+    public ResponseResult listVo(@RequestBody NewsAuthDto dto) {
+        return wmNewsService.newsAuthPageQuery(dto);
+    }
+
+    /**
+     * 文章联合查询
+     *
+     * @param newsId
+     * @return ResponseResult
+     */
+    @GetMapping("/one_vo/{id}")
+    public ResponseResult getOneVo(@PathVariable("id") Integer newsId) {
+        return wmNewsService.getOneVo(newsId);
+    }
+
 
     /**
      * 根据id获取文章
@@ -53,7 +77,7 @@ public class WmNewsController {
     }
 
     /**
-     * 提交素材
+     * 提交文章
      *
      * @param dto
      * @return ResponseResult
@@ -72,5 +96,27 @@ public class WmNewsController {
     @PostMapping("/down_or_up")
     public ResponseResult downOrUp(@RequestBody WmNewsDto dto) {
         return wmNewsService.downOrUp(dto);
+    }
+
+    /**
+     * 审核未通过
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/auth_fail")
+    public ResponseResult authFail(@RequestBody NewsAuthDto dto) {
+        return wmNewsService.authFail(dto);
+    }
+
+    /**
+     * 审核通过
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/auth_pass")
+    public ResponseResult authPass(@RequestBody NewsAuthDto dto) {
+        return wmNewsService.authPass(dto);
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-//@EnableAsync
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.heima.apis")
 @EnableScheduling

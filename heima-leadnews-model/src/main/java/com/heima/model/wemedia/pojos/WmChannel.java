@@ -62,5 +62,4 @@ public class WmChannel implements Serializable {
      */
     @TableField("created_time")
     private Date createdTime;
-
 }

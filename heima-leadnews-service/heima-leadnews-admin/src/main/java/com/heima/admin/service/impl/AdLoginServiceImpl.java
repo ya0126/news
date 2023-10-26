@@ -64,6 +64,7 @@ public class AdLoginServiceImpl implements AdLoginService {
         adUser.setPassword("");
         result.put("user", adUser);
         result.put("token", token);
+        log.info("用户登录成功，userId:{}",adUser.getId());
         return ResponseResult.okResult(result);
     }
 }

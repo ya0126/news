@@ -28,7 +28,11 @@ public enum AppHttpCodeEnum {
     NO_OPERATOR_AUTH(3000, "无权限操作"),
     NEED_ADMIND(3001, "需要管理员权限"),
     // 自媒体文章错误 3501~3600
-    MATERIASL_REFERENCE_FAIL(3501, "素材引用失效");
+    MATERIASL_REFERENCE_FAIL(3501, "素材引用失效"),
+    // 自媒体频道错误
+    CHANNEL_NAME_EXIST(3601, "频道名字重复"),
+    CHANNEL_IN_USE(3602, "频道被引用"),
+    CHANNEL_NOT_DISABLED(3603, "频道未禁用");
 
     int code;
     String errorMessage;

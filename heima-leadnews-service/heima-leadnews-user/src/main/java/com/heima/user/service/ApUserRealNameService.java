@@ -18,4 +18,20 @@ public interface ApUserRealNameService extends IService<ApUserRealname> {
      * @return ResponseResult
      */
     ResponseResult pageQuery(ApUserAuthDto dto);
+
+    /**
+     * 审核失败
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult authFail(ApUserAuthDto dto);
+
+    /**
+     * 审核成功
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult authPass(ApUserAuthDto dto);
 }

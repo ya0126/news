@@ -30,4 +30,24 @@ public class ApUserAuthController {
     public ResponseResult listAuth(@RequestBody ApUserAuthDto dto) {
         return apUserRealNameService.pageQuery(dto);
     }
+
+    /**
+     * 审核失败
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/authFail")
+    public ResponseResult authFiil(@RequestBody ApUserAuthDto dto) {
+        return apUserRealNameService.authFail(dto);
+    }
+
+    /**
+     * 审核成功
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/authPass")
+    public ResponseResult authPass(@RequestBody ApUserAuthDto dto) {
+        return apUserRealNameService.authPass(dto);
+    }
 }

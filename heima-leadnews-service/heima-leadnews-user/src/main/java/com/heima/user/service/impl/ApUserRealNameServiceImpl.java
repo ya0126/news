@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.user.dtos.ApUserAuthDto;
 import com.heima.model.user.pojos.ApUserRealname;
 import com.heima.user.mapper.ApUserRealNameMapper;
@@ -47,5 +48,57 @@ public class ApUserRealNameServiceImpl extends ServiceImpl<ApUserRealNameMapper,
         PageResponseResult pageResponseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         pageResponseResult.setData(page.getRecords());
         return ResponseResult.okResult(pageResponseResult);
+    }
+
+    /**
+     * 审核失败
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResponseResult authFail(ApUserAuthDto dto) {
+        // 1.参数校验
+        if (dto == null || dto.getId() == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        }
+
+        // 2.修改状态
+        ApUserRealname userRealname = getById(dto.getId());
+        if (userRealname == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+        }
+
+        userRealname.setReason(dto.getMessage());
+        userRealname.setStatus((short) 0);
+        updateById(userRealname);
+
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 审核成功
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResponseResult authPass(ApUserAuthDto dto) {
+        // 1.参数校验
+        if (dto == null || dto.getId() == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        }
+
+        // 2.修改状态
+        ApUserRealname userRealname = getById(dto.getId());
+        if (userRealname == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+        }
+
+        userRealname.setReason(dto.getMessage());
+        userRealname.setStatus((short) 1);
+        updateById(userRealname);
+
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

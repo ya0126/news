@@ -12,6 +12,16 @@ import lombok.Data;
 public class ApUserAuthDto extends PageRequestDto {
 
     /**
+     * 用户id
+     */
+    private Integer id;
+
+    /**
+     * 审核消息
+     */
+    private String message;
+
+    /**
      * 认证状态
      */
     private Short status;

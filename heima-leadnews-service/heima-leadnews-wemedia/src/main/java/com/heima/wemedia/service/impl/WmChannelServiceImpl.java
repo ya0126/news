@@ -18,12 +18,16 @@ import com.heima.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * 频道信息业务层service实现类
  *
  * @author yaoh
  */
+@Transactional
 @Service
 @Slf4j
 public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel> implements WmChannelService {
@@ -56,6 +60,7 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
         if (one != null) return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_NAME_EXIST);
 
         // 2.保存频道信息
+        wmChannel.setCreatedTime(new Date());
         save(wmChannel);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }

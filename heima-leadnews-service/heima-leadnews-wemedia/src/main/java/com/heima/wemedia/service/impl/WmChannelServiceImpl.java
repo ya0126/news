@@ -91,7 +91,12 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
         if (StringUtils.isNotBlank(dto.getName())) {
             queryWrapper.like(WmChannel::getName, dto.getName());
         }
-        // 3.2 根据createdTime降序排序
+
+        // 3.2 根据状态查找
+        if (dto.getStatus() != null) {
+            queryWrapper.eq(WmChannel::getStatus,dto.getStatus());
+        }
+        // 3.3 根据createdTime降序排序
         queryWrapper.orderByDesc(WmChannel::getCreatedTime);
 
         // 4.封装返回参数

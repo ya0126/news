@@ -10,4 +10,9 @@ public class WmChannelDto extends PageRequestDto {
      * 频道名称
      */
     private String name;
+
+    /**
+     * 状态
+     */
+    private Short status;
 }

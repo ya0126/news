@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author yaoh
  */
-@FeignClient("leadnews-wemedia")
+@FeignClient(value = "leadnews-wemedia")
 public interface IWemediaClient {
 
     @GetMapping("/api/v1/user/findByName/{name}")

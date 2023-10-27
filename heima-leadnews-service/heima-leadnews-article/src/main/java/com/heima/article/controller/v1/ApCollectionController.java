@@ -21,8 +21,14 @@ public class ApCollectionController {
     @Autowired
     private ApCollectionService apCollectionService;
 
+    /**
+     * 用户收藏
+     *
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping
-    public ResponseResult collectionBehavior(@RequestBody CollectionBehaviorDto dto) {
+    public ResponseResult collection(@RequestBody CollectionBehaviorDto dto) {
         return apCollectionService.collection(dto);
     }
 }

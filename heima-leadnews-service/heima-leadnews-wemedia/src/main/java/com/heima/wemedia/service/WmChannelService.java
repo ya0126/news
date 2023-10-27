@@ -13,14 +13,14 @@ import com.heima.model.wemedia.pojos.WmChannel;
 public interface WmChannelService extends IService<WmChannel> {
 
     /**
-     * 查询所有频道
+     * 查询所有
      *
      * @return ResponseResult
      */
     ResponseResult findAll();
 
     /**
-     * 保存频道
+     * 保存
      *
      * @param wmChannel
      * @return
@@ -36,7 +36,7 @@ public interface WmChannelService extends IService<WmChannel> {
     ResponseResult listChannel(WmChannelDto dto);
 
     /**
-     * 修改频道
+     * 修改
      *
      * @param wmChannel
      * @return ResponseResult
@@ -44,7 +44,7 @@ public interface WmChannelService extends IService<WmChannel> {
     ResponseResult updateChannel(WmChannel wmChannel);
 
     /**
-     * 删除频道
+     * 删除
      *
      * @param channelId
      * @return ResponseResult

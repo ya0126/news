@@ -10,7 +10,7 @@ import com.heima.model.search.dtos.UserSearchDto;
  */
 public interface ApAssociateWordsService {
     /**
-     * 联想词
+     * 搜索联想词
      *
      * @param userSearchDto
      * @return

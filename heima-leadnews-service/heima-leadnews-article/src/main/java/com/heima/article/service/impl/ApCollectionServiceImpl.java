@@ -28,7 +28,7 @@ public class ApCollectionServiceImpl implements ApCollectionService {
     private CacheService cacheService;
 
     /**
-     * 用户收藏、取消收藏文章
+     * 收藏、取消收藏
      *
      * @param dto
      * @return ResponseResult
@@ -39,20 +39,17 @@ public class ApCollectionServiceImpl implements ApCollectionService {
         if (dto == null || dto.getEntryId() == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
-
         // 2.判断登录
         ApUser user = AppThreadLocalUtil.getUser();
         if (user == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
         Integer userId = user.getId();
-
         // 3.判断是否已经收藏
         String articleId = (String) cacheService.hGet(BehaviorConstants.COLLECTION_BEHAVIOR + userId, dto.getEntryId().toString());
         if (articleId != null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.DATA_EXIST, "已收藏");
         }
-
         // 4.收藏、取消收藏
         if (dto.getOperation() == 0) {
             log.info("文章收藏，保存key:{},{},{}", dto.getEntryId(), user.getId().toString(), JSON.toJSONString(dto));

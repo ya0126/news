@@ -22,7 +22,7 @@ import java.util.Map;
 public class WmUserServiceImpl extends ServiceImpl<WmUserMapper, WmUser> implements WmUserService {
 
     /**
-     * 自媒体用户登录
+     * 登录
      *
      * @param dto
      * @return

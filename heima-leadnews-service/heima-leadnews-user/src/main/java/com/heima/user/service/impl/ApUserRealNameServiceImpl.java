@@ -69,6 +69,13 @@ public class ApUserRealNameServiceImpl extends ServiceImpl<ApUserRealNameMapper,
         return ResponseResult.okResult(pageResponseResult);
     }
 
+    /**
+     * 修改认证状态
+     *
+     * @param dto
+     * @param status
+     * @return
+     */
     @Override
     public ResponseResult updateStatus(AuthDto dto, Short status) {
         //1.检查参数
@@ -103,18 +110,18 @@ public class ApUserRealNameServiceImpl extends ServiceImpl<ApUserRealNameMapper,
      */
     private ResponseResult createWmUserAndAuthor(AuthDto dto) {
         Integer userRealnameId = dto.getId();
-        //查询用户认证信息
+        // 1.查询用户认证信息
         ApUserRealname apUserRealname = getById(userRealnameId);
         if (apUserRealname == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
         }
-        //查询app端用户信息
+        // 2.查询app端用户信息
         Integer userId = apUserRealname.getUserId();
         ApUser apUser = apUserMapper.selectById(userId);
         if (apUser == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
         }
-        //创建自媒体账户
+        // 3.创建自媒体账户
         WmUser wmUser = wemediaClient.findWmUserByName(apUser.getName());
         if (wmUser == null) {
             wmUser = new WmUser();
@@ -130,7 +137,6 @@ public class ApUserRealNameServiceImpl extends ServiceImpl<ApUserRealNameMapper,
         apUser.setFlag((short) 1);
         apUserMapper.updateById(apUser);
 
-        return null;
-
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

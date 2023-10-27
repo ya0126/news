@@ -21,14 +21,18 @@ import java.util.Map;
 @Slf4j
 public class ApArticleConfigServiceImpl extends ServiceImpl<ApArticleConfigMapper, ApArticleConfig> implements ApArticleConfigService {
 
+    /**
+     * 文章上下线
+     *
+     * @param map(0-下线，1上线)
+     */
     @Override
     public void updateByMap(Map map) {
+        boolean isDown = false;
         Object enable = map.get("enable");
-        boolean isDown = true;
-        if (enable.equals(1)) {
-            isDown = false;
+        if (enable.equals(0)) {
+            isDown = true;
         }
-
         update(Wrappers.<ApArticleConfig>lambdaUpdate()
                 .eq(ApArticleConfig::getArticleId, map.get("articleId"))
                 .set(ApArticleConfig::getIsDown, isDown));

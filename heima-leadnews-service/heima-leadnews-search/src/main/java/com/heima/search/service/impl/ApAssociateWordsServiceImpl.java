@@ -28,17 +28,19 @@ public class ApAssociateWordsServiceImpl implements ApAssociateWordsService {
     private MongoTemplate mongoTemplate;
 
     /**
-     * 联想词
+     * 搜索联想词
      *
      * @param dto
      * @return
      */
     @Override
     public ResponseResult findAssociate(UserSearchDto dto) {
+        // 1.参数校验
         if (dto == null || StringUtils.isBlank(dto.getSearchWords())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
+        // 2.联想词搜索：mongo
         Query query = Query.query(Criteria.where("associateWords").regex(".*?\\" + dto.getSearchWords() + ".*"));
         query.limit(dto.getPageSize());
         List<ApAssociateWords> apAssociateWordsList = mongoTemplate.find(query, ApAssociateWords.class);

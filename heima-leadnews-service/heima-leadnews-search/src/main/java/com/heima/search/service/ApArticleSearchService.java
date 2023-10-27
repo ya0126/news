@@ -11,6 +11,7 @@ import java.io.IOException;
  * @author yaoh
  */
 public interface ApArticleSearchService {
+
     /**
      * ES文章分页搜索
      *

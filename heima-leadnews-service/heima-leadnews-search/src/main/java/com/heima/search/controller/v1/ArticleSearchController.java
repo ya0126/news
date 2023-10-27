@@ -23,6 +23,13 @@ public class ArticleSearchController {
     @Autowired
     private ApArticleSearchService apArticleSearchService;
 
+    /**
+     * 搜索
+     *
+     * @param dto
+     * @return ResponseResult
+     * @throws IOException
+     */
     @PostMapping("/search")
     public ResponseResult search(@RequestBody UserSearchDto dto) throws IOException {
         return apArticleSearchService.search(dto);

@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public interface ApArticleConfigService extends IService<ApArticleConfig> {
     /**
-     * 修改文章配置
+     * 文章上下线
      *
      * @param map
      */

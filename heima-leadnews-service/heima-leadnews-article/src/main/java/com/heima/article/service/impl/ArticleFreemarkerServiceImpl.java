@@ -45,6 +45,12 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    /**
+     * 生成静态文件上传到minio
+     *
+     * @param apArticle
+     * @param content
+     */
     @Async
     @Override
     public void buildArticleToMinIO(ApArticle apArticle, String content) {
@@ -53,7 +59,6 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
             // 2.文章内容通过freemarker生成html文件
             Template template = null;
             StringWriter out = new StringWriter();
-
             try {
                 template = configuration.getTemplate("article.ftl");
                 // 2.1 数据模型
@@ -62,17 +67,16 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
                 // 2.2 合成
                 template.process(contentDataModel, out);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.info("生成freemarker文件失败", e);
             }
-
             // 3.把html文件上传到minio中
             InputStream in = new ByteArrayInputStream(out.toString().getBytes());
             String path = fileStorageService.uploadHtmlFile("html", apArticle.getId() + ".html", in);
 
             // 4.修改ap_article表，保存static_url字段
-            apArticleService.update(Wrappers.<ApArticle>lambdaUpdate().eq(ApArticle::getId, apArticle.getId())
-                    .set(ApArticle::getStaticUrl, path));
-
+            apArticleService
+                    .update(Wrappers.<ApArticle>lambdaUpdate().eq(ApArticle::getId, apArticle.getId())
+                            .set(ApArticle::getStaticUrl, path));
             //发送消息，创建索引
             createArticleESIndex(apArticle, content, path);
         }

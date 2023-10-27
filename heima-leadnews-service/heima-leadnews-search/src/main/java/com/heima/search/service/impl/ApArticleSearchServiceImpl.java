@@ -51,13 +51,13 @@ public class ApArticleSearchServiceImpl implements ApArticleSearchService {
      */
     @Override
     public ResponseResult search(UserSearchDto dto) throws IOException {
-        // 检查参数
+        // 1.检查参数
         if (dto == null || StringUtils.isBlank(dto.getSearchWords())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
         ApUser user = AppThreadLocalUtil.getUser();
-        //异步调用 保存搜索记录
+        // 2.异步调用 保存搜索记录
         if (user != null && dto.getFromIndex() == 0) {
             apUserSearchService.insert(dto.getSearchWords(), user.getId());
         }
@@ -78,7 +78,7 @@ public class ApArticleSearchServiceImpl implements ApArticleSearchService {
 
         boolQueryBuilder.must(queryStringQueryBuilder);
 
-        // 查询小于mindate的数据
+        // 查询小于MinDate的数据
         if (dto.getMinBehotTime() != null) {
             RangeQueryBuilder rangeQueryBuilder = QueryBuilders
                     .rangeQuery("publishTime")
@@ -124,7 +124,6 @@ public class ApArticleSearchServiceImpl implements ApArticleSearchService {
             }
             list.add(map);
         }
-
         return ResponseResult.okResult(list);
     }
 }

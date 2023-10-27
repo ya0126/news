@@ -13,7 +13,7 @@ import com.heima.model.user.pojos.ApUser;
 public interface ApUserService extends IService<ApUser> {
 
     /**
-     * app端登录
+     * 登录
      *
      * @param dto
      * @return ResponseResult

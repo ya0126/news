@@ -1,5 +1,6 @@
 package com.heima.wemedia.controller.v1;
 
+import com.heima.common.constants.WemediaConstants;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.dtos.WmMaterialDto;
 import com.heima.wemedia.service.WmMaterialService;
@@ -20,7 +21,18 @@ public class WmMaterialController {
     private WmMaterialService wmMaterialService;
 
     /**
-     * 上传图片
+     * 列表查询
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/list")
+    public ResponseResult findList(@RequestBody WmMaterialDto dto) {
+        return wmMaterialService.findList(dto);
+    }
+
+    /**
+     * 上传
      *
      * @param multipartFile
      * @return ResponseResult
@@ -31,7 +43,7 @@ public class WmMaterialController {
     }
 
     /**
-     * 删除图片
+     * 删除
      *
      * @param materialId
      * @return ResponseResult
@@ -42,33 +54,22 @@ public class WmMaterialController {
     }
 
     /**
-     * 收藏图片
+     * 收藏
      *
      * @return ResponseResult
      */
     @GetMapping("/collect/{materialId}")
     public ResponseResult collect(@PathVariable("materialId") Integer materialId) {
-        return wmMaterialService.collect(materialId);
+        return wmMaterialService.collection(materialId, WemediaConstants.COLLECT_MATERIAL);
     }
 
     /**
-     * 取消收藏图片
+     * 取消收藏
      *
      * @return ResponseResult
      */
     @GetMapping("/cancel_collect/{materialId}")
     public ResponseResult cancelCollect(@PathVariable("materialId") Integer materialId) {
-        return wmMaterialService.cancelCollect(materialId);
-    }
-
-    /**
-     * 素材列表查询
-     *
-     * @param dto
-     * @return ResponseResult
-     */
-    @PostMapping("/list")
-    public ResponseResult findList(@RequestBody WmMaterialDto dto) {
-        return wmMaterialService.findList(dto);
+        return wmMaterialService.collection(materialId,WemediaConstants.CANCEL_COLLECT_MATERIAL);
     }
 }

@@ -21,6 +21,12 @@ public class ApAssociateWordsController {
     @Autowired
     private ApAssociateWordsService apAssociateWordsService;
 
+    /**
+     * 搜索联想词
+     *
+     * @param userSearchDto
+     * @return ResponseResult
+     */
     @PostMapping("/search")
     public ResponseResult search(@RequestBody UserSearchDto userSearchDto) {
         return apAssociateWordsService.findAssociate(userSearchDto);

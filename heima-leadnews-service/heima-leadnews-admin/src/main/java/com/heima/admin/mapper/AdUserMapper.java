@@ -5,7 +5,7 @@ import com.heima.model.admin.pojo.AdUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 后台系统用户mapper
+ * 用户mapper
  *
  * @author yaoh
  */

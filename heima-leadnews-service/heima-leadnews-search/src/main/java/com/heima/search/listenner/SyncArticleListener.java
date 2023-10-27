@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * TODO
+ * 文章添加至索引库
  *
  * @author yaoh
  */
@@ -27,11 +27,14 @@ public class SyncArticleListener {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
+    /**
+     * 将上传至minio的文章添加到elasticsearch
+     * @param message
+     */
     @KafkaListener(topics = ArticleConstants.ARTICLE_ES_SYNC_TOPIC)
     public void add(String message) {
         if (StringUtils.isNotBlank(message)) {
             log.info("SyncArticleListener,message={}", message);
-
             SearchArticleVo searchArticleVo = JSON.parseObject(message, SearchArticleVo.class);
 
             IndexRequest indexRequest = new IndexRequest("app_info_article");
@@ -44,6 +47,5 @@ public class SyncArticleListener {
                 log.error("sync es error={}", e);
             }
         }
-
     }
 }

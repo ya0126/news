@@ -31,7 +31,7 @@ public class WmChannelController {
     }
 
     /**
-     * 查询所有频道
+     * 查询所有
      *
      * @return ResponseResult
      */
@@ -47,29 +47,29 @@ public class WmChannelController {
      * @return ResponseResult
      */
     @PostMapping("/save")
-    public ResponseResult saveChannel(@RequestBody WmChannel wmChannel) {
+    public ResponseResult save(@RequestBody WmChannel wmChannel) {
         return wmChannelService.saveChannel(wmChannel);
     }
 
     /**
-     * 修改频道
+     * 修改
      *
      * @param wmChannel
      * @return ResponseResult
      */
     @PostMapping("/update")
-    public ResponseResult updateChannel(@RequestBody WmChannel wmChannel) {
+    public ResponseResult update(@RequestBody WmChannel wmChannel) {
         return wmChannelService.updateChannel(wmChannel);
     }
 
     /**
-     * 修改频道
+     * 删除
      *
      * @param channelId
      * @return ResponseResult
      */
     @GetMapping("/del/{id}")
-    public ResponseResult deleteChannel(@PathVariable("id") Integer channelId) {
+    public ResponseResult delete(@PathVariable("id") Integer channelId) {
         return wmChannelService.deleteChannel(channelId);
     }
 

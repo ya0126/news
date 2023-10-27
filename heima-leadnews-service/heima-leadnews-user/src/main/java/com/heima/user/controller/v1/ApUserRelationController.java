@@ -21,6 +21,12 @@ public class ApUserRelationController {
     @Autowired
     private ApUserFollowService apUserFlowerService;
 
+    /**
+     * 用户关注
+     *
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping("/user_follow")
     public ResponseResult userFollow(@RequestBody UserRelationDto dto) {
         return apUserFlowerService.userFollow(dto);

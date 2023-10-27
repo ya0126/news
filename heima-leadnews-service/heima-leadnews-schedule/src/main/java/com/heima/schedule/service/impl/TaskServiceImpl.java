@@ -49,10 +49,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public long addTask(Task task) {
-
         // 添加任务至数据库
         boolean success = addTaskToDB(task);
-
         // 添加任务到redis
         if (success) addTaskToCache(task);
         return task.getTaskId();
@@ -65,7 +63,6 @@ public class TaskServiceImpl implements TaskService {
      * @return boolean
      */
     private boolean addTaskToDB(Task task) {
-
         boolean flag = false;
         try {
             // 1.保存任务信息
@@ -119,11 +116,9 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public boolean cancelTask(long taskId) {
-
         boolean flag = false;
         // 删除任务的数据库信息，更新任务的日志的数据库信息
         Task task = updateDB(taskId, ScheduleConstants.CANCELLED);
-
         if (task != null) {
             removeTaskFromCache(task);
             flag = true;
@@ -143,7 +138,6 @@ public class TaskServiceImpl implements TaskService {
         try {
             // 1.删除任务信息
             taskInfoMapper.deleteById(taskId);
-
             // 2.修改任务日志
             TaskinfoLogs taskinfoLogs = taskInfoLogsMapper.selectById(taskId);
             taskinfoLogs.setStatus(status);

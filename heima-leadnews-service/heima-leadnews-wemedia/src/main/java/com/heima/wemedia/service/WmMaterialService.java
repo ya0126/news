@@ -38,18 +38,11 @@ public interface WmMaterialService extends IService<WmMaterial> {
     ResponseResult deletePicture(Integer materialId);
 
     /**
-     * 收藏素材
+     * 收藏、取消收藏
      *
      * @param materialId
+     * @param collection
      * @return ResponseResult
      */
-    ResponseResult collect(Integer materialId);
-
-    /**
-     * 取消收藏素材
-     *
-     * @param materialId
-     * @return ResponseResult
-     */
-    ResponseResult cancelCollect(Integer materialId);
+    ResponseResult collection(Integer materialId, Short collection);
 }

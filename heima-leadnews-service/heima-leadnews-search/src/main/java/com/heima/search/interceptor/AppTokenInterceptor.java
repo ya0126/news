@@ -1,4 +1,4 @@
-package com.heima.search.listenner;
+package com.heima.search.interceptor;
 
 import com.heima.model.user.pojos.ApUser;
 import com.heima.utils.common.AppThreadLocalUtil;

@@ -25,7 +25,7 @@ import java.util.Map;
 public class ApUserServiceImpl extends ServiceImpl<ApUserMapper, ApUser> implements ApUserService {
 
     /**
-     * app端登录
+     * 登录
      *
      * @param dto
      * @return

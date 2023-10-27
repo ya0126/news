@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * app用户搜索历史
+ * 搜索历史
  *
  * @author yaoh
  */
@@ -21,11 +21,22 @@ public class ApUserSearchController {
     @Autowired
     private ApUserSearchService apUserSearchService;
 
+    /**
+     * 加载搜索历史
+     *
+     * @return ResponseResult
+     */
     @PostMapping("/load")
     public ResponseResult findUserSearch() {
         return apUserSearchService.findUserSearch();
     }
 
+    /**
+     * 删除搜索历史
+     *
+     * @param historySearchDto
+     * @return ResponseResult
+     */
     @PostMapping("/del")
     public ResponseResult delUserSearch(@RequestBody HistorySearchDto historySearchDto) {
         return apUserSearchService.delUserSearch(historySearchDto);

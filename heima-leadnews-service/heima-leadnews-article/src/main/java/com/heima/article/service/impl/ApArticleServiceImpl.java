@@ -49,33 +49,26 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short loadType) {
-
         // 1.校验参数
         Integer size = dto.getSize();
         if (size == null || size == 0) {
             size = 10;
         }
-
         size = Math.min(size, MAX_PAGE_SIZE);
         dto.setSize(size);
-
         // 2.类型参数检验
         if (!loadType.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !loadType.equals(ArticleConstants.LOADTYPE_LOAD_NEW)) {
             loadType = ArticleConstants.LOADTYPE_LOAD_MORE;
         }
-
-        //文章频道校验
+        // 3.文章频道校验
         if (StringUtils.isEmpty(dto.getTag())) {
             dto.setTag(ArticleConstants.DEFAULT_TAG);
         }
-
-        // 3.时间校验
+        // 4.时间校验
         if (dto.getMaxBehotTime() == null) dto.setMaxBehotTime(new Date());
         if (dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
-
         // 4.查询数据
         List<ApArticle> apArticles = apArticleMapper.loadArticleList(dto, loadType);
-
         //5.结果封装
         ResponseResult responseResult = ResponseResult.okResult(apArticles);
         return responseResult;
@@ -89,15 +82,13 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
      */
     @Override
     public ResponseResult saveArticle(ArticleDto dto) {
-
         // 1.参数校验
         if (dto == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
-
         ApArticle apArticle = new ApArticle();
         BeanUtils.copyProperties(dto, apArticle);
-        // 2.保存文章
+        // 2.保存/修改 文章
         if (apArticle.getId() == null) {
             // 2.1保存文章
             save(apArticle);

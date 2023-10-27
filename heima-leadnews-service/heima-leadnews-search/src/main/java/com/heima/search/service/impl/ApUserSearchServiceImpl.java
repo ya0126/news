@@ -106,12 +106,12 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
 
         //2.判断是否登录
         ApUser user = AppThreadLocalUtil.getUser();
-        if(user == null){
+        if (user == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
 
         //3.删除
-        mongoTemplate.remove(Query.query(Criteria.where("userId").is(user.getId()).and("id").is(dto.getId())),ApUserSearch.class);
+        mongoTemplate.remove(Query.query(Criteria.where("userId").is(user.getId()).and("id").is(dto.getId())), ApUserSearch.class);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

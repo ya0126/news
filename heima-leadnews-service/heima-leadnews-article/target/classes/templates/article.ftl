@@ -165,14 +165,10 @@
         </van-row>
     </van-popup>
 </div>
-
-<!-- 引入 Vue 和 Vant 的 JS 文件 -->
 <script src=" ../../../plugins/js/vue.min.js"></script>
 <script src="../../../plugins/js/vant.min.js"></script>
-<!-- 引入 Axios 的 JS 文件 -->
 <script src="../../../plugins/js/axios.min.js"></script>
 <!-- 页面逻辑 -->
-<script src="../../../plugins/js/index.js"></script>
+<script src="../../../plugins/js/page.js"></script>
 </body>
-
 </html>

@@ -12,8 +12,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 /**
  * 后台管理系统-全局认证过滤器
  *
@@ -27,13 +25,13 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
 
         // 登录放行
         boolean login = request.getURI().getPath().contains("login");
-        if (login){
+        if (login) {
             chain.filter(exchange);
         }
 
         // 获取token
         String token = request.getHeaders().getFirst("token");
-        if (StringUtils.isBlank(token)){
+        if (StringUtils.isBlank(token)) {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.setComplete();
         }
@@ -42,11 +40,11 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         try {
             Claims claimsBody = JwtUtil.getClaimsBody(token);
             int result = JwtUtil.verifyToken(claimsBody);
-            if (result==1||result==2){
+            if (result == 1 || result == 2) {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.setComplete();

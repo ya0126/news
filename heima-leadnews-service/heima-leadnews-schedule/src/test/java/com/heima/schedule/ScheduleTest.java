@@ -25,52 +25,52 @@ public class ScheduleTest {
     private CacheService cacheService;
 
     @Test
-    public void testList(){
-        cacheService.lLeftPush("testKey1","testValue1");
-        cacheService.lLeftPush("testKey1","testValue2");
+    public void testList() {
+        cacheService.lLeftPush("testKey1", "testValue1");
+        cacheService.lLeftPush("testKey1", "testValue2");
         cacheService.lLeftPop("testKey1");
     }
 
     @Test
-    public void testZset(){
-        cacheService.zAdd("testKey2","value1",1.0);
-        cacheService.zAdd("testKey2","value2",2.0);
-        cacheService.zAdd("testKey2","value3",3.0);
+    public void testZset() {
+        cacheService.zAdd("testKey2", "value1", 1.0);
+        cacheService.zAdd("testKey2", "value2", 2.0);
+        cacheService.zAdd("testKey2", "value3", 3.0);
     }
 
     @Test
-    public void testKeys(){
+    public void testKeys() {
         Set<String> keys = cacheService.keys("*");
-        System.out.println("keys"+keys);
+        System.out.println("keys" + keys);
         Set<String> scan = cacheService.scan("*");
-        System.out.println("scan"+scan);
+        System.out.println("scan" + scan);
     }
 
 
     //耗时6151
     @Test
-    public  void testPiple1(){
-        long start =System.currentTimeMillis();
-        for (int i = 0; i <3000 ; i++) {
+    public void testPiple1() {
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 3000; i++) {
             Task task = new Task();
             task.setTaskType(1001);
             task.setPriority(1);
             task.setExecuteTime(new Date().getTime());
             cacheService.lLeftPush("1001_1", JSON.toJSONString(task));
         }
-        System.out.println("未使用使用管道技术执行3000次自增操作共耗时"+(System.currentTimeMillis()- start));
+        System.out.println("未使用使用管道技术执行3000次自增操作共耗时" + (System.currentTimeMillis() - start));
     }
 
 
     @Test
-    public void testPiple2(){
-        long start  = System.currentTimeMillis();
+    public void testPiple2() {
+        long start = System.currentTimeMillis();
         //使用管道技术
         List<Object> objectList = cacheService.getstringRedisTemplate().executePipelined(new RedisCallback<Object>() {
             @Nullable
             @Override
             public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-                for (int i = 0; i <3000 ; i++) {
+                for (int i = 0; i < 3000; i++) {
                     Task task = new Task();
                     task.setTaskType(1001);
                     task.setPriority(1);
@@ -80,7 +80,7 @@ public class ScheduleTest {
                 return null;
             }
         });
-        System.out.println("使用管道技术执行3000次自增操作共耗时:"+(System.currentTimeMillis()-start)+"毫秒");
+        System.out.println("使用管道技术执行3000次自增操作共耗时:" + (System.currentTimeMillis() - start) + "毫秒");
     }
 
 }

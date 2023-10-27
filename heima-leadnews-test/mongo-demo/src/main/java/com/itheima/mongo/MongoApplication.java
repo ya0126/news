@@ -8,6 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MongoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MongoApplication.class,args);
+        SpringApplication.run(MongoApplication.class, args);
     }
 }

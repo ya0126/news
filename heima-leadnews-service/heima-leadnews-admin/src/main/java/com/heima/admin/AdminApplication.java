@@ -15,6 +15,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @MapperScan("com.heima.admin.mapper")
 public class AdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class,args);
+        SpringApplication.run(AdminApplication.class, args);
     }
 }

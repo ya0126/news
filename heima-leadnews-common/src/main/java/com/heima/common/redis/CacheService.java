@@ -1409,6 +1409,7 @@ public class CacheService extends CachingConfigurerSupport {
 
     /**
      * 加锁操作
+     *
      * @param name
      * @param expire
      * @return String
@@ -1426,8 +1427,8 @@ public class CacheService extends CachingConfigurerSupport {
                     RedisStringCommands.SetOption.SET_IF_ABSENT);   // 不存在才设置（不存在才能加上锁）
 
             if (result != null && result) return token;
-        }finally {
-            RedisConnectionUtils.releaseConnection(conn, factory,false);
+        } finally {
+            RedisConnectionUtils.releaseConnection(conn, factory, false);
         }
         return null;
     }

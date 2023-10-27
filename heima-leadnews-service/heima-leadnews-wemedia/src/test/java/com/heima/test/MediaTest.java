@@ -25,6 +25,12 @@ public class MediaTest {
 
     @Autowired
     private TextScan textScan;
+    @Autowired
+    private ImageScan imageScan;
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Test
     public void textScan() throws Exception {
@@ -32,25 +38,16 @@ public class MediaTest {
         System.err.println(result);
     }
 
-    @Autowired
-    private ImageScan imageScan;
-
     @Test
     public void imageScan() throws Exception {
         Map result = imageScan.scan("test", new FileInputStream(new File("/Users/yaoh/test.jpg")), AliImageServiceCode.BASELINE_CHECK.getServiceCode());
         System.out.println(result);
     }
 
-    @Autowired
-    private WmNewsAutoScanService wmNewsAutoScanService;
-
     @Test
     public void autoScanWmNews() {
         wmNewsAutoScanService.autoScanWmNews(6243);
     }
-
-    @Autowired
-    private FileStorageService fileStorageService;
 
     @Test
     public void download() {
@@ -60,8 +57,8 @@ public class MediaTest {
             byte[] buffer = new byte[1024];
             int bytesRead;
 
-            while ((bytesRead=inputStream.read(buffer))!=-1){
-                outputStream.write(buffer,0,bytesRead);
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
             }
         } catch (Exception e) {
             e.printStackTrace();

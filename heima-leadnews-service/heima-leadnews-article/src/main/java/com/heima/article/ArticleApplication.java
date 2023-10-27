@@ -16,8 +16,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @MapperScan("com.heima.article.mapper")
 public class ArticleApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ArticleApplication.class,args);
+        SpringApplication.run(ArticleApplication.class, args);
     }
+
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();

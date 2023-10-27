@@ -56,6 +56,7 @@ public interface WmNewsService extends IService<WmNews> {
 
     /**
      * 文章联合查询
+     *
      * @param newsId
      * @return ResponseResult
      */
@@ -63,6 +64,7 @@ public interface WmNewsService extends IService<WmNews> {
 
     /**
      * 审核未通过
+     *
      * @param dto
      * @return ResponseResult
      */
@@ -70,6 +72,7 @@ public interface WmNewsService extends IService<WmNews> {
 
     /**
      * 审核通过
+     *
      * @param dto
      * @return ResponseResult
      */

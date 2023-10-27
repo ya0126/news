@@ -28,30 +28,6 @@ import java.util.Date;
 @Service
 @Slf4j
 public class WmSensitivesServiceImpl extends ServiceImpl<WmSensitiveMapper, WmSensitive> implements WmSensitivesService {
-    /**
-     * 保存关键词
-     *
-     * @param wmSensitive
-     * @return
-     */
-    @Override
-    public ResponseResult saveSensitives(WmSensitive wmSensitive) {
-        // 1.参数校验
-        if (wmSensitive == null || StringUtils.isBlank(wmSensitive.getSensitives())) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
-        }
-
-        // 2.判断是否存在
-        WmSensitive one = getOne(Wrappers.<WmSensitive>lambdaQuery().eq(WmSensitive::getSensitives, wmSensitive.getSensitives()));
-        if (one != null) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_EXIST);
-        }
-
-        // 3.保存
-        wmSensitive.setCreatedTime(new Date());
-        save(wmSensitive);
-        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
-    }
 
     /**
      * 条件分页查询
@@ -60,7 +36,7 @@ public class WmSensitivesServiceImpl extends ServiceImpl<WmSensitiveMapper, WmSe
      * @return
      */
     @Override
-    public ResponseResult pageQuery(WmSensitiveDto dto) {
+    public ResponseResult list(WmSensitiveDto dto) {
         // 1.参数校验
         if (dto == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
@@ -78,16 +54,41 @@ public class WmSensitivesServiceImpl extends ServiceImpl<WmSensitiveMapper, WmSe
 
         // 2.2 根据created_time 倒序排序
         wrapper.orderByDesc(WmSensitive::getCreatedTime);
-
         page = page(page, wrapper);
 
-        PageResponseResult resultData = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
+        ResponseResult resultData = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         resultData.setData(page.getRecords());
         return ResponseResult.okResult(resultData);
     }
 
     /**
+     * 保存关键词
+     *
+     * @param wmSensitive
+     * @return
+     */
+    @Override
+    public ResponseResult saveSensitives(WmSensitive wmSensitive) {
+        // 1.参数校验
+        if (wmSensitive == null || StringUtils.isBlank(wmSensitive.getSensitives())) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        }
+
+        // 2.已存在的敏感词，不能保存
+        WmSensitive one = getOne(Wrappers.<WmSensitive>lambdaQuery().eq(WmSensitive::getSensitives, wmSensitive.getSensitives()));
+        if (one != null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "敏感词已经存在");
+        }
+
+        // 3.保存
+        wmSensitive.setCreatedTime(new Date());
+        save(wmSensitive);
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+    /**
      * 修改关键词
+     *
      * @param wmSensitive
      * @return
      */
@@ -95,7 +96,7 @@ public class WmSensitivesServiceImpl extends ServiceImpl<WmSensitiveMapper, WmSe
     public ResponseResult updateSensitive(WmSensitive wmSensitive) {
         // 1.参数校验
         if (wmSensitive.getId() == null || StringUtils.isBlank(wmSensitive.getSensitives())) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
         // 2.修改
@@ -105,16 +106,23 @@ public class WmSensitivesServiceImpl extends ServiceImpl<WmSensitiveMapper, WmSe
 
     /**
      * 删除关键词
+     *
      * @param wmSensitiveId
      * @return
      */
     @Override
     public ResponseResult deleteSensitice(Integer wmSensitiveId) {
         // 1.校验参数
-        if (wmSensitiveId==null){
+        if (wmSensitiveId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
-        // 2.删除
+
+        // 2.判断是否存在
+        WmSensitive wmSensitive = getById(wmSensitiveId);
+        if (wmSensitive == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+        }
+        // 3.删除
         removeById(wmSensitiveId);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }

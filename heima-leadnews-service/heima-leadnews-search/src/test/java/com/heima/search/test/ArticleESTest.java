@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ArticleESTest {
 
     @Test
-    public void importAllTest(){
+    public void importAllTest() {
 
     }
 

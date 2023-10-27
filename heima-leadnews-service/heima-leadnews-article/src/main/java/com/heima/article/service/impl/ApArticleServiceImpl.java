@@ -40,6 +40,12 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
     @Autowired
     private ApArticleMapper apArticleMapper;
+    @Autowired
+    private ApArticleConfigMapper apArticleConfigMapper;
+    @Autowired
+    private ApArticleContentMapper apArticleContentMapper;
+    @Autowired
+    private ArticleFreemarkerService articleFreemarkerService;
 
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short loadType) {
@@ -74,13 +80,6 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         ResponseResult responseResult = ResponseResult.okResult(apArticles);
         return responseResult;
     }
-
-    @Autowired
-    private ApArticleConfigMapper apArticleConfigMapper;
-    @Autowired
-    private ApArticleContentMapper apArticleContentMapper;
-    @Autowired
-    private ArticleFreemarkerService articleFreemarkerService;
 
     /**
      * 保存app端相关文章

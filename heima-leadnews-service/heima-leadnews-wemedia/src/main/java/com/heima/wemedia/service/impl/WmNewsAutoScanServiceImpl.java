@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +44,23 @@ import java.util.stream.Collectors;
 public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
 
     @Autowired
+    WmUserMapper wmUserMapper;
+    @Autowired
     private WmNewsMapper wmNewsMapper;
+    @Autowired
+    private WmSensitiveMapper wmSensitiveMapper;
+    @Autowired
+    private TextScan textScan;
+    @Autowired
+    private ImageScan imageScan;
+    @Autowired
+    private FileStorageService fileStorageService;
+    @Autowired
+    private Tess4jClient tess4jClient;
+    @Autowired
+    private WmChannelMapper wmChannelMapper;
+    @Autowired
+    private IArticleClient articleClient;
 
     /**
      * 自媒体文章审核
@@ -126,9 +141,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         return resultMap;
     }
 
-    @Autowired
-    private WmSensitiveMapper wmSensitiveMapper;
-
     /**
      * 自管理的敏感词审核
      *
@@ -153,9 +165,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         }
         return flag;
     }
-
-    @Autowired
-    private TextScan textScan;
 
     /**
      * 审核文本内容 阿里云
@@ -203,13 +212,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         wmNewsMapper.updateById(wmNews);
     }
 
-    @Autowired
-    private ImageScan imageScan;
-    @Autowired
-    private FileStorageService fileStorageService;
-    @Autowired
-    private Tess4jClient tess4jClient;
-
     /**
      * 审核图片内容 阿里云
      *
@@ -251,13 +253,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         }
         return flag;
     }
-
-    @Autowired
-    private WmChannelMapper wmChannelMapper;
-    @Autowired
-    WmUserMapper wmUserMapper;
-    @Autowired
-    private IArticleClient articleClient;
 
     /**
      * 保存app端相关的文章数据

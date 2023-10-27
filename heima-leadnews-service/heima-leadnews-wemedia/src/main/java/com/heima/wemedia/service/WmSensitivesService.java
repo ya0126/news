@@ -13,21 +13,24 @@ import com.heima.model.wemedia.pojos.WmSensitive;
 public interface WmSensitivesService extends IService<WmSensitive> {
 
     /**
+     * 条件分页查询
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult list(WmSensitiveDto dto);
+
+    /**
      * 保存关键词
+     *
      * @param wmSensitive
      * @return ResponseResult
      */
     ResponseResult saveSensitives(WmSensitive wmSensitive);
 
     /**
-     * 条件分页查询
-     * @param dto
-     * @return ResponseResult
-     */
-    ResponseResult pageQuery(WmSensitiveDto dto);
-
-    /**
      * 修改关键词
+     *
      * @param wmSensitive
      * @return ResponseResult
      */
@@ -35,6 +38,7 @@ public interface WmSensitivesService extends IService<WmSensitive> {
 
     /**
      * 删除关键词
+     *
      * @param wmSensitiveId
      * @return ResponseResult
      */

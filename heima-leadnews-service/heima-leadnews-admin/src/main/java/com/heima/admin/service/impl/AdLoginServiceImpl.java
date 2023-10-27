@@ -30,7 +30,7 @@ public class AdLoginServiceImpl implements AdLoginService {
     private AdUserMapper adUserMapper;
 
     /**
-     * 用户登录
+     * 登录后台
      *
      * @param dto
      * @return
@@ -39,7 +39,7 @@ public class AdLoginServiceImpl implements AdLoginService {
     public ResponseResult login(AdLoginDto dto) {
         // 1.校验参数
         if (StringUtils.isBlank(dto.getName()) || StringUtils.isBlank(dto.getPassword())) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "用户名或密码为空");
         }
 
         // 2.查询用户
@@ -52,7 +52,7 @@ public class AdLoginServiceImpl implements AdLoginService {
         String salt = adUser.getSalt();
         String password = dto.getPassword();
 
-        password= DigestUtils.md5DigestAsHex((password + salt).getBytes());
+        password = DigestUtils.md5DigestAsHex((password + salt).getBytes());
 
         if (!password.equals(adUser.getPassword())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_PASSWORD_ERROR);
@@ -64,7 +64,7 @@ public class AdLoginServiceImpl implements AdLoginService {
         adUser.setPassword("");
         result.put("user", adUser);
         result.put("token", token);
-        log.info("用户登录成功，userId:{}",adUser.getId());
+        log.info("用户登录成功，userId:{}", adUser.getId());
         return ResponseResult.okResult(result);
     }
 }

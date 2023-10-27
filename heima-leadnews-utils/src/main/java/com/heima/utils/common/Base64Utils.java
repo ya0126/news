@@ -7,10 +7,11 @@ public class Base64Utils {
 
     /**
      * 解码
+     *
      * @param base64
      * @return
      */
-    public static byte[] decode(String base64){
+    public static byte[] decode(String base64) {
         BASE64Decoder decoder = new BASE64Decoder();
         try {
             // Base64解码
@@ -29,6 +30,7 @@ public class Base64Utils {
 
     /**
      * 编码
+     *
      * @param data
      * @return
      * @throws Exception

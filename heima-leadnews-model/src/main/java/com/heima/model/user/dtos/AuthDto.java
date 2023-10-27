@@ -9,7 +9,7 @@ import lombok.Data;
  * @author yaoh
  */
 @Data
-public class ApUserAuthDto extends PageRequestDto {
+public class AuthDto extends PageRequestDto {
 
     /**
      * 用户id
@@ -17,7 +17,7 @@ public class ApUserAuthDto extends PageRequestDto {
     private Integer id;
 
     /**
-     * 审核消息
+     * 驳回的信息
      */
     private String message;
 

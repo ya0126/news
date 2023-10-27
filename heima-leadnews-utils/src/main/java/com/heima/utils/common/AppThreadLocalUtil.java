@@ -12,21 +12,21 @@ public class AppThreadLocalUtil {
     private static final ThreadLocal<ApUser> APP_USER_THREAD_LOCAL = new ThreadLocal<>();
 
     /**
-     * 设置用户
-     *
-     * @param apUser
-     */
-    public static void setUser(ApUser apUser) {
-        APP_USER_THREAD_LOCAL.set(apUser);
-    }
-
-    /**
      * 获取用户
      *
      * @return ApUser
      */
     public static ApUser getUser() {
         return APP_USER_THREAD_LOCAL.get();
+    }
+
+    /**
+     * 设置用户
+     *
+     * @param apUser
+     */
+    public static void setUser(ApUser apUser) {
+        APP_USER_THREAD_LOCAL.set(apUser);
     }
 
     /**

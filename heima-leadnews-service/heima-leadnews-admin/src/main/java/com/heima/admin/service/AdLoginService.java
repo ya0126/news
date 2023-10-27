@@ -11,7 +11,7 @@ import com.heima.model.common.dtos.ResponseResult;
 public interface AdLoginService {
 
     /**
-     * 用户登录
+     * 后台登录
      *
      * @param dto
      * @return ResponseResult

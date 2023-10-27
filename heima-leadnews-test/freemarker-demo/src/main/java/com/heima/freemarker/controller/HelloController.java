@@ -30,7 +30,7 @@ public class HelloController {
     }
 
     @GetMapping("/list")
-    public String list(Model model){
+    public String list(Model model) {
 
         //------------------------------------
         Student stu1 = new Student();
@@ -51,14 +51,14 @@ public class HelloController {
         stus.add(stu2);
 
         //向model中存放List集合数据
-        model.addAttribute("stus",stus);
+        model.addAttribute("stus", stus);
 
         //------------------------------------
 
         //创建Map数据
-        HashMap<String,Student> stuMap = new HashMap<>();
-        stuMap.put("stu1",stu1);
-        stuMap.put("stu2",stu2);
+        HashMap<String, Student> stuMap = new HashMap<>();
+        stuMap.put("stu1", stu1);
+        stuMap.put("stu2", stu2);
         // 3.1 向model中存放Map数据
         model.addAttribute("stuMap", stuMap);
 

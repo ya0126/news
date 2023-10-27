@@ -20,6 +20,17 @@ public class WmSensitivesController {
     private WmSensitivesService wmSensitivesService;
 
     /**
+     * 条件分页查询
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    @PostMapping("/list")
+    public ResponseResult list(@RequestBody WmSensitiveDto dto) {
+        return wmSensitivesService.list(dto);
+    }
+
+    /**
      * 保存关键词
      *
      * @param wmSensitive
@@ -28,17 +39,6 @@ public class WmSensitivesController {
     @PostMapping("/save")
     public ResponseResult saveSensitives(@RequestBody WmSensitive wmSensitive) {
         return wmSensitivesService.saveSensitives(wmSensitive);
-    }
-
-    /**
-     * 条件分页查询
-     *
-     * @param dto
-     * @return ResponseResult
-     */
-    @PostMapping("/list")
-    public ResponseResult list(@RequestBody WmSensitiveDto dto) {
-        return wmSensitivesService.pageQuery(dto);
     }
 
     /**

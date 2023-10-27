@@ -39,6 +39,7 @@ public interface WmMaterialService extends IService<WmMaterial> {
 
     /**
      * 收藏素材
+     *
      * @param materialId
      * @return ResponseResult
      */
@@ -46,6 +47,7 @@ public interface WmMaterialService extends IService<WmMaterial> {
 
     /**
      * 取消收藏素材
+     *
      * @param materialId
      * @return ResponseResult
      */

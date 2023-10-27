@@ -53,6 +53,10 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     private WmMaterialMapper wmMaterialMapper;
     @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
+    @Autowired
+    private WmNewsTaskService wmNewsTaskService;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public ResponseResult newsAuthPageQuery(NewsAuthDto dto) {
@@ -119,9 +123,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         responseResult.setData(page.getRecords());
         return responseResult;
     }
-
-    @Autowired
-    private WmNewsTaskService wmNewsTaskService;
 
     /**
      * 发布文章或保存草稿
@@ -264,9 +265,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, newsId));
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
-
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public ResponseResult downOrUp(WmNewsDto dto) {

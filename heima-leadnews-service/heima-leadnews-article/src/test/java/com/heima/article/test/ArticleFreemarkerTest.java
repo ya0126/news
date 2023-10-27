@@ -70,7 +70,7 @@ public class ArticleFreemarkerTest {
                 apArticle.setId(apArticleContent.getId());
                 apArticle.setStaticUrl(path);
                 apArticleMapper.updateById(apArticle);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

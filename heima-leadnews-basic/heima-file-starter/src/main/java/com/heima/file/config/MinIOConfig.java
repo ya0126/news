@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  * minio配置
  *
- *
  * @author yaoh
  */
 @Data

@@ -12,13 +12,14 @@ public class JdkSerializeUtil {
 
     /**
      * 序列化
+     *
      * @param obj
      * @param <T>
      * @return
      */
     public static <T> byte[] serialize(T obj) {
 
-        if (obj  == null){
+        if (obj == null) {
             throw new NullPointerException();
         }
 
@@ -36,6 +37,7 @@ public class JdkSerializeUtil {
 
     /**
      * 反序列化
+     *
      * @param data
      * @param clazz
      * @param <T>
@@ -46,15 +48,14 @@ public class JdkSerializeUtil {
 
         try {
             ObjectInputStream ois = new ObjectInputStream(bis);
-            T obj = (T)ois.readObject();
+            T obj = (T) ois.readObject();
             return obj;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return  null;
+        return null;
     }
-
 
 
 }

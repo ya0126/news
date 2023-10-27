@@ -6,7 +6,7 @@ public class CustomException extends RuntimeException {
 
     private AppHttpCodeEnum appHttpCodeEnum;
 
-    public CustomException(AppHttpCodeEnum appHttpCodeEnum){
+    public CustomException(AppHttpCodeEnum appHttpCodeEnum) {
         this.appHttpCodeEnum = appHttpCodeEnum;
     }
 

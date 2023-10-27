@@ -34,6 +34,13 @@ import java.util.Set;
 @Slf4j
 public class TaskServiceImpl implements TaskService {
 
+    @Autowired
+    private TaskInfoMapper taskInfoMapper;
+    @Autowired
+    private TaskInfoLogsMapper taskInfoLogsMapper;
+    @Autowired
+    private CacheService cacheService;
+
     /**
      * 添加任务
      *
@@ -50,11 +57,6 @@ public class TaskServiceImpl implements TaskService {
         if (success) addTaskToCache(task);
         return task.getTaskId();
     }
-
-    @Autowired
-    private TaskInfoMapper taskInfoMapper;
-    @Autowired
-    private TaskInfoLogsMapper taskInfoLogsMapper;
 
     /**
      * 添加任务到数据库
@@ -87,9 +89,6 @@ public class TaskServiceImpl implements TaskService {
         }
         return flag;
     }
-
-    @Autowired
-    private CacheService cacheService;
 
     /**
      * 添加任务至redis
@@ -154,7 +153,7 @@ public class TaskServiceImpl implements TaskService {
             BeanUtils.copyProperties(taskinfoLogs, task);
             task.setExecuteTime(taskinfoLogs.getExecuteTime().getTime());
         } catch (Exception e) {
-            log.error("删除任务的数据库信息，更新任务的日志的数据库信息失败",e);
+            log.error("删除任务的数据库信息，更新任务的日志的数据库信息失败", e);
         }
         return task;
     }
@@ -193,7 +192,7 @@ public class TaskServiceImpl implements TaskService {
                 updateDB(task.getTaskId(), ScheduleConstants.EXECUTED);
             }
         } catch (Exception e) {
-            log.error("拉取任务失败",e);
+            log.error("拉取任务失败", e);
         }
         return task;
     }

@@ -13,7 +13,6 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.clients.KafkaClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -43,6 +42,8 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
     private FileStorageService fileStorageService;
     @Autowired
     private ApArticleService apArticleService;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Async
     @Override
@@ -77,8 +78,6 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
         }
     }
 
-    @Autowired
-    private KafkaTemplate<String,String> kafkaTemplate;
     /**
      * 送消息，创建索引
      *
@@ -88,11 +87,11 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
      */
     private void createArticleESIndex(ApArticle apArticle, String content, String path) {
         SearchArticleVo vo = new SearchArticleVo();
-        BeanUtils.copyProperties(apArticle,vo);
+        BeanUtils.copyProperties(apArticle, vo);
         vo.setContent(content);
         vo.setStaticUrl(path);
 
         kafkaTemplate.send(ArticleConstants.ARTICLE_ES_SYNC_TOPIC, JSON.toJSONString(vo));
-        log.info("发送消息至search服务，文章ID为：{}",apArticle.getId());
+        log.info("发送消息至search服务，文章ID为：{}", apArticle.getId());
     }
 }

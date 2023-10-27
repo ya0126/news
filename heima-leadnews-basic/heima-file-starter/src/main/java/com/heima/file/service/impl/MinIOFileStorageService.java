@@ -28,11 +28,11 @@ import java.util.Date;
 @Slf4j
 public class MinIOFileStorageService implements FileStorageService {
 
+    private final static String separator = "/";
     @Autowired
     private MinioClient minioClient;
     @Autowired
     private MinIOConfigProperties minIOConfigProperties;
-    private final static String separator = "/";
 
     /**
      * 构建文件路径

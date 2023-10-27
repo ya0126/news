@@ -2,7 +2,7 @@ package com.heima.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.heima.model.common.dtos.ResponseResult;
-import com.heima.model.user.dtos.ApUserAuthDto;
+import com.heima.model.user.dtos.AuthDto;
 import com.heima.model.user.pojos.ApUserRealname;
 
 /**
@@ -11,27 +11,21 @@ import com.heima.model.user.pojos.ApUserRealname;
  * @author yaoh
  */
 public interface ApUserRealNameService extends IService<ApUserRealname> {
+
     /**
      * 认证列表
      *
      * @param dto
      * @return ResponseResult
      */
-    ResponseResult pageQuery(ApUserAuthDto dto);
+    ResponseResult pageQuery(AuthDto dto);
 
     /**
-     * 审核失败
+     * 修改状态
      *
      * @param dto
+     * @param status
      * @return ResponseResult
      */
-    ResponseResult authFail(ApUserAuthDto dto);
-
-    /**
-     * 审核成功
-     *
-     * @param dto
-     * @return ResponseResult
-     */
-    ResponseResult authPass(ApUserAuthDto dto);
+    ResponseResult updateStatus(AuthDto dto, Short status);
 }

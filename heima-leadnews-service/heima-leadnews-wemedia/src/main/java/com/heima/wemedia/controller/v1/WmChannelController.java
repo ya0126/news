@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 频道信息接口
+ * 频道信息controller
  *
  * @author yaoh
  */
@@ -53,6 +53,7 @@ public class WmChannelController {
 
     /**
      * 修改频道
+     *
      * @param wmChannel
      * @return ResponseResult
      */
@@ -63,6 +64,7 @@ public class WmChannelController {
 
     /**
      * 修改频道
+     *
      * @param channelId
      * @return ResponseResult
      */

@@ -18,7 +18,7 @@ public class ElasticSearchConfig {
     private int port;
 
     @Bean
-    public RestHighLevelClient client(){
+    public RestHighLevelClient client() {
         return new RestHighLevelClient(RestClient.builder(
                 new HttpHost(
                         host,

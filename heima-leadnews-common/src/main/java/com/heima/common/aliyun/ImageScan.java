@@ -32,10 +32,24 @@ import java.util.*;
 @Slf4j
 public class ImageScan {
 
+    public static DescribeUploadTokenResponseBody.DescribeUploadTokenResponseBodyData uploadToken = null;
+    private static String bucketName;
     private String accessKeyId;
     private String secret;
-    private static String bucketName;
-    public static DescribeUploadTokenResponseBody.DescribeUploadTokenResponseBodyData uploadToken = null;
+
+    public static String uploadFile(String fileName, InputStream inputStream, DescribeUploadTokenResponseBody.DescribeUploadTokenResponseBodyData tokenData, boolean isVPC) throws Exception {
+        OSS ossClient = null;
+        if (isVPC) {
+            ossClient = new OSSClientBuilder().build(tokenData.ossInternalEndPoint, tokenData.getAccessKeyId(), tokenData.getAccessKeySecret(), tokenData.getSecurityToken());
+        } else {
+            ossClient = new OSSClientBuilder().build(tokenData.ossInternetEndPoint, tokenData.getAccessKeyId(), tokenData.getAccessKeySecret(), tokenData.getSecurityToken());
+        }
+
+        String objectName = tokenData.getFileNamePrefix() + UUID.randomUUID() + "." + fileName;
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, inputStream);
+        ossClient.putObject(putObjectRequest);
+        return objectName;
+    }
 
     public Map scan(String fileName, InputStream inputStream, String service) throws Exception {
         //服务是否部署在vpc上。
@@ -103,12 +117,12 @@ public class ImageScan {
                     List<ImageModerationResponseBodyDataResult> results = data.getResult();
 
                     if (results.size() == 1 && results.get(0).getLabel().equals("nonLabel")) {
-                        log.info("requestId:{}，审核通过",JSON.toJSONString(body.getRequestId()));
+                        log.info("requestId:{}，审核通过", JSON.toJSONString(body.getRequestId()));
                         return Collections.singletonMap("suggestion", "pass");
                     }
 
                     Map<String, Object> resultMap = new HashMap<>();
-                    log.info("requestId:{}，审核未通过",JSON.toJSONString(body.getRequestId()));
+                    log.info("requestId:{}，审核未通过", JSON.toJSONString(body.getRequestId()));
                     resultMap.put("suggestion", "block");
                     for (ImageModerationResponseBodyDataResult result : results) {
                         resultMap.put(result.getLabel(), result.getConfidence());
@@ -119,22 +133,8 @@ public class ImageScan {
 
             return null;
         } catch (Exception e) {
-            log.error("阿里云图片审核失败",e);
+            log.error("阿里云图片审核失败", e);
         }
         return null;
-    }
-
-    public static String uploadFile(String fileName, InputStream inputStream, DescribeUploadTokenResponseBody.DescribeUploadTokenResponseBodyData tokenData, boolean isVPC) throws Exception {
-        OSS ossClient = null;
-        if (isVPC) {
-            ossClient = new OSSClientBuilder().build(tokenData.ossInternalEndPoint, tokenData.getAccessKeyId(), tokenData.getAccessKeySecret(), tokenData.getSecurityToken());
-        } else {
-            ossClient = new OSSClientBuilder().build(tokenData.ossInternetEndPoint, tokenData.getAccessKeyId(), tokenData.getAccessKeySecret(), tokenData.getSecurityToken());
-        }
-
-        String objectName = tokenData.getFileNamePrefix() + UUID.randomUUID() + "." + fileName;
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName,inputStream);
-        ossClient.putObject(putObjectRequest);
-        return objectName;
     }
 }

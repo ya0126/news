@@ -1,7 +1,6 @@
 package com.heima.model.wemedia.dtos;
 
 import com.heima.model.common.dtos.PageRequestDto;
-import com.heima.model.wemedia.pojos.WmMaterial;
 import lombok.Data;
 
 /**

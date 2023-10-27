@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author yaoh
  */
-@FeignClient(value = "leadnews-schedule",fallback = IScheduleClientFallback.class)
+@FeignClient(value = "leadnews-schedule", fallback = IScheduleClientFallback.class)
 public interface IScheduleClient {
     /**
      * 添加任务

@@ -32,6 +32,9 @@ import java.util.Date;
 @Slf4j
 public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel> implements WmChannelService {
 
+    @Autowired
+    private WmNewsService wmNewsService;
+
     /**
      * 查询所有频道
      *
@@ -52,21 +55,18 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
     public ResponseResult saveChannel(WmChannel wmChannel) {
         // 1.校验参数
         if (wmChannel == null || StringUtils.isBlank(wmChannel.getName())) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
         // 2.校验频道名字是否重复
         WmChannel one = getOne(Wrappers.<WmChannel>lambdaQuery().eq(WmChannel::getName, wmChannel.getName()));
-        if (one != null) return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_NAME_EXIST);
+        if (one != null) return ResponseResult.errorResult(AppHttpCodeEnum.DATA_EXIST, "频道名称已经存在");
 
         // 2.保存频道信息
         wmChannel.setCreatedTime(new Date());
         save(wmChannel);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
-
-    @Autowired
-    private WmNewsService wmNewsService;
 
     /**
      * 条件分页查询
@@ -94,14 +94,15 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
 
         // 3.2 根据状态查找
         if (dto.getStatus() != null) {
-            queryWrapper.eq(WmChannel::getStatus,dto.getStatus());
+            queryWrapper.eq(WmChannel::getStatus, dto.getStatus());
         }
         // 3.3 根据createdTime降序排序
         queryWrapper.orderByDesc(WmChannel::getCreatedTime);
 
-        // 4.封装返回参数
         page = page(page, queryWrapper);
-        PageResponseResult pageResponseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
+
+        // 4.封装返回参数
+        ResponseResult pageResponseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         pageResponseResult.setData(page.getRecords());
         return ResponseResult.okResult(pageResponseResult);
     }
@@ -119,11 +120,13 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
         // 2.判断是否被引用
-        WmNews one = wmNewsService.getOne(Wrappers.<WmNews>lambdaQuery().eq(WmNews::getChannelId, wmChannel.getId()));
-        if (one != null && wmChannel.getStatus() != null && !wmChannel.getStatus()) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_IN_USE);
+        int count = wmNewsService.count(Wrappers.<WmNews>lambdaQuery()
+                .eq(WmNews::getChannelId, wmChannel.getId())
+                .eq(WmNews::getStatus, WmNews.Status.PUBLISHED.getCode()));
+        if (count > 1) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "频道被引用不能修改或禁用");
         }
-
+        // 3.修改
         updateById(wmChannel);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
@@ -141,12 +144,26 @@ public class WmChannelServiceImpl extends ServiceImpl<WmChannelMapper, WmChannel
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
 
-        // 2.判断频道状态
+        // 2.查询频道
         WmChannel wmChannel = getById(channelId);
-        if (wmChannel != null && wmChannel.getStatus()) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.CHANNEL_NOT_DISABLED);
+        if (wmChannel == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
         }
 
+        // 3.判断是否有效
+        if (wmChannel.getStatus()) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "频道有效，无法删除");
+        }
+
+        // 4.判断是否被引用
+        int count = wmNewsService.count(Wrappers.<WmNews>lambdaQuery()
+                .eq(WmNews::getChannelId, channelId)
+                .eq(WmNews::getStatus, WmNews.Status.PUBLISHED.getCode()));
+        if (count > 1) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "频道被引用，无法删除");
+        }
+
+        // 5.删除
         removeById(channelId);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }

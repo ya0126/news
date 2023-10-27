@@ -29,6 +29,7 @@ public class SyncArticleListener {
 
     /**
      * 将上传至minio的文章添加到elasticsearch
+     *
      * @param message
      */
     @KafkaListener(topics = ArticleConstants.ARTICLE_ES_SYNC_TOPIC)

@@ -70,6 +70,6 @@ public class WmMaterialController {
      */
     @GetMapping("/cancel_collect/{materialId}")
     public ResponseResult cancelCollect(@PathVariable("materialId") Integer materialId) {
-        return wmMaterialService.collection(materialId,WemediaConstants.CANCEL_COLLECT_MATERIAL);
+        return wmMaterialService.collection(materialId, WemediaConstants.CANCEL_COLLECT_MATERIAL);
     }
 }

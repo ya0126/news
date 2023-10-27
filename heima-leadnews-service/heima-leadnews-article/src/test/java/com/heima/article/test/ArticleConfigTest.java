@@ -2,7 +2,6 @@ package com.heima.article.test;
 
 import com.heima.article.ArticleApplication;
 import com.heima.article.service.ApArticleConfigService;
-import org.apache.commons.collections.map.SingletonMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class ArticleConfigTest {
     private ApArticleConfigService apArticleConfigService;
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
         Map<String, Integer> enable = Collections.singletonMap("enable", 1);
         apArticleConfigService.updateByMap(enable);
     }

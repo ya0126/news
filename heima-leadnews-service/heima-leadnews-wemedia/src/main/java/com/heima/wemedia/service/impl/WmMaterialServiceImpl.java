@@ -39,6 +39,8 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
 
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    private WmNewsMaterialMapper wmNewsMaterialMapper;
 
     /**
      * 上传素材
@@ -109,9 +111,6 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         return responseResult;
     }
 
-    @Autowired
-    private WmNewsMaterialMapper wmNewsMaterialMapper;
-
     /**
      * 删除素材
      *
@@ -136,7 +135,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         if (StringUtils.isNoneBlank(url)) {
             // 删除文件系统图片
             fileStorageService.delete(url);
-            log.info("素材删除，fileURL:{}",url);
+            log.info("素材删除，fileURL:{}", url);
         }
 
         // 4.删除数据库保存的图片信息

@@ -58,6 +58,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     private WmNewsTaskService wmNewsTaskService;
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
 
     /**
      * 查询所有自媒体图文
@@ -323,9 +325,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         NewAuthVo newAuthVo = wmNewsMapper.getOneVo(newsId);
         return ResponseResult.okResult(newAuthVo);
     }
-
-    @Autowired
-    private WmNewsAutoScanService wmNewsAutoScanService;
 
     /**
      * 修改审核状态

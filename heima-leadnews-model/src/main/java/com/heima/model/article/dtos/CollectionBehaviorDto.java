@@ -21,7 +21,7 @@ public class CollectionBehaviorDto {
      * 0-收藏
      * 1-取消收藏
      */
-    private Boolean operation;
+    private Short operation;
 
     /**
      * 发布时间

@@ -24,5 +24,5 @@ public class UserRelationDto {
      * 0-关注
      * 1-取消
      */
-    private Boolean operation;
+    private Short operation;
 }

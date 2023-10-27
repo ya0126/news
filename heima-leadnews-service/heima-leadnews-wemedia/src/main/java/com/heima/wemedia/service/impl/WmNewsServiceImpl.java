@@ -2,7 +2,6 @@ package com.heima.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,11 +18,13 @@ import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmMaterial;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.model.wemedia.pojos.WmNewsMaterial;
+import com.heima.model.wemedia.pojos.WmUser;
 import com.heima.model.wemedia.vos.NewAuthVo;
 import com.heima.utils.common.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
+import com.heima.wemedia.service.WmNewsAutoScanService;
 import com.heima.wemedia.service.WmNewsService;
 import com.heima.wemedia.service.WmNewsTaskService;
 import lombok.extern.slf4j.Slf4j;
@@ -58,12 +59,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Override
-    public ResponseResult newsAuthPageQuery(NewsAuthDto dto) {
-        List<NewAuthVo> newAuthVos = wmNewsMapper.newsAuthList(dto);
-        return ResponseResult.okResult(newAuthVos);
-    }
-
     /**
      * 查询所有自媒体图文
      *
@@ -72,47 +67,41 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      */
     @Override
     public ResponseResult findAll(WmNewsPageReqDto dto) {
-
-        // 检查dto参数
+        // 1.参数校验
         if (dto == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
 
-        // 检车登录用户
-        //WmUser user = WmThreadLocalUtil.getUser();
-        //if (user == null) {
-        //    return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-        //}
+        // 2.检车登录用户
+        WmUser user = WmThreadLocalUtil.getUser();
+        if (user == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+        }
 
-        // 检查分页参数
+        // 3.检查分页参数
         dto.checkParam();
 
-        // 分页查询条件
+        // 4.分页查询条件
         IPage page = new Page(dto.getPage(), dto.getSize());
         LambdaQueryWrapper<WmNews> queryWrapper = new LambdaQueryWrapper<>();
-
         // 状态精确查找
         if (dto.getStatus() != null) {
             queryWrapper.eq(WmNews::getStatus, dto.getStatus());
         }
-
         // 频道精确查找
         if (dto.getChannelId() != null) {
             queryWrapper.eq(WmNews::getChannelId, dto.getChannelId());
         }
-
         // 时间范围查找
         if (dto.getBeginPubDate() != null && dto.getEndPubDate() != null) {
             queryWrapper.between(WmNews::getPublishTime, dto.getBeginPubDate(), dto.getEndPubDate());
         }
-
         // 关键字模糊查找
         if (StringUtils.isNotBlank(dto.getKeyword())) {
             queryWrapper.like(WmNews::getTitle, dto.getKeyword());
         }
-
         //查询当前登录用户的文章
-        //queryWrapper.eq(WmNews::getUserId, user.getId());
+        queryWrapper.eq(WmNews::getUserId, user.getId());
 
         //发布时间倒序查询
         queryWrapper.orderByDesc(WmNews::getCreatedTime);
@@ -294,6 +283,31 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     /**
+     * 审核-文章联合分页查询
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResponseResult newsAuthPageQuery(NewsAuthDto dto) {
+        // 1.参数检查
+        dto.checkParam();
+
+        // 2.记录当前页
+        Integer currentPage = dto.getPage();
+        dto.setPage((dto.getPage() - 1) * dto.getSize());
+        // 3.分页查询
+        List<NewAuthVo> newAuthVos = wmNewsMapper.newsAuthList(dto);
+        // 4.count查询
+        int count = wmNewsMapper.findListCount(dto);
+
+        // 5.结果返回
+        ResponseResult responseResult = new PageResponseResult(currentPage, dto.getSize(), count);
+        responseResult.setData(newAuthVos);
+        return ResponseResult.okResult(responseResult);
+    }
+
+    /**
      * 文章联合查询
      *
      * @param newsId
@@ -301,58 +315,56 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      */
     @Override
     public ResponseResult getOneVo(Integer newsId) {
+        // 1. 校验参数
         if (newsId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
+        // 2. 查询
         NewAuthVo newAuthVo = wmNewsMapper.getOneVo(newsId);
         return ResponseResult.okResult(newAuthVo);
     }
 
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
+
     /**
-     * 审核未通过
+     * 修改审核状态
      *
      * @param dto
+     * @param status
      * @return
      */
     @Override
-    public ResponseResult authFail(NewsAuthDto dto) {
-        // 1.校验参数
+    public ResponseResult updateStatus(NewsAuthDto dto, Short status) {
+        //1.检查参数
         if (dto == null || dto.getId() == null) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        //2.查询文章信息
+        WmNews wmNews = getById(dto.getId());
+        if (wmNews == null) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
         }
 
-        // 2.修改
-        LambdaUpdateWrapper<WmNews> wrapper = new LambdaUpdateWrapper<>();
+        //3.修改文章的状态
+        wmNews.setStatus(status);
         if (StringUtils.isNotBlank(dto.getMessage())) {
-            wrapper.set(WmNews::getReason, dto.getMessage());
+            wmNews.setReason(dto.getMessage());
         }
-        wrapper.set(WmNews::getStatus, (short) 2);
-        wrapper.eq(WmNews::getId, dto.getId());
-        update(wrapper);
-        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
-    }
+        updateById(wmNews);
 
-    /**
-     * 审核通过
-     *
-     * @param dto
-     * @return
-     */
-    @Override
-    public ResponseResult authPass(NewsAuthDto dto) {
-        // 1.校验参数
-        if (dto == null || dto.getId() == null) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
+        //审核成功，则需要创建app端文章数据，并修改自媒体文章
+        if (status.equals(WemediaConstants.WM_NEWS_AUTH_PASS)) {
+            //创建app端文章数据
+            ResponseResult responseResult = wmNewsAutoScanService.saveAppArticle(wmNews);
+            if (responseResult.getCode().equals(200)) {
+                wmNews.setArticleId((Long) responseResult.getData());
+                wmNews.setStatus(WmNews.Status.PUBLISHED.getCode());
+                updateById(wmNews);
+            }
         }
 
-        // 2.修改
-        LambdaUpdateWrapper<WmNews> wrapper = new LambdaUpdateWrapper<>();
-        if (StringUtils.isNotBlank(dto.getMessage())) {
-            wrapper.set(WmNews::getReason, dto.getMessage());
-        }
-        wrapper.set(WmNews::getStatus, (short) 8);
-        wrapper.eq(WmNews::getId, dto.getId());
-        update(wrapper);
+        //4.返回
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

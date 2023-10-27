@@ -260,7 +260,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
      * @param wmNews
      * @return ResponseResult
      */
-    private ResponseResult saveAppArticle(WmNews wmNews) {
+    public ResponseResult saveAppArticle(WmNews wmNews) {
         ArticleDto articleDto = new ArticleDto();
         BeanUtils.copyProperties(wmNews, articleDto);
         // 文章的布局

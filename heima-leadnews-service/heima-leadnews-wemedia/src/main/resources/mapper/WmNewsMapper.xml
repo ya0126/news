@@ -26,4 +26,22 @@
                  LEFT JOIN wm_user u On n.user_id = u.id
         where n.id = #{newsId}
     </select>
+
+    <select id="findListCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        wm_news wn
+        LEFT JOIN
+        wm_user wu
+        ON wn.user_id = wu.id
+        <where>
+            <if test="dto.title!=null and dto.title!=''">
+                and wn.title like concat('%',#{dto.title},'%')
+            </if>
+            <if test="dto.status!=null">
+                and wn.status = #{dto.status}
+            </if>
+        </where>
+    </select>
 </mapper>

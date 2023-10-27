@@ -63,18 +63,11 @@ public interface WmNewsService extends IService<WmNews> {
     ResponseResult getOneVo(Integer newsId);
 
     /**
-     * 审核未通过
+     * 修改审核状态
      *
      * @param dto
+     * @param status
      * @return ResponseResult
      */
-    ResponseResult authFail(NewsAuthDto dto);
-
-    /**
-     * 审核通过
-     *
-     * @param dto
-     * @return ResponseResult
-     */
-    ResponseResult authPass(NewsAuthDto dto);
+    ResponseResult updateStatus(NewsAuthDto dto, Short status);
 }

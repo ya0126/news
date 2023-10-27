@@ -1,5 +1,8 @@
 package com.heima.wemedia.service;
 
+import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.wemedia.pojos.WmNews;
+
 /**
  * 自媒体文章发布自动审核业务层service
  *
@@ -13,4 +16,12 @@ public interface WmNewsAutoScanService {
      * @param id 自媒体文章id
      */
     void autoScanWmNews(Integer id);
+
+    /**
+     * 保存app端相关的文章数据
+     *
+     * @param wmNews
+     * @return ResponseResult
+     */
+    ResponseResult saveAppArticle(WmNews wmNews);
 }

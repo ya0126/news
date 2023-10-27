@@ -20,4 +20,6 @@ public interface WmNewsMapper extends BaseMapper<WmNews> {
     List<NewAuthVo> newsAuthList(@Param("dto") NewsAuthDto dto);
 
     NewAuthVo getOneVo(Integer newsId);
+
+    int findListCount(NewsAuthDto dto);
 }

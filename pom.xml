@@ -34,7 +34,6 @@
         <!-- 项目编译JDK版本 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
         <!-- 依赖包版本管理 -->
         <spring.boot.version>2.3.9.RELEASE</spring.boot.version>
         <commons.io.version>2.6</commons.io.version>

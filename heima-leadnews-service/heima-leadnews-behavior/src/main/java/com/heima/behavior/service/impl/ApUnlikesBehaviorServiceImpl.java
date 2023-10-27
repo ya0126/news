@@ -27,16 +27,18 @@ public class ApUnlikesBehaviorServiceImpl implements ApUnlikesBehaviorService {
 
     @Override
     public ResponseResult unLike(UnLikesBehaviorDto dto) {
-
+        // 1.参数校验
         if (dto.getArticleId() == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
+        // 2.判断登录
         ApUser user = AppThreadLocalUtil.getUser();
         if (user == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
 
+        // 不喜欢，保存数据
         if (dto.getType() == 0) {
             log.info("保存当前key:{} ,{}, {}", dto.getArticleId(), user.getId(), dto);
             cacheService.hPut(BehaviorConstants.UN_LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString(), JSON.toJSONString(dto));
@@ -44,7 +46,6 @@ public class ApUnlikesBehaviorServiceImpl implements ApUnlikesBehaviorService {
             log.info("删除当前key:{} ,{}, {}", dto.getArticleId(), user.getId(), dto);
             cacheService.hDelete(BehaviorConstants.UN_LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString());
         }
-
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

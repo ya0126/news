@@ -12,11 +12,9 @@ import com.heima.utils.common.AppThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@Transactional
 @Slf4j
 public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
 
@@ -25,19 +23,18 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
 
     @Override
     public ResponseResult like(LikesBehaviorDto dto) {
-
-        //1.检查参数
+        // 1.检查参数
         if (dto == null || dto.getArticleId() == null || checkParam(dto)) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
-        //2.是否登录
+        // 2.是否登录
         ApUser user = AppThreadLocalUtil.getUser();
         if (user == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
 
-        //3.点赞  保存数据
+        // 3.点赞  保存数据
         if (dto.getOperation() == 0) {
             Object obj = cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString());
             if (obj != null) {
@@ -51,10 +48,7 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
             log.info("删除当前key:{}, {}", dto.getArticleId(), user.getId());
             cacheService.hDelete(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString());
         }
-
-
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
-
     }
 
     /**

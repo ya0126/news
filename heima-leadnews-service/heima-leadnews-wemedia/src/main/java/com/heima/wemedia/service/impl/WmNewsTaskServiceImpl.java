@@ -60,7 +60,6 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
     @Override
     @SneakyThrows
     public void scanNewsByTask() {
-        log.info("文章审核--消费任务执行---begin---");
         ResponseResult responseResult = scheduleClient.poll(TaskTypeEnum.NEWS_SCAN_TIME.getTaskType(), TaskTypeEnum.NEWS_SCAN_TIME.getPriority());
         if (responseResult.getCode().equals(200) && responseResult.getData() != null) {
             String json_str = JSON.toJSONString(responseResult.getData());
@@ -69,7 +68,7 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
             WmNews wmNews = ProtostuffUtil.deserialize(parameters, WmNews.class);
 
             wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
+            log.info("文章审核任务执行完成");
         }
-        log.info("文章审核---消费任务执行---end---");
     }
 }

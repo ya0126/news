@@ -67,7 +67,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
      *
      * @param id 自媒体文章id
      */
-    //@Async
     @Override
     public void autoScanWmNews(Integer id) {
         // 查询自媒体文章

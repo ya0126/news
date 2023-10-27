@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -196,7 +197,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh() {
-        log.info("{}执行了定时任务", System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+        log.info("{}执行了定时任务", format.format(new Date()));
 
         String token = cacheService.tryLock("FUTURE_TASK_SYNC", 1000 * 30);
         if (StringUtils.isNoneBlank(token)) {
@@ -227,7 +229,7 @@ public class TaskServiceImpl implements TaskService {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);
 
-        //查看小于未来5分钟的所有任务
+        // 查看小于未来5分钟的所有任务
         List<TaskInfo> taskInfos = taskInfoMapper.selectList(Wrappers
                 .<TaskInfo>lambdaQuery()
                 .lt(TaskInfo::getExecuteTime, calendar.getTime()));

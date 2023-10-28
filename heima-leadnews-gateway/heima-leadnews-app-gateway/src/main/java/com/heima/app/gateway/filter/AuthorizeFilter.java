@@ -32,11 +32,13 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         //判断是否为登录
         if (request.getURI().getPath().contains("login")) {
             //放行
+            log.info("登录放行");
             return chain.filter(exchange);
         }
 
         String token = request.getHeaders().getFirst("token");
         if (StringUtils.isBlank(token)) {
+            log.error("未携带token，结束请求");
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return response.setComplete();
         }
@@ -47,16 +49,18 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
             // 是否过期
             int result = JwtUtil.verifyToken(claimsBody);
             if (result == 1 || result == 2) {
+                log.error("token无效，结束请求");
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("token校验异常", e);
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return response.setComplete();
         }
 
         //6.放行
+        log.info("token有效，放行");
         return chain.filter(exchange);
     }
 

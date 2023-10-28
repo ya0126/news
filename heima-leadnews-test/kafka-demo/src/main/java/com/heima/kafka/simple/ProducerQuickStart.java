@@ -28,7 +28,7 @@ public class ProducerQuickStart {
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 
         //封装发送的消息
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>("yaoh-topic", "100001", "hello kafka");
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>("itcast_topic_input", "100001", "hello kafka");
 
         //3.发送消息
         producer.send(record);

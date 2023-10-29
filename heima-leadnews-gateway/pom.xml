@@ -13,9 +13,9 @@
     <artifactId>heima-leadnews-gateway</artifactId>
 
     <modules>
-        <module>heima-leadnews-wemedia-gateway</module>
         <module>heima-leadnews-app-gateway</module>
         <module>heima-leadnews-admin-gateway</module>
+        <module>heima-leadnews-wemedia-gateway</module>
     </modules>
 
     <properties>
@@ -24,26 +24,21 @@
     </properties>
 
     <dependencies>
-        <!--gateway-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
-        <!--nacos 注册-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-        <!--nacos 配置-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        <!--utils模块-->
         <dependency>
             <groupId>com.heima</groupId>
             <artifactId>heima-leadnews-utils</artifactId>
         </dependency>
     </dependencies>
-
 </project>

@@ -29,7 +29,6 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "aliyun")
 @Slf4j
 public class TextScan {
-
     private String accessKeyId;
     private String secret;
 

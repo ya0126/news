@@ -2,13 +2,15 @@ package com.heima.admin.geateway.filter;
 
 import com.heima.utils.common.JwtUtil;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -17,26 +19,29 @@ import reactor.core.publisher.Mono;
  *
  * @author yaoh
  */
-public class AuthorizeFilter implements Ordered, GlobalFilter {
+@Slf4j
+@Order(0)
+@Component
+public class AuthorizeFilter implements GlobalFilter {
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
 
-        // 登录放行
         boolean login = request.getURI().getPath().contains("login");
         if (login) {
             chain.filter(exchange);
+            log.info("登录放行");
         }
 
-        // 获取token
         String token = request.getHeaders().getFirst("token");
         if (StringUtils.isBlank(token)) {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.setComplete();
+            log.info("未携带token，结束请求");
         }
 
-        // 校验token
         try {
             Claims claimsBody = JwtUtil.getClaimsBody(token);
             int result = JwtUtil.verifyToken(claimsBody);
@@ -44,18 +49,14 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
+            log.info("token无效，结束请求");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("token校验异常", e);
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.setComplete();
         }
 
-        // token有效，放行
+        log.info("token有效，放行");
         return chain.filter(exchange);
-    }
-
-    @Override
-    public int getOrder() {
-        return 0;
     }
 }

@@ -9,8 +9,6 @@ import java.util.Date;
 
 /**
  * 管理员用户信息表
- *
- * @author itheima
  */
 @Data
 @TableName("ad_user")

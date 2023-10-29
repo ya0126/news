@@ -6,11 +6,6 @@ import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.schedule.dtos.Task;
 import org.springframework.stereotype.Component;
 
-/**
- * feign失败配置-ScheduleClient
- *
- * @author yaoh
- */
 @Component
 public class IScheduleClientFallback implements IScheduleClient {
     @Override

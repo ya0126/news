@@ -6,11 +6,6 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import org.springframework.stereotype.Component;
 
-/**
- * feign失败配置-ArticleClient
- *
- * @author yaoh
- */
 @Component
 public class IArticleClientFallback implements IArticleClient {
     @Override

@@ -24,7 +24,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class Swagger2Configuration {
 
-
     @Bean(value = "defaultApi2")
     public Docket defaultApi2() {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)

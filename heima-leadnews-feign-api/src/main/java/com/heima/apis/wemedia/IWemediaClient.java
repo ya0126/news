@@ -8,11 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-/**
- * 自媒体服务feign调用接口
- *
- * @author yaoh
- */
 @FeignClient(value = "leadnews-wemedia")
 public interface IWemediaClient {
 

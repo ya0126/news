@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -19,9 +19,11 @@ import reactor.core.publisher.Mono;
  *
  * @author yaoh
  */
-@Component
+
 @Slf4j
-public class AuthorizeFilter implements Ordered, GlobalFilter {
+@Order(0)
+@Component
+public class AuthorizeFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -62,15 +64,5 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         //6.放行
         log.info("token有效，放行");
         return chain.filter(exchange);
-    }
-
-    /**
-     * 优先级设置  值越小  优先级越高
-     *
-     * @return
-     */
-    @Override
-    public int getOrder() {
-        return 0;
     }
 }

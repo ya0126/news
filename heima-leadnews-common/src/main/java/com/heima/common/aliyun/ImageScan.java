@@ -28,10 +28,9 @@ import java.util.*;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "aliyun")
 @Slf4j
+@ConfigurationProperties(prefix = "aliyun")
 public class ImageScan {
-
     public static DescribeUploadTokenResponseBody.DescribeUploadTokenResponseBodyData uploadToken = null;
     private static String bucketName;
     private String accessKeyId;

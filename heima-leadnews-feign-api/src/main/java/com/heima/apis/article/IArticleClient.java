@@ -7,11 +7,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-/**
- * 文章服务feign调用接口
- *
- * @author yaoh
- */
 @FeignClient(value = "leadnews-article", fallback = IArticleClientFallback.class)
 public interface IArticleClient {
 

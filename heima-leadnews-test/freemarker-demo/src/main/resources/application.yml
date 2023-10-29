@@ -1,8 +1,8 @@
 server:
-  port: 8881 #服务端口
+  port: 1001
 spring:
   application:
-    name: freemarker-demo #指定服务名
+    name: freemarker-demo
   freemarker:
     cache: false  #关闭模板缓存，方便测试
     settings:

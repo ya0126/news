@@ -1,5 +1,5 @@
 server:
-  port: 51602
+  port: 10003
 spring:
   application:
     name: leadnews-wemedia-gateway

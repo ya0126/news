@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * 用户实名业务层service实现类
+ * 用户实名业务层实现类
  *
  * @author yaoh
  */

@@ -15,6 +15,13 @@
         <option value="$PROJECT_DIR$/heima-leadnews-test/mongo-demo/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/heima-leadnews-test/DelayQueue-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/heima-leadnews-test/simple-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/heima-leadnews-test/tess4j-demo/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>

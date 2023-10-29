@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登录业务层service实现类
+ * 登录业务层实现类
  *
  * @author yaoh
  */

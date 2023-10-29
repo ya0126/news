@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * 自媒体关键词业务层service实现类
+ * 自媒体关键词业务层实现类
  *
  * @author yaoh
  */

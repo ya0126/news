@@ -11,8 +11,8 @@
         <module name="heima-file-starter" />
         <module name="minio-demo" />
         <module name="heima-leadnews-wemedia-gateway" />
+        <module name="elasticsearch-demo" />
         <module name="heima-leadnews-wemedia" />
-        <module name="tess4j-demo" />
         <module name="heima-leadnews-behavior" />
         <module name="heima-leadnews-feign-api" />
         <module name="heima-leadnews-user" />
@@ -20,12 +20,9 @@
         <module name="kafka-demo" />
         <module name="heima-leadnews-admin" />
         <module name="heima-leadnews-admin-gateway" />
-        <module name="DelayQueue-demo" />
-        <module name="es-init" />
         <module name="heima-leadnews-schedule" />
         <module name="heima-leadnews-utils" />
         <module name="heima-leadnews-app-gateway" />
-        <module name="simple-demo" />
         <module name="heima-leadnews-search" />
         <module name="heima-leadnews-common" />
         <module name="mongo-demo" />
@@ -33,14 +30,17 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="DelayQueue-demo" target="1.8" />
       <module name="heima-leadnews-apis" target="1.8" />
+      <module name="simple-demo" target="1.8" />
+      <module name="tess4j-demo" target="1.8" />
       <module name="test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="DelayQueue-demo" options="-parameters" />
-      <module name="es-init" options="-parameters" />
+      <module name="elasticsearch-demo" options="-parameters" />
       <module name="freemarker-demo" options="-parameters" />
       <module name="heima-file-starter" options="-parameters" />
       <module name="heima-leadnews" options="-parameters" />

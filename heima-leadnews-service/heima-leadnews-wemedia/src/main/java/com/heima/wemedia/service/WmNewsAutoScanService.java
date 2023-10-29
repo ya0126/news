@@ -4,7 +4,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.pojos.WmNews;
 
 /**
- * 自媒体文章发布自动审核业务层service
+ * 自媒体文章发布自动审核业务层
  *
  * @author yaoh
  */

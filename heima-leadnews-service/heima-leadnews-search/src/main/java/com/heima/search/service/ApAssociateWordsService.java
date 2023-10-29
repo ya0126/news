@@ -4,7 +4,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.search.dtos.UserSearchDto;
 
 /**
- * 联想词业务层service
+ * 联想词业务层
  *
  * @author yaoh
  */

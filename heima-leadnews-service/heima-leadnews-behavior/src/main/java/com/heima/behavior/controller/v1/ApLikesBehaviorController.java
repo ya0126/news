@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 用户点赞信息controller
+ * 用户点赞接口
  *
  * @author yaoh
  */
@@ -21,6 +21,11 @@ public class ApLikesBehaviorController {
     @Autowired
     private ApLikesBehaviorService apLikesBehaviorService;
 
+    /**
+     * 点赞、取消点赞
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping
     public ResponseResult like(@RequestBody LikesBehaviorDto dto) {
         return apLikesBehaviorService.like(dto);

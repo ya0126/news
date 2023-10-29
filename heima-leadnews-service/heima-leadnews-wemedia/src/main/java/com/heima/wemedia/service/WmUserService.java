@@ -6,7 +6,7 @@ import com.heima.model.wemedia.dtos.WmLoginDto;
 import com.heima.model.wemedia.pojos.WmUser;
 
 /**
- * 自媒体用户业务层service
+ * 自媒体用户业务层
  */
 public interface WmUserService extends IService<WmUser> {
 

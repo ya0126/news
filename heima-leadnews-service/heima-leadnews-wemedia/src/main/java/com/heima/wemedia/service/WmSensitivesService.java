@@ -6,7 +6,7 @@ import com.heima.model.wemedia.dtos.WmSensitiveDto;
 import com.heima.model.wemedia.pojos.WmSensitive;
 
 /**
- * 自媒体关键词业务层service
+ * 自媒体关键词业务层
  *
  * @author yaoh
  */

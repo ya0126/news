@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 联想词业务层service实现类
+ * 联想词业务层实现类
  *
  * @author yaoh
  */

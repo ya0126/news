@@ -5,7 +5,7 @@ import com.heima.model.article.pojos.ApCollection;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 文章收藏信息mapper
+ * 文章收藏mapper
  *
  * @author yaoh
  */

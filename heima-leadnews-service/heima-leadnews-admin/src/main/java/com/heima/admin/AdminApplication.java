@@ -5,11 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-/**
- * 后台管理服务引导类
- *
- * @author yaoh
- */
 @EnableDiscoveryClient
 @SpringBootApplication
 @MapperScan("com.heima.admin.mapper")

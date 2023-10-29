@@ -10,8 +10,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-@EnableDiscoveryClient
 @EnableAsync
+@EnableDiscoveryClient
 @SpringBootApplication
 @MapperScan("com.heima.article.mapper")
 public class ArticleApplication {

@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * app获取文章接口
+ * 文章接口
  *
  * @author yaoh
  */
-@Api(value = "app获取文章接口", tags = "ap_article", description = "app端获取文章API")
 @RestController
 @RequestMapping("/api/v1/article")
 public class ArticleHomeController {
@@ -25,20 +24,32 @@ public class ArticleHomeController {
     @Autowired
     private ApArticleService apArticleService;
 
+    /**
+     * 默认加载
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping("/load")
-    @ApiOperation("默认加载")
     public ResponseResult load(@RequestBody ArticleHomeDto dto) {
         return apArticleService.load(dto, ArticleConstants.LOADTYPE_LOAD_MORE);
     }
 
+    /**
+     * 加载更多
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping("/loadmore")
-    @ApiOperation("加载更多")
     public ResponseResult loadMore(@RequestBody ArticleHomeDto dto) {
         return apArticleService.load(dto, ArticleConstants.LOADTYPE_LOAD_MORE);
     }
 
+    /**
+     * 加载最新
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping("/loadnew")
-    @ApiOperation("加载最新")
     public ResponseResult loadNew(@RequestBody ArticleHomeDto dto) {
         return apArticleService.load(dto, ArticleConstants.LOADTYPE_LOAD_NEW);
     }

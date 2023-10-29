@@ -26,6 +26,12 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    /**
+     * 点赞、取消点赞
+     *
+     * @param dto
+     * @return
+     */
     @Override
     public ResponseResult like(LikesBehaviorDto dto) {
         // 1.检查参数

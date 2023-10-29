@@ -57,27 +57,21 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short loadType) {
-        // 1.校验参数
         Integer size = dto.getSize();
         if (size == null || size == 0) {
             size = 10;
         }
         size = Math.min(size, MAX_PAGE_SIZE);
         dto.setSize(size);
-        // 2.类型参数检验
         if (!loadType.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !loadType.equals(ArticleConstants.LOADTYPE_LOAD_NEW)) {
             loadType = ArticleConstants.LOADTYPE_LOAD_MORE;
         }
-        // 3.文章频道校验
         if (StringUtils.isEmpty(dto.getTag())) {
             dto.setTag(ArticleConstants.DEFAULT_TAG);
         }
-        // 4.时间校验
         if (dto.getMaxBehotTime() == null) dto.setMaxBehotTime(new Date());
         if (dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
-        // 4.查询数据
         List<ApArticle> apArticles = apArticleMapper.loadArticleList(dto, loadType);
-        //5.结果封装
         ResponseResult responseResult = ResponseResult.okResult(apArticles);
         return responseResult;
     }
@@ -126,7 +120,11 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         return ResponseResult.okResult(apArticle.getId());
     }
 
-    // 更新文章的分值  同时更新缓存中的热点文章数据
+    /**
+     * 更新文章的分值  同时更新缓存中的热点文章数据
+     *
+     * @param mess
+     */
     @Override
     public void updateScore(ArticleVisitStreamMess mess) {
         // 1.更新文章的阅读、点赞、收藏、评论的数量

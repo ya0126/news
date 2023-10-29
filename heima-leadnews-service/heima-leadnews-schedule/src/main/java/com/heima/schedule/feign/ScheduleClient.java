@@ -7,11 +7,6 @@ import com.heima.schedule.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * 计划FeignClient
- *
- * @author yaoh
- */
 @RestController
 public class ScheduleClient implements IScheduleClient {
 

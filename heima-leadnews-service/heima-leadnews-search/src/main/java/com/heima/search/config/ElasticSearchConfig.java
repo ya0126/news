@@ -21,7 +21,6 @@ public class ElasticSearchConfig {
 
     @Bean
     public RestHighLevelClient client() {
-        log.debug("test");
         log.info("elasticsearch:host:{},post:{}");
         return new RestHighLevelClient(RestClient.builder(
                 new HttpHost(

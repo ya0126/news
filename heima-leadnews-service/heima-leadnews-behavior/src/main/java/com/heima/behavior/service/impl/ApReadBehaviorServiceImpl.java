@@ -27,6 +27,12 @@ public class ApReadBehaviorServiceImpl implements ApReadBehaviorService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    /**
+     * 保存阅读
+     *
+     * @param dto
+     * @return
+     */
     @Override
     public ResponseResult readBehavior(ReadBehaviorDto dto) {
         // 1.检查参数

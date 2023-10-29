@@ -6,7 +6,7 @@ import com.heima.model.wemedia.dtos.WmChannelDto;
 import com.heima.model.wemedia.pojos.WmChannel;
 
 /**
- * 频道信息业务层service
+ * 频道信息业务层
  *
  * @author yaoh
  */

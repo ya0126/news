@@ -3,7 +3,7 @@ package com.heima.wemedia.service;
 import java.util.Date;
 
 /**
- * 自媒体图文信息任务业务层service
+ * 自媒体图文信息任务业务层
  *
  * @author yaoh
  */

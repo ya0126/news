@@ -6,7 +6,7 @@ import com.heima.model.article.pojos.ApArticleConfig;
 import java.util.Map;
 
 /**
- * 文章配置业务层service
+ * 文章配置业务层
  *
  * @author yaoh
  */

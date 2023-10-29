@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * app端用户搜索业务层service实现类
+ * 用户搜索业务层实现类
  *
  * @author yaoh
  */

@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 自媒体文章发布自动审核业务层service实现类
+ * 自媒体文章发布自动审核业务层实现类
  *
  * @author yaoh
  */

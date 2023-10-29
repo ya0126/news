@@ -6,7 +6,7 @@ import com.heima.model.common.dtos.ResponseResult;
 public interface ApLikesBehaviorService {
 
     /**
-     * 存储喜欢数据
+     * 点赞、取消点赞
      *
      * @param dto
      * @return

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 搜索历史
+ * 搜索历史接口
  *
  * @author yaoh
  */

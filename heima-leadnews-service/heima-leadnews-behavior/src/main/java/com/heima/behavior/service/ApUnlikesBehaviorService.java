@@ -4,7 +4,7 @@ import com.heima.model.behavior.dtos.UnLikesBehaviorDto;
 import com.heima.model.common.dtos.ResponseResult;
 
 /**
- * APP不喜欢行为表 服务类
+ * APP不喜欢业务层
  *
  * @author itheima
  */

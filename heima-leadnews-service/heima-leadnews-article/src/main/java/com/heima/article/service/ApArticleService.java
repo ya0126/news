@@ -8,7 +8,7 @@ import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.common.dtos.ResponseResult;
 
 /**
- * 文章服务
+ * 文章业务层
  *
  * @author yaoh
  */
@@ -36,5 +36,5 @@ public interface ApArticleService extends IService<ApArticle> {
      *
      * @param mess
      */
-    public void updateScore(ArticleVisitStreamMess mess);
+    void updateScore(ArticleVisitStreamMess mess);
 }

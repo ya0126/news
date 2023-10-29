@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 收藏行为dto
+ * 收藏dto
  *
  * @author yaoh
  */

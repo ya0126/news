@@ -6,11 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-/**
- * 用户服务引导类
- *
- * @author yaoh
- */
+
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.heima.apis")
 @SpringBootApplication

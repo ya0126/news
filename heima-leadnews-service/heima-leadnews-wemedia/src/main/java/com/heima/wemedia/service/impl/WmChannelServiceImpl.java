@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * 频道信息业务层service实现类
+ * 频道信息业务层实现类
  *
  * @author yaoh
  */

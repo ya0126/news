@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 频道信息controller
+ * 频道信息接口
  *
  * @author yaoh
  */

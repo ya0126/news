@@ -4,7 +4,7 @@ import com.heima.model.admin.dtos.LoginDto;
 import com.heima.model.common.dtos.ResponseResult;
 
 /**
- * 登录业务层service
+ * 登录业务层
  *
  * @author yaoh
  */

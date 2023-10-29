@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
 /**
- * 文章配置业务层service实现类
+ * 文章配置业务层实现类
  *
  * @author yaoh
  */

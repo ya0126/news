@@ -39,11 +39,9 @@
             <if test="type != null and type == 1">
                 and aa.publish_time <![CDATA[<]]> #{dto.minBehotTime}
             </if>
-
             <if test="type != null and type == 2">
                 and aa.publish_time <![CDATA[>]]> #{dto.maxBehotTime}
             </if>
-
             <if test="dto.tag != '__all__'">
                 and aa.channel_id = #{dto.tag}
             </if>

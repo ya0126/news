@@ -8,7 +8,7 @@ import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmNews;
 
 /**
- * 自媒体图文内容信息业务层service
+ * 自媒体图文内容信息业务层
  *
  * @author yaoh
  */

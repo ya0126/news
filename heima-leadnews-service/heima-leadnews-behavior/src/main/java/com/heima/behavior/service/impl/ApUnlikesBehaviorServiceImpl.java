@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * APP不喜欢行为表 服务实现类
+ * APP不喜欢行为业务层实现类
  *
  * @author itheima
  */
-@Slf4j
 @Service
+@Slf4j
 public class ApUnlikesBehaviorServiceImpl implements ApUnlikesBehaviorService {
 
     @Autowired

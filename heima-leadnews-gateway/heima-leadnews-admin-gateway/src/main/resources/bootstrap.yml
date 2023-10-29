@@ -1,5 +1,5 @@
 server:
-  port: 6001
+  port: 10001
 spring:
   application:
     name: leadnews-admin-gateway

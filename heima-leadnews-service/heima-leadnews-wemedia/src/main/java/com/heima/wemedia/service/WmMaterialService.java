@@ -7,7 +7,7 @@ import com.heima.model.wemedia.pojos.WmMaterial;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 自媒体图文素材信息-业务层service
+ * 自媒体图文素材信息业务层
  *
  * @author yaoh
  */

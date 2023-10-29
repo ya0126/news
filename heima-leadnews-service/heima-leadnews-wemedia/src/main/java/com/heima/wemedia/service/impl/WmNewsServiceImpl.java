@@ -39,7 +39,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 自媒体图文内容信息业务层service实现类
+ * 自媒体图文内容信息业务层实现类
  *
  * @author yaoh
  */

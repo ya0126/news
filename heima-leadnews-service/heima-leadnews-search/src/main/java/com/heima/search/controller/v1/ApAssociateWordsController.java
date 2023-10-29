@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 联想词controller
+ * 联想词接口
  *
  * @author yaoh
  */

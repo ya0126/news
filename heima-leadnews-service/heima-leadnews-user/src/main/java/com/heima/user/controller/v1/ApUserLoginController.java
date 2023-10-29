@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * app端用户登录controller
+ * 用户登录接口
  *
  * @author yaoh
  */
-@Api(value = "app端用户登录", tags = "ap_user", description = "app端用户登录API")
 @RestController
 @RequestMapping("/api/v1/login")
 public class ApUserLoginController {
@@ -31,7 +30,6 @@ public class ApUserLoginController {
      * @return ResponseResult
      */
     @PostMapping("login_auth")
-    @ApiOperation("用户登录")
     public ResponseResult login(@RequestBody LoginDto dto) {
         return apUserService.login(dto);
     }

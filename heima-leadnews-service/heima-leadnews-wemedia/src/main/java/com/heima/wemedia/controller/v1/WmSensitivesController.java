@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 自媒体关键词controller
+ * 自媒体关键词接口
  *
  * @author yaoh
  */

@@ -12,11 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-/**
- * appToken拦截器
- *
- * @author yaoh
- */
+
 @Slf4j
 public class AppTokenInterceptor implements HandlerInterceptor {
 

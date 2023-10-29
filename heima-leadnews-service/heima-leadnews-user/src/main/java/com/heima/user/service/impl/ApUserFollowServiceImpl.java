@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 用户关注业务层service实现类
+ * 用户关注业务层实现类
  *
  * @author yaoh
  */

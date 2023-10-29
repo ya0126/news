@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 文章搜索业务层service实现类
+ * 文章搜索业务层实现类
  *
  * @author yaoh
  */

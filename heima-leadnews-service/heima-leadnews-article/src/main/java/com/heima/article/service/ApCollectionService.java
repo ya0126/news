@@ -4,7 +4,7 @@ import com.heima.model.article.dtos.CollectionBehaviorDto;
 import com.heima.model.common.dtos.ResponseResult;
 
 /**
- * 收藏业务层service
+ * 收藏业务层
  *
  * @author yaoh
  */

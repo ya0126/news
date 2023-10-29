@@ -6,7 +6,7 @@ import com.heima.model.search.dtos.UserSearchDto;
 import java.io.IOException;
 
 /**
- * 文章搜索业务层service
+ * 文章搜索业务层
  *
  * @author yaoh
  */

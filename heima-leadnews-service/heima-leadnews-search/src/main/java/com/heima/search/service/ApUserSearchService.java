@@ -4,7 +4,7 @@ import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.search.dtos.HistorySearchDto;
 
 /**
- * app端用户搜索业务层service
+ * 用户搜索业务层
  *
  * @author yaoh
  */

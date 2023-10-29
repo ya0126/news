@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 用户收藏controller
+ * 收藏接口
  *
  * @author yaoh
  */
@@ -22,7 +22,7 @@ public class ApCollectionController {
     private ApCollectionService apCollectionService;
 
     /**
-     * 用户收藏
+     * 收藏
      *
      * @param dto
      * @return ResponseResult

@@ -4,8 +4,6 @@ import com.heima.article.service.ApArticleService;
 import com.heima.common.constants.ArticleConstants;
 import com.heima.model.article.dtos.ArticleHomeDto;
 import com.heima.model.common.dtos.ResponseResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +24,7 @@ public class ArticleHomeController {
 
     /**
      * 默认加载
+     *
      * @param dto
      * @return ResponseResult
      */
@@ -36,6 +35,7 @@ public class ArticleHomeController {
 
     /**
      * 加载更多
+     *
      * @param dto
      * @return ResponseResult
      */
@@ -46,6 +46,7 @@ public class ArticleHomeController {
 
     /**
      * 加载最新
+     *
      * @param dto
      * @return ResponseResult
      */

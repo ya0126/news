@@ -2,7 +2,6 @@ package com.heima.common.constants;
 
 /**
  * 用户常量
- *
  */
 public class UserConstants {
     /**

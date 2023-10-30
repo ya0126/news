@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.apis.article.IArticleClient;
 import com.heima.common.aliyun.ImageScan;
 import com.heima.common.aliyun.TextScan;
-import com.heima.common.tess4j.Tess4jClient;
 import com.heima.file.service.FileStorageService;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.common.dtos.ResponseResult;
@@ -55,8 +54,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     private ImageScan imageScan;
     @Autowired
     private FileStorageService fileStorageService;
-    @Autowired
-    private Tess4jClient tess4jClient;
+
     @Autowired
     private WmChannelMapper wmChannelMapper;
     @Autowired

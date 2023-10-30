@@ -5,11 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-/**
- * app端网关引导类
- *
- * @author yaoh
- */
 @EnableDiscoveryClient
 /**
  * 之所以排除DataSourceAutoConfiguration.class，

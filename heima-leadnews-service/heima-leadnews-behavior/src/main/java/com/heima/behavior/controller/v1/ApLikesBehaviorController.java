@@ -23,6 +23,7 @@ public class ApLikesBehaviorController {
 
     /**
      * 点赞、取消点赞
+     *
      * @param dto
      * @return ResponseResult
      */

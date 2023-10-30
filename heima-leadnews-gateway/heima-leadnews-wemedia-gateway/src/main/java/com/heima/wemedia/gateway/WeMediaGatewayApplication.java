@@ -8,8 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-public class WemediaGatewayAplication {
+public class WeMediaGatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WemediaGatewayAplication.class, args);
+        SpringApplication.run(WeMediaGatewayApplication.class, args);
     }
 }

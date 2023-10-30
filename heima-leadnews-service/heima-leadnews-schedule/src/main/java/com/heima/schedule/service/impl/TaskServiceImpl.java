@@ -241,7 +241,7 @@ public class TaskServiceImpl implements TaskService {
                 addTaskToCache(task);
             }
         }
-        log.info("数据库数据同步完成，任务数量{}",taskInfos.size());
+        log.info("数据库数据同步完成，任务数量{}", taskInfos.size());
     }
 
     /**

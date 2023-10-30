@@ -17,7 +17,7 @@ public class MongoTest {
     private MongoTemplate mongoTemplate;
 
     @Test
-    public void save(){
+    public void save() {
         ApUserSearch apUserSearch = new ApUserSearch();
         apUserSearch.setUserId(1);
         apUserSearch.setKeyword("你好");

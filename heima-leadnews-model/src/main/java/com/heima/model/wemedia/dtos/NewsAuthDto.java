@@ -24,5 +24,4 @@ public class NewsAuthDto extends PageRequestDto {
     private String title;
 
     private String message;
-
 }

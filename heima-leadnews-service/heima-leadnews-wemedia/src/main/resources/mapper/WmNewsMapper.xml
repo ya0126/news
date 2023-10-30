@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heima.wemedia.mapper.WmNewsMapper">
 
-    <select id="newsAuthList" resultType="com.heima.model.wemedia.vos.NewAuthVo">
+    <select id="newsAuthList" parameterType="com.heima.model.wemedia.dtos.NewsAuthDto" resultType="com.heima.model.wemedia.vos.NewAuthVo">
         SELECT n.*,
         u.name as authorName
         FROM wm_news n
@@ -27,7 +27,7 @@
         where n.id = #{newsId}
     </select>
 
-    <select id="findListCount" resultType="java.lang.Integer">
+    <select id="findListCount" parameterType="com.heima.model.wemedia.dtos.NewsAuthDto" resultType="java.lang.Integer">
         SELECT
         count(1)
         FROM

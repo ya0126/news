@@ -32,6 +32,7 @@ public class ArticleSearchController {
      */
     @PostMapping("/search")
     public ResponseResult search(@RequestBody UserSearchDto dto) throws IOException {
+        System.err.println(dto);
         return apArticleSearchService.search(dto);
     }
 }

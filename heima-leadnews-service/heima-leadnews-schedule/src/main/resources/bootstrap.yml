@@ -2,11 +2,14 @@ server:
   port: 9004
 spring:
   application:
-    name: leadnews-schedule
+    name: ScheduleService
+  profiles:
+    active: dev
   cloud:
     nacos:
+      server-addr: 101.34.245.48:8848
       discovery:
-        server-addr: 101.34.245.48:8848
+        namespace: cd035185-8de7-4af0-b58f-f964157ed3e3
       config:
-        server-addr: 101.34.245.48:8848
-        file-extension: yml
+        namespace: cd035185-8de7-4af0-b58f-f964157ed3e3
+        file-extension: yaml

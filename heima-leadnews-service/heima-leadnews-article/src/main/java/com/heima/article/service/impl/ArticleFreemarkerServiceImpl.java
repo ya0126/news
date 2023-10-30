@@ -96,6 +96,6 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
         vo.setStaticUrl(path);
 
         kafkaTemplate.send(ArticleConstants.ARTICLE_ES_SYNC_TOPIC, JSON.toJSONString(vo));
-        log.info("发送消息至search服务，文章ID为：{}", apArticle.getId());
+        log.info("发送消息至search服务,添加文章索引，文章ID为：{}", apArticle.getId());
     }
 }

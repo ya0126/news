@@ -1,7 +1,6 @@
 package com.itheima.test.mongo;
 
 
-import com.itheima.test.mongo.MongoApplication;
 import com.itheima.test.mongo.pojo.ApAssociateWords;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,6 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class MongoTest {
 
-
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -28,7 +26,7 @@ public class MongoTest {
     @Test
     public void saveTest() {
         ApAssociateWords apAssociateWords = new ApAssociateWords();
-        apAssociateWords.setAssociateWords("黑马头条");
+        apAssociateWords.setAssociateWords("白马头条");
         apAssociateWords.setCreatedTime(new Date());
         mongoTemplate.save(apAssociateWords);
     }

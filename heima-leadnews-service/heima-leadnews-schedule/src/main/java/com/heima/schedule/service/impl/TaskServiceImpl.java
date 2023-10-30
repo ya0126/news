@@ -193,11 +193,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 将即将执行的任务从zset刷新到list中，每分钟执行一次
+     * 将即将执行的任务从Zset刷新到list中，每分钟执行一次
      */
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         log.info("{}执行了定时任务", format.format(new Date()));
 
         String token = cacheService.tryLock("FUTURE_TASK_SYNC", 1000 * 30);
@@ -224,7 +224,7 @@ public class TaskServiceImpl implements TaskService {
     @PostConstruct
     public void reloadData() {
         clearCache();
-        log.info("数据库数据同步到缓存");
+        log.info("数据库数据同步开始：将未来5分钟任务同步到缓存");
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);
@@ -241,6 +241,7 @@ public class TaskServiceImpl implements TaskService {
                 addTaskToCache(task);
             }
         }
+        log.info("数据库数据同步完成，任务数量{}",taskInfos.size());
     }
 
     /**

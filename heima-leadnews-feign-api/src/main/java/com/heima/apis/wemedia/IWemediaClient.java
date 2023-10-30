@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "leadnews-wemedia")
+@FeignClient(value = "WeMedisService")
 public interface IWemediaClient {
 
     @GetMapping("/api/v1/user/findByName/{name}")

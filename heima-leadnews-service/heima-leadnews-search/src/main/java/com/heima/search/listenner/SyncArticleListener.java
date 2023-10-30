@@ -35,8 +35,8 @@ public class SyncArticleListener {
     @KafkaListener(topics = ArticleConstants.ARTICLE_ES_SYNC_TOPIC)
     public void add(String message) {
         if (StringUtils.isNotBlank(message)) {
-            log.info("SyncArticleListener,message={}", message);
             SearchArticleVo searchArticleVo = JSON.parseObject(message, SearchArticleVo.class);
+            log.info("收到消息,文章id为{}", searchArticleVo.getId());
 
             IndexRequest indexRequest = new IndexRequest("app_info_article");
             indexRequest.id(searchArticleVo.getId().toString());

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.admin.mapper.AdUserMapper;
 import com.heima.admin.service.LoginService;
 import com.heima.model.admin.dtos.LoginDto;
-import com.heima.model.admin.pojo.AdUser;
+import com.heima.model.admin.pojos.AdUser;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.utils.common.JwtUtil;

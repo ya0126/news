@@ -1,4 +1,4 @@
-package com.heima.model.admin.pojo;
+package com.heima.model.admin.pojos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

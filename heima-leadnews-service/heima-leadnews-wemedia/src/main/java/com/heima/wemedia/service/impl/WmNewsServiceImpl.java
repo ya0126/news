@@ -154,7 +154,6 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         saveRelativeInfoForContent(materials, wmNews.getId());
 
         // 审核代码
-        //wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
         wmNewsTaskService.addNewsToTask(wmNews.getId(), wmNews.getPublishTime());
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }

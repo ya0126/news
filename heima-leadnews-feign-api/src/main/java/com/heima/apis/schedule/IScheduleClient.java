@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "leadnews-schedule", fallback = IScheduleClientFallback.class)
+@FeignClient(value = "ScheduleService", fallback = IScheduleClientFallback.class)
 public interface IScheduleClient {
     /**
      * 添加任务

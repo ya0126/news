@@ -31,8 +31,8 @@ public class AuthorizeFilter implements GlobalFilter {
 
         boolean login = request.getURI().getPath().contains("login");
         if (login) {
-            chain.filter(exchange);
             log.info("登录放行");
+            return chain.filter(exchange);
         }
 
         String token = request.getHeaders().getFirst("token");

@@ -29,7 +29,6 @@ public class AppTokenInterceptor implements HandlerInterceptor {
                 ApUser apUser = new ApUser();
                 apUser.setId(userId);
                 AppThreadLocalUtil.setUser(apUser);
-                log.info("appTokenFilter设置用户信息到ThreadLocal中...");
             }
         }
         return true;

@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -38,7 +37,7 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
      * @param keyword
      * @param userId
      */
-    @Async
+    //@Async
     @Override
     public void insert(String keyword, Integer userId) {
         // 1.查询当前用户的搜索关键词

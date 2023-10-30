@@ -57,6 +57,7 @@ public class ApArticleSearchServiceImpl implements ApArticleSearchService {
         }
 
         ApUser user = AppThreadLocalUtil.getUser();
+
         // 2.异步调用 保存搜索记录
         if (user != null && dto.getFromIndex() == 0) {
             apUserSearchService.insert(dto.getSearchWords(), user.getId());

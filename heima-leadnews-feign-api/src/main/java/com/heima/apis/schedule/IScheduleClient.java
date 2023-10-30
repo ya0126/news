@@ -18,7 +18,7 @@ public interface IScheduleClient {
      * @return 任务id
      */
     @PostMapping("/api/v1/task/add")
-    public ResponseResult addTask(@RequestBody Task task);
+    ResponseResult addTask(@RequestBody Task task);
 
     /**
      * 取消任务
@@ -27,7 +27,7 @@ public interface IScheduleClient {
      * @return 取消结果
      */
     @GetMapping("/api/v1/task/cancel/{taskId}")
-    public ResponseResult cancelTask(@PathVariable("taskId") long taskId);
+    ResponseResult cancelTask(@PathVariable("taskId") long taskId);
 
     /**
      * 按照类型和优先级来拉取任务
@@ -37,5 +37,5 @@ public interface IScheduleClient {
      * @return
      */
     @GetMapping("/api/v1/task/poll/{type}/{priority}")
-    public ResponseResult poll(@PathVariable("type") int type, @PathVariable("priority") int priority);
+    ResponseResult poll(@PathVariable("type") int type, @PathVariable("priority") int priority);
 }

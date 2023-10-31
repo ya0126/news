@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>com.stu</groupId>
-            <artifactId>news-feign-api</artifactId>
+            <artifactId>news-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

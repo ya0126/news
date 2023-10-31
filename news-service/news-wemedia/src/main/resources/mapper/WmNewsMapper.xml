@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.stu.wemedia.mapper.WmNewsMapper">
 
-    <select id="newsAuthList" parameterType="dtos.wemedia.com.stu.model.NewsAuthDto"
-            resultType="vos.wemedia.com.stu.model.NewAuthVo">
+    <select id="newsAuthList" parameterType="com.stu.model.wemedia.dtos.NewsAuthDto"
+            resultType="com.stu.model.wemedia.vos.NewAuthVo">
         SELECT n.*,
         u.name as authorName
         FROM wm_news n
@@ -20,7 +20,7 @@
         LIMIT #{dto.page},#{dto.size}
     </select>
 
-    <select id="getOneVo" resultType="vos.wemedia.com.stu.model.NewAuthVo">
+    <select id="getOneVo" resultType="com.stu.model.wemedia.vos.NewAuthVo">
         SELECT n.*,
                u.name as authorName
         FROM wm_news n
@@ -28,7 +28,7 @@
         where n.id = #{newsId}
     </select>
 
-    <select id="findListCount" parameterType="dtos.wemedia.com.stu.model.NewsAuthDto" resultType="java.lang.Integer">
+    <select id="findListCount" parameterType="com.stu.model.wemedia.dtos.NewsAuthDto" resultType="java.lang.Integer">
         SELECT
         count(1)
         FROM

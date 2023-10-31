@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.stu.schedule.mapper.TaskInfoMapper">
 
-    <select id="queryFutureTime" resultType="pojos.schedule.com.stu.model.TaskInfo">
+    <select id="queryFutureTime" resultType="com.stu.model.schedule.pojos.TaskInfo">
         select *
         from taskinfo
         where task_type = #{taskType}

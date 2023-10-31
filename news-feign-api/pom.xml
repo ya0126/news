@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>news-feign-api</artifactId>
-    <name>news-feign-api</name>
+    <name>feign-api</name>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

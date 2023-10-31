@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(value = "ArticleService", fallback = IArticleClientFallback.class)
 public interface IArticleClient {
 
+    /**
+     * 测试slave分支
+     * @param dto
+     * @return ResponseResult
+     */
     @PostMapping("/api/v1/article/save")
     ResponseResult saveArticle(@RequestBody ArticleDto dto);
 }

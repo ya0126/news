@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.stu.common.exception.ExceptionCatch,\
+  com.stu.common.aliyun.TextScan,\
+  com.stu.common.aliyun.ImageScan,\
+  com.stu.common.tess4j.Tess4jClient,\
+  com.stu.common.redis.CacheService

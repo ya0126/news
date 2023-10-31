@@ -4,19 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.heima</groupId>
-    <artifactId>leadnews</artifactId>
+    <groupId>com.stu</groupId>
+    <artifactId>news</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>heima-leadnews-common</module>
-        <module>heima-leadnews-utils</module>
-        <module>heima-leadnews-model</module>
-        <module>heima-leadnews-feign-api</module>
-        <module>heima-leadnews-service</module>
-        <module>heima-leadnews-gateway</module>
-        <module>heima-leadnews-test</module>
-        <module>heima-leadnews-basic</module>
+        <module>news-common</module>
+        <module>news-utils</module>
+        <module>news-model</module>
+        <module>news-service</module>
+        <module>news-gateway</module>
+        <module>news-test</module>
+        <module>news-basic</module>
+        <module>news-api</module>
+        <module>news-feign-api</module>
     </modules>
 
     <!-- 继承Spring boot工程 -->
@@ -54,6 +55,7 @@
         <com.alibaba.cloud>2.2.5.RELEASE</com.alibaba.cloud>
         <aliyun.oss>3.16.3</aliyun.oss>
         <tess4j.version>4.1.1</tess4j.version>
+        <minio.version>7.1.0</minio.version>
     </properties>
 
     <dependencies>
@@ -74,23 +76,28 @@
         <dependencies>
             <!--内部依赖工程-->
             <dependency>
-                <artifactId>heima-leadnews-feign-api</artifactId>
-                <groupId>com.heima</groupId>
+                <artifactId>news-api</artifactId>
+                <groupId>com.stu</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>heima-leadnews-common</artifactId>
-                <groupId>com.heima</groupId>
+                <artifactId>news-feign-api</artifactId>
+                <groupId>com.stu</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>heima-leadnews-model</artifactId>
-                <groupId>com.heima</groupId>
+                <artifactId>news-common</artifactId>
+                <groupId>com.stu</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>heima-leadnews-utils</artifactId>
-                <groupId>com.heima</groupId>
+                <artifactId>news-model</artifactId>
+                <groupId>com.stu</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>news-utils</artifactId>
+                <groupId>com.stu</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -238,6 +245,11 @@
                 <groupId>org.elasticsearch</groupId>
                 <artifactId>elasticsearch</artifactId>
                 <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,0 +1,74 @@
+package com.stu.wemedia.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.stu.model.common.dtos.ResponseResult;
+import com.stu.model.wemedia.dtos.NewsAuthDto;
+import com.stu.model.wemedia.dtos.WmNewsDto;
+import com.stu.model.wemedia.dtos.WmNewsPageReqDto;
+import com.stu.model.wemedia.pojos.WmNews;
+
+
+/**
+ * 自媒体图文内容信息业务层
+ *
+ * @author yaoh
+ */
+public interface WmNewsService extends IService<WmNews> {
+
+    /**
+     * 文章审核联合分页查询
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult newsAuthPageQuery(NewsAuthDto dto);
+
+    /**
+     * 查询所有文章
+     *
+     * @param dto
+     * @return ResponseResult
+     */
+    ResponseResult findAll(WmNewsPageReqDto dto);
+
+    /**
+     * 发布文章或保存草稿
+     *
+     * @param dto
+     * @return
+     */
+    ResponseResult submitNews(WmNewsDto dto);
+
+    /**
+     * 根据id删除文章
+     *
+     * @param newsId
+     * @return ResponseResult
+     */
+    ResponseResult deleteNewsById(Integer newsId);
+
+    /**
+     * 文章的上下架
+     *
+     * @param dto
+     * @return
+     */
+    ResponseResult downOrUp(WmNewsDto dto);
+
+    /**
+     * 文章联合查询
+     *
+     * @param newsId
+     * @return ResponseResult
+     */
+    ResponseResult getOneVo(Integer newsId);
+
+    /**
+     * 修改审核状态
+     *
+     * @param dto
+     * @param status
+     * @return ResponseResult
+     */
+    ResponseResult updateStatus(NewsAuthDto dto, Short status);
+}

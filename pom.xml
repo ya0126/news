@@ -17,7 +17,6 @@
         <module>news-test</module>
         <module>news-basic</module>
         <module>news-api</module>
-        <module>news-api</module>
     </modules>
 
     <!-- 继承Spring boot工程 -->

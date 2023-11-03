@@ -1,7 +1,7 @@
 package com.stu.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.stu.apis.schedule.IScheduleClient;
+import com.stu.apis.client.schedule.IScheduleClient;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.common.enums.TaskTypeEnum;
 import com.stu.model.schedule.dtos.Task;

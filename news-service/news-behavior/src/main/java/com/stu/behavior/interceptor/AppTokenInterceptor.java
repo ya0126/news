@@ -29,7 +29,6 @@ public class AppTokenInterceptor implements HandlerInterceptor {
                 WmUser wmUser = new WmUser();
                 wmUser.setId(userId);
                 WmThreadLocalUtil.setUser(wmUser);
-                log.info("appTokenFilter设置用户信息到ThreadLocal中...");
             }
         }
         return true;

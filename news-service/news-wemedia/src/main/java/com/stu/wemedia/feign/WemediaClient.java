@@ -1,7 +1,7 @@
 package com.stu.wemedia.feign;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.stu.apis.wemedia.IWemediaClient;
+import com.stu.apis.client.wemedia.IWemediaClient;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.common.enums.AppHttpCodeEnum;
 import com.stu.model.wemedia.pojos.WmUser;

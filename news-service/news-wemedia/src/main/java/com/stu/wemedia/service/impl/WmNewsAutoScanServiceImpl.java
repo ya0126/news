@@ -2,7 +2,7 @@ package com.stu.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.stu.apis.article.IArticleClient;
+import com.stu.apis.client.article.IArticleClient;
 import com.stu.common.aliyun.ImageScan;
 import com.stu.common.aliyun.TextScan;
 import com.stu.file.service.FileStorageService;

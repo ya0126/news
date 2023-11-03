@@ -1,5 +1,7 @@
-package com.stu.apis.wemedia;
+package com.stu.apis.client.wemedia;
 
+import com.stu.apis.client.wemedia.fallback.IWemediaClientFallbackFactory;
+import com.stu.apis.config.DefaultFeignConfiguration;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.pojos.WmUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,7 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "WeMedisService")
+@FeignClient(
+        value = "WeMedisService",
+        configuration = DefaultFeignConfiguration.class,
+        fallbackFactory = IWemediaClientFallbackFactory.class)
 public interface IWemediaClient {
 
     @GetMapping("/api/v1/user/findByName/{name}")

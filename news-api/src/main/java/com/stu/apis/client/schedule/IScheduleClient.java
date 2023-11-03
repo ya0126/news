@@ -1,6 +1,7 @@
-package com.stu.apis.schedule;
+package com.stu.apis.client.schedule;
 
-import com.stu.apis.schedule.fallback.IScheduleClientFallback;
+import com.stu.apis.client.schedule.fallback.IScheduleClientFallbackFactory;
+import com.stu.apis.config.DefaultFeignConfiguration;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.schedule.dtos.Task;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,7 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(value = "ScheduleService", fallback = IScheduleClientFallback.class)
+@FeignClient(
+        value = "ScheduleService",
+        configuration = DefaultFeignConfiguration.class,
+        fallbackFactory = IScheduleClientFallbackFactory.class)
 public interface IScheduleClient {
     /**
      * 添加任务

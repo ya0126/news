@@ -47,9 +47,9 @@ public class AuthorizeFilter implements GlobalFilter {
             int result = JwtUtil.verifyToken(claimsBody);
             if (result == 1 || result == 2) {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                log.info("token无效，结束请求");
                 return response.setComplete();
             }
-            log.info("token无效，结束请求");
         } catch (Exception e) {
             log.error("token校验异常", e);
             response.setStatusCode(HttpStatus.UNAUTHORIZED);

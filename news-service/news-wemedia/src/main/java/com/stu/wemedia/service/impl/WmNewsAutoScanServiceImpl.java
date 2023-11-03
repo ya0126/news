@@ -53,9 +53,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Autowired
     private ImageScan imageScan;
     @Autowired
-    private FileStorageService fileStorageService;
-
-    @Autowired
+    private FileStorageService fileStorageService;@Autowired
     private WmChannelMapper wmChannelMapper;
     @Autowired
     private IArticleClient articleClient;

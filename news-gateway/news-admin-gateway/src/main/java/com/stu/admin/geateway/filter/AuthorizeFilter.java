@@ -31,7 +31,6 @@ public class AuthorizeFilter implements GlobalFilter {
 
         boolean login = request.getURI().getPath().contains("login");
         if (login) {
-            log.info("登录放行");
             return chain.filter(exchange);
         }
 
@@ -39,7 +38,7 @@ public class AuthorizeFilter implements GlobalFilter {
         if (StringUtils.isBlank(token)) {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             response.setComplete();
-            log.info("未携带token，结束请求");
+            log.error("未携带token，结束请求");
         }
 
         try {
@@ -47,7 +46,7 @@ public class AuthorizeFilter implements GlobalFilter {
             int result = JwtUtil.verifyToken(claimsBody);
             if (result == 1 || result == 2) {
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
-                log.info("token无效，结束请求");
+                log.error("token无效，结束请求");
                 return response.setComplete();
             }
         } catch (Exception e) {
@@ -56,7 +55,6 @@ public class AuthorizeFilter implements GlobalFilter {
             response.setComplete();
         }
 
-        log.info("token有效，放行");
         return chain.filter(exchange);
     }
 }

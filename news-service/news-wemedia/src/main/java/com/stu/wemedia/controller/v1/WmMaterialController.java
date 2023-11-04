@@ -50,7 +50,7 @@ public class WmMaterialController {
      */
     @GetMapping("/del_picture/{materialId}")
     public ResponseResult delete(@PathVariable("materialId") Integer materialId) {
-        return wmMaterialService.deletePicture(materialId);
+        return wmMaterialService.delete(materialId);
     }
 
     /**

@@ -1,6 +1,6 @@
-package com.stu.apis.client.article.fallback;
+package com.stu.apis.factory;
 
-import com.stu.apis.client.article.IArticleClient;
+import com.stu.apis.client.IArticleClient;
 import com.stu.model.article.dtos.ArticleDto;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.common.enums.AppHttpCodeEnum;

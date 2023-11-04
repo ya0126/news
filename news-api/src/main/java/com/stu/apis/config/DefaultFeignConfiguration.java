@@ -1,8 +1,8 @@
 package com.stu.apis.config;
 
-import com.stu.apis.client.article.fallback.IArticleClientFallbackFactory;
-import com.stu.apis.client.schedule.fallback.IScheduleClientFallbackFactory;
-import com.stu.apis.client.wemedia.fallback.IWemediaClientFallbackFactory;
+import com.stu.apis.factory.IArticleClientFallbackFactory;
+import com.stu.apis.factory.IScheduleClientFallbackFactory;
+import com.stu.apis.factory.IWemediaClientFallbackFactory;
 import feign.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

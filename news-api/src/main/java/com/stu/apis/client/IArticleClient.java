@@ -1,6 +1,6 @@
-package com.stu.apis.client.article;
+package com.stu.apis.client;
 
-import com.stu.apis.client.article.fallback.IArticleClientFallbackFactory;
+import com.stu.apis.factory.IArticleClientFallbackFactory;
 import com.stu.apis.config.DefaultFeignConfiguration;
 import com.stu.model.article.dtos.ArticleDto;
 import com.stu.model.common.dtos.ResponseResult;

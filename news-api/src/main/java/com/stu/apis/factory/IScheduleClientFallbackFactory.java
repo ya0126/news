@@ -1,6 +1,6 @@
-package com.stu.apis.client.schedule.fallback;
+package com.stu.apis.factory;
 
-import com.stu.apis.client.schedule.IScheduleClient;
+import com.stu.apis.client.IScheduleClient;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.common.enums.AppHttpCodeEnum;
 import com.stu.model.schedule.dtos.Task;

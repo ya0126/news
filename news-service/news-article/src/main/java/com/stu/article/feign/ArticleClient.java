@@ -1,6 +1,6 @@
 package com.stu.article.feign;
 
-import com.stu.apis.client.article.IArticleClient;
+import com.stu.apis.client.IArticleClient;
 import com.stu.article.service.ApArticleService;
 import com.stu.model.article.dtos.ArticleDto;
 import com.stu.model.common.dtos.ResponseResult;

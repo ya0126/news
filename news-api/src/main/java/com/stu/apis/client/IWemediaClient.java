@@ -1,6 +1,6 @@
-package com.stu.apis.client.wemedia;
+package com.stu.apis.client;
 
-import com.stu.apis.client.wemedia.fallback.IWemediaClientFallbackFactory;
+import com.stu.apis.factory.IWemediaClientFallbackFactory;
 import com.stu.apis.config.DefaultFeignConfiguration;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.pojos.WmUser;

@@ -1,6 +1,6 @@
-package com.stu.apis.client.wemedia.fallback;
+package com.stu.apis.factory;
 
-import com.stu.apis.client.wemedia.IWemediaClient;
+import com.stu.apis.client.IWemediaClient;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.pojos.WmUser;
 import feign.hystrix.FallbackFactory;

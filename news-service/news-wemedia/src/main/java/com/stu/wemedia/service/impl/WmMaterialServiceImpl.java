@@ -54,18 +54,13 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
      */
     @Override
     public ResponseResult upload(MultipartFile multipartFile) {
-        // 1.参数校验
         if (multipartFile == null || multipartFile.isEmpty()) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
-        // 2.UUID生成文件名，防止重复
         String fileName = UUID.randomUUID().toString().replace("-", "");
-
         String originalFilename = multipartFile.getOriginalFilename();
         String postfix = originalFilename.substring(originalFilename.lastIndexOf("."));
         String fileURL = "";
-
-        // 3.上传
         try {
             fileURL = fileStorageService.uploadImgFile("material", fileName + postfix, multipartFile.getInputStream());
             log.info("素材上传成功，fileURL:{}", fileURL);
@@ -73,8 +68,6 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
             log.error("素材上传失败", e);
             throw new CustomException(AppHttpCodeEnum.CHANNEL_IN_USE);
         }
-
-        // 4.保存素材信息
         WmMaterial wmMaterial = save(WmThreadLocalUtil.getUser().getId(), fileURL);
         return ResponseResult.okResult(wmMaterial);
     }
@@ -98,30 +91,20 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
     }
 
     /**
-     * 列表查询
+     * 素材列表查询
      *
      * @param dto
      * @return
      */
     @Override
     public ResponseResult findList(WmMaterialDto dto) {
-        // 1.参数校验
         dto.checkParam();
-        // 2.分页查询
         IPage page = new Page(dto.getPage(), dto.getSize());
         LambdaQueryWrapper<WmMaterial> queryWrapper = new LambdaQueryWrapper<>();
-
-        // 2.1是否收藏
         if (dto.getIsCollection() != null && dto.getIsCollection() == 1) {
             queryWrapper.eq(WmMaterial::getIsCollection, dto.getIsCollection());
         }
-
-        // 2.2根据用户查找
-        queryWrapper.eq(WmMaterial::getUserId, WmThreadLocalUtil.getUser().getId());
-
-        // 2.3根据时间排序
-        queryWrapper.orderByDesc(WmMaterial::getCreatedTime);
-
+        queryWrapper.eq(WmMaterial::getUserId, WmThreadLocalUtil.getUser().getId()).orderByDesc(WmMaterial::getCreatedTime);
         page = page(page, queryWrapper);
         ResponseResult responseResult = new PageResponseResult(dto.getPage(), dto.getSize(), (int) page.getTotal());
         responseResult.setData(page.getRecords());
@@ -136,26 +119,19 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
      */
     @Override
     public ResponseResult delete(Integer materialId) {
-        // 1.参数校验
         if (materialId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
-
-        // 2.检查是否被引用
         Integer count = wmNewsMaterialMapper.selectCount(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getMaterialId, materialId));
         if (count > 0) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "素材被引用，无法删除");
         }
-        // 3.删除文件
         WmMaterial wmMaterial = getById(materialId);
         String url = wmMaterial.getUrl();
         if (StringUtils.isNoneBlank(url)) {
-            // 删除文件系统图片
             fileStorageService.delete(url);
             log.info("素材删除，fileURL:{}", url);
         }
-
-        // 4.删除数据库保存的图片信息
         removeById(materialId);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
@@ -167,19 +143,14 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
      * @return
      */
     @Override
-    public ResponseResult collection(Integer materialId, Short collection) {
-        // 1.参数校验
+    public ResponseResult updateCollection(Integer materialId, Short collection) {
         if (materialId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
-
-        // 2.查询
         WmMaterial wmMaterial = getById(materialId);
         if (wmMaterial == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
         }
-
-        // 3.修改
         wmMaterial.setIsCollection(collection);
         updateById(wmMaterial);
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);

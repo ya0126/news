@@ -4,7 +4,6 @@ import com.stu.common.constants.WemediaConstants;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.dtos.WmMaterialDto;
 import com.stu.wemedia.service.WmMaterialService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,11 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/material")
 public class WmMaterialController {
 
-    @Autowired
-    private WmMaterialService wmMaterialService;
+    private final WmMaterialService wmMaterialService;
+
+    public WmMaterialController(WmMaterialService wmMaterialService) {
+        this.wmMaterialService = wmMaterialService;
+    }
 
     /**
-     * 列表查询
+     * 素材列表查询
      *
      * @param dto
      * @return ResponseResult
@@ -32,7 +34,7 @@ public class WmMaterialController {
     }
 
     /**
-     * 上传
+     * 上传素材
      *
      * @param multipartFile
      * @return ResponseResult
@@ -43,7 +45,7 @@ public class WmMaterialController {
     }
 
     /**
-     * 删除
+     * 删除素材
      *
      * @param materialId
      * @return ResponseResult
@@ -54,22 +56,22 @@ public class WmMaterialController {
     }
 
     /**
-     * 收藏
+     * 收藏素材
      *
      * @return ResponseResult
      */
     @GetMapping("/collect/{materialId}")
     public ResponseResult collect(@PathVariable("materialId") Integer materialId) {
-        return wmMaterialService.collection(materialId, WemediaConstants.COLLECT_MATERIAL);
+        return wmMaterialService.updateCollection(materialId, WemediaConstants.COLLECT_MATERIAL);
     }
 
     /**
-     * 取消收藏
+     * 取消收藏素材
      *
      * @return ResponseResult
      */
     @GetMapping("/cancel_collect/{materialId}")
     public ResponseResult cancelCollect(@PathVariable("materialId") Integer materialId) {
-        return wmMaterialService.collection(materialId, WemediaConstants.CANCEL_COLLECT_MATERIAL);
+        return wmMaterialService.updateCollection(materialId, WemediaConstants.CANCEL_COLLECT_MATERIAL);
     }
 }

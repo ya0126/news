@@ -22,7 +22,7 @@ public interface WmMaterialService extends IService<WmMaterial> {
     ResponseResult upload(MultipartFile multipartFile);
 
     /**
-     * 列表查询
+     * 素材列表查询
      *
      * @param dto
      * @return ResponseResult
@@ -44,5 +44,5 @@ public interface WmMaterialService extends IService<WmMaterial> {
      * @param collection
      * @return ResponseResult
      */
-    ResponseResult collection(Integer materialId, Short collection);
+    ResponseResult updateCollection(Integer materialId, Short collection);
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.stu.common.exception.CustomException;
 import com.stu.file.service.FileStorageService;
 import com.stu.model.common.dtos.PageResponseResult;
 import com.stu.model.common.dtos.ResponseResult;
@@ -18,7 +19,6 @@ import com.stu.wemedia.mapper.WmNewsMaterialMapper;
 import com.stu.wemedia.service.WmMaterialService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,10 +37,14 @@ import java.util.UUID;
 @Slf4j
 public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMaterial> implements WmMaterialService {
 
-    @Autowired
-    private FileStorageService fileStorageService;
-    @Autowired
-    private WmNewsMaterialMapper wmNewsMaterialMapper;
+    private final FileStorageService fileStorageService;
+    private final WmNewsMaterialMapper wmNewsMaterialMapper;
+
+    public WmMaterialServiceImpl(FileStorageService fileStorageService,
+                                 WmNewsMaterialMapper wmNewsMaterialMapper) {
+        this.fileStorageService = fileStorageService;
+        this.wmNewsMaterialMapper = wmNewsMaterialMapper;
+    }
 
     /**
      * 上传素材
@@ -49,7 +53,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
      * @return
      */
     @Override
-    public ResponseResult uploadPicture(MultipartFile multipartFile) {
+    public ResponseResult upload(MultipartFile multipartFile) {
         // 1.参数校验
         if (multipartFile == null || multipartFile.isEmpty()) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
@@ -59,25 +63,38 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
 
         String originalFilename = multipartFile.getOriginalFilename();
         String postfix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String fileURL = null;
+        String fileURL = "";
 
         // 3.上传
         try {
             fileURL = fileStorageService.uploadImgFile("material", fileName + postfix, multipartFile.getInputStream());
-            log.info("上传素材到MinIO中，fileURL:{}", fileURL);
+            log.info("素材上传成功，fileURL:{}", fileURL);
         } catch (IOException e) {
-            log.error("WmMaterialServiceImpl-上传文件失败", e);
+            log.error("素材上传失败", e);
+            throw new CustomException(AppHttpCodeEnum.CHANNEL_IN_USE);
         }
 
         // 4.保存素材信息
+        WmMaterial wmMaterial = save(WmThreadLocalUtil.getUser().getId(), fileURL);
+        return ResponseResult.okResult(wmMaterial);
+    }
+
+    /**
+     * 保存素材信息
+     *
+     * @param userId
+     * @param url
+     * @return WmMaterial
+     */
+    private WmMaterial save(Integer userId, String url) {
         WmMaterial wmMaterial = new WmMaterial();
-        wmMaterial.setUserId(WmThreadLocalUtil.getUser().getId());
-        wmMaterial.setUrl(fileURL);
+        wmMaterial.setUserId(userId);
+        wmMaterial.setUrl(url);
         wmMaterial.setIsCollection((short) 0);
         wmMaterial.setType((short) 0);
         wmMaterial.setCreatedTime(new Date());
         save(wmMaterial);
-        return ResponseResult.okResult(wmMaterial);
+        return wmMaterial;
     }
 
     /**
@@ -118,7 +135,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
      * @return
      */
     @Override
-    public ResponseResult deletePicture(Integer materialId) {
+    public ResponseResult delete(Integer materialId) {
         // 1.参数校验
         if (materialId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);

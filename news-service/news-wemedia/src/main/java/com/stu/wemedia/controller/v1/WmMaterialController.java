@@ -38,8 +38,8 @@ public class WmMaterialController {
      * @return ResponseResult
      */
     @PostMapping("/upload_picture")
-    public ResponseResult uploadPicture(MultipartFile multipartFile) {
-        return wmMaterialService.uploadPicture(multipartFile);
+    public ResponseResult upload(MultipartFile multipartFile) {
+        return wmMaterialService.upload(multipartFile);
     }
 
     /**
@@ -49,7 +49,7 @@ public class WmMaterialController {
      * @return ResponseResult
      */
     @GetMapping("/del_picture/{materialId}")
-    public ResponseResult deletePicture(@PathVariable("materialId") Integer materialId) {
+    public ResponseResult delete(@PathVariable("materialId") Integer materialId) {
         return wmMaterialService.deletePicture(materialId);
     }
 

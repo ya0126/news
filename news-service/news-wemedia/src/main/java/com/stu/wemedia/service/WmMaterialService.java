@@ -19,7 +19,7 @@ public interface WmMaterialService extends IService<WmMaterial> {
      * @param multipartFile
      * @return ResponseResult
      */
-    ResponseResult uploadPicture(MultipartFile multipartFile);
+    ResponseResult upload(MultipartFile multipartFile);
 
     /**
      * 列表查询
@@ -35,7 +35,7 @@ public interface WmMaterialService extends IService<WmMaterial> {
      * @param materialId
      * @return ResponseResult
      */
-    ResponseResult deletePicture(Integer materialId);
+    ResponseResult delete(Integer materialId);
 
     /**
      * 收藏、取消收藏

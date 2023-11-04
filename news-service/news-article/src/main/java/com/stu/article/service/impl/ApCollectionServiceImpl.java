@@ -54,6 +54,13 @@ public class ApCollectionServiceImpl implements ApCollectionService {
         }
         // 4.收藏、取消收藏
         if (dto.getOperation() == 0) {
+            /**
+             *          KEY                               FIELD             VALUE
+             *          COLLECTION-BEHAVIOR-{userId}      {articleId}       { entryId(文章id):                001
+             *                                                                operation(0-收藏，1-取消收藏)：   0/1
+             *                                                                publishedTime(发布时间)：        2023-10-10
+             *                                                                type(0-文章，1-动态)：           0/1 }
+             */
             log.info("文章收藏，保存key:{},{},{}", dto.getEntryId(), user.getId().toString(), JSON.toJSONString(dto));
             cacheService.hPut(BehaviorConstants.COLLECTION_BEHAVIOR + userId, dto.getEntryId().toString(), JSON.toJSONString(dto));
         } else {

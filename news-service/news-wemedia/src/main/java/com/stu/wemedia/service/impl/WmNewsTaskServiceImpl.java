@@ -11,7 +11,6 @@ import com.stu.wemedia.service.WmNewsAutoScanService;
 import com.stu.wemedia.service.WmNewsTaskService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +25,14 @@ import java.util.Date;
 @Slf4j
 public class WmNewsTaskServiceImpl implements WmNewsTaskService {
 
+    private final IScheduleClient scheduleClient;
+    private final WmNewsAutoScanService wmNewsAutoScanService;
 
-    @Autowired
-    private IScheduleClient scheduleClient;
-    @Autowired
-    private WmNewsAutoScanService wmNewsAutoScanService;
+    public WmNewsTaskServiceImpl(IScheduleClient scheduleClient,
+                                 WmNewsAutoScanService wmNewsAutoScanService) {
+        this.scheduleClient = scheduleClient;
+        this.wmNewsAutoScanService = wmNewsAutoScanService;
+    }
 
     /**
      * 添加任务到延迟队列
@@ -40,7 +42,6 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
      */
     @Override
     public void addNewsToTask(Integer id, Date publishTime) {
-        log.info("添加任务到延迟服务中----begin");
         Task task = new Task();
         task.setExecuteTime(publishTime.getTime());
         task.setTaskType(TaskTypeEnum.NEWS_SCAN_TIME.getTaskType());
@@ -48,9 +49,7 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
         WmNews wmNews = new WmNews();
         wmNews.setId(id);
         task.setParameters(ProtostuffUtil.serialize(wmNews));
-
         scheduleClient.addTask(task);
-        log.info("添加任务到延迟服务中----end");
     }
 
     /**
@@ -66,9 +65,7 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
             Task task = JSON.parseObject(json_str, Task.class);
             byte[] parameters = task.getParameters();
             WmNews wmNews = ProtostuffUtil.deserialize(parameters, WmNews.class);
-
             wmNewsAutoScanService.autoScanWmNews(wmNews.getId());
-            log.info("文章审核任务执行完成");
         }
     }
 }

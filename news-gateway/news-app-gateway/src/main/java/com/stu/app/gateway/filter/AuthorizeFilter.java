@@ -27,14 +27,10 @@ public class AuthorizeFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        // 获取request和response对象
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
 
-        //判断是否为登录
         if (request.getURI().getPath().contains("login")) {
-            //放行
-            log.info("登录放行");
             return chain.filter(exchange);
         }
 
@@ -45,24 +41,20 @@ public class AuthorizeFilter implements GlobalFilter {
             return response.setComplete();
         }
 
-        // 判断token是否有效
         try {
             Claims claimsBody = JwtUtil.getClaimsBody(token);
-            // 是否过期
             int result = JwtUtil.verifyToken(claimsBody);
             if (result == 1 || result == 2) {
-                log.error("token无效，结束请求");
                 response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                log.error("token无效，结束请求");
                 return response.setComplete();
             }
         } catch (Exception e) {
-            log.error("token校验异常", e);
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            log.error("token校验异常", e);
             return response.setComplete();
         }
 
-        //6.放行
-        log.info("token有效，放行");
         return chain.filter(exchange);
     }
 }

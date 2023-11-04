@@ -37,8 +37,8 @@ public class AuthorizeFilter implements GlobalFilter {
         String token = request.getHeaders().getFirst("token");
         if (StringUtils.isBlank(token)) {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            response.setComplete();
             log.error("未携带token，结束请求");
+            return response.setComplete();
         }
 
         try {
@@ -50,9 +50,9 @@ public class AuthorizeFilter implements GlobalFilter {
                 return response.setComplete();
             }
         } catch (Exception e) {
-            log.error("token校验异常", e);
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            response.setComplete();
+            log.error("token校验异常", e);
+            return response.setComplete();
         }
 
         return chain.filter(exchange);

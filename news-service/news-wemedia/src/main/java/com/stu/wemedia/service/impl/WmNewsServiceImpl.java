@@ -27,7 +27,6 @@ import com.stu.wemedia.service.WmNewsTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,64 +43,60 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> implements WmNewsService {
+    private final WmMaterialMapper wmMaterialMapper;
+    private final WmNewsMaterialMapper wmNewsMaterialMapper;
+    private final WmNewsTaskService wmNewsTaskService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Autowired
-    private WmNewsMapper wmNewsMapper;
-    @Autowired
-    private WmMaterialMapper wmMaterialMapper;
-    @Autowired
-    private WmNewsMaterialMapper wmNewsMaterialMapper;
-    @Autowired
-    private WmNewsTaskService wmNewsTaskService;
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    public WmNewsServiceImpl(WmMaterialMapper wmMaterialMapper,
+                             WmNewsMaterialMapper wmNewsMaterialMapper,
+                             WmNewsTaskService wmNewsTaskService,
+                             KafkaTemplate<String, String> kafkaTemplate) {
+        this.wmMaterialMapper = wmMaterialMapper;
+        this.wmNewsMaterialMapper = wmNewsMaterialMapper;
+        this.wmNewsTaskService = wmNewsTaskService;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     /**
-     * 查询所有自媒体图文
+     * 查询所有文章
      *
      * @param dto
      * @return
      */
     @Override
     public ResponseResult findAll(WmNewsPageReqDto dto) {
-        // 1.参数校验
         if (dto == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_REQUIRE);
         }
 
-        // 2.检车登录用户
         WmUser user = WmThreadLocalUtil.getUser();
         if (user == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
 
-        // 3.检查分页参数
         dto.checkParam();
 
-        // 4.分页查询条件
         IPage page = new Page(dto.getPage(), dto.getSize());
         LambdaQueryWrapper<WmNews> queryWrapper = new LambdaQueryWrapper<>();
-        // 状态精确查找
+
         if (dto.getStatus() != null) {
             queryWrapper.eq(WmNews::getStatus, dto.getStatus());
         }
-        // 频道精确查找
+
         if (dto.getChannelId() != null) {
             queryWrapper.eq(WmNews::getChannelId, dto.getChannelId());
         }
-        // 时间范围查找
+
         if (dto.getBeginPubDate() != null && dto.getEndPubDate() != null) {
             queryWrapper.between(WmNews::getPublishTime, dto.getBeginPubDate(), dto.getEndPubDate());
         }
-        // 关键字模糊查找
+
         if (StringUtils.isNotBlank(dto.getKeyword())) {
             queryWrapper.like(WmNews::getTitle, dto.getKeyword());
         }
-        //查询当前登录用户的文章
-        queryWrapper.eq(WmNews::getUserId, user.getId());
 
-        //发布时间倒序查询
-        queryWrapper.orderByDesc(WmNews::getCreatedTime);
+        queryWrapper.eq(WmNews::getUserId, user.getId()).orderByDesc(WmNews::getCreatedTime);
 
         page = page(page, queryWrapper);
 
@@ -111,39 +106,35 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     /**
-     * 发布文章或保存草稿
+     * 提交文章
      *
      * @param dto
      * @return
      */
     @Override
-    public ResponseResult submitNews(WmNewsDto dto) {
-        // 1.参数检查
+    public ResponseResult submit(WmNewsDto dto) {
         if (dto == null || dto.getContent() == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
         WmNews wmNews = new WmNews();
         BeanUtils.copyProperties(dto, wmNews);
 
-        // 2.封面图片处理
         if (dto.getImages() != null && dto.getImages().size() > 0) {
             String imageStr = StringUtils.join(dto.getImages(), ",");
             wmNews.setImages(imageStr);
         }
 
-        // 3.如果当前封面类型为自动 -1
         if (dto.getType().equals(WemediaConstants.WM_NEWS_TYPE_AUTO)) {
             wmNews.setType(null);
         }
 
         saveOrUpdateWmNews(wmNews);
 
-        // 4.判断是否为草稿  如果为草稿结束当前方法
         if (dto.getStatus().equals(WmNews.Status.NORMAL.getCode())) {
             return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
         }
 
-        // 5.不是草稿，保存文章内容图片与素材的关系
+        // 不是草稿，保存文章内容图片与素材的关系
         // 获取到文章内容中的图片信息
         List<String> materials = ectractUrlInfo(dto.getContent());
         saveRelativeInfoForContent(materials, wmNews.getId());
@@ -158,19 +149,15 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      *
      * @param wmNews
      */
-    private void saveOrUpdateWmNews(WmNews wmNews) {
-        // 补全属性
+    protected void saveOrUpdateWmNews(WmNews wmNews) {
         wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
         wmNews.setCreatedTime(new Date());
         wmNews.setSubmitedTime(new Date());
         wmNews.setEnable((short) 1);//默认上架
 
         if (wmNews.getId() == null) {
-            // 保存
             save(wmNews);
         } else {
-            // 修改
-            // 删除文章图片与素材的关系
             wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, wmNews.getId()));
             updateById(wmNews);
         }
@@ -182,7 +169,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      * @param content
      * @return List<String>
      */
-    private List<String> ectractUrlInfo(String content) {
+    protected List<String> ectractUrlInfo(String content) {
         List<String> materials = new ArrayList<>();
 
         List<Map> maps = JSON.parseArray(content, Map.class);
@@ -202,7 +189,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      * @param materials
      * @param newsId
      */
-    private void saveRelativeInfoForContent(List<String> materials, Integer newsId) {
+    protected void saveRelativeInfoForContent(List<String> materials, Integer newsId) {
         saveRelativeInfo(materials, newsId, WemediaConstants.WM_CONTENT_REFERENCE);
     }
 
@@ -215,7 +202,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
      */
     private void saveRelativeInfo(List<String> materials, Integer newsId, Short type) {
         if (materials != null && !materials.isEmpty()) {
-            //通过图片的url查询素材的id
+            // 通过图片的url查询素材的id
             List<WmMaterial> dbMaterials = wmMaterialMapper.selectList(Wrappers.<WmMaterial>lambdaQuery().in(WmMaterial::getUrl, materials));
 
             //判断素材是否有效
@@ -233,24 +220,28 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     }
 
     /**
-     * 根据id删除文章
+     * 删除文章
      *
      * @param newsId
      * @return
      */
     @Override
-    public ResponseResult deleteNewsById(Integer newsId) {
-        // 1.参数检查
+    public ResponseResult delete(Integer newsId) {
         if (newsId == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
-        // 2.删除文章
+
         removeById(newsId);
-        // 3.删除文章关联的素材信息
         wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId, newsId));
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
+    /**
+     * 文章上、下架
+     *
+     * @param dto
+     * @return
+     */
     @Override
     public ResponseResult downOrUp(WmNewsDto dto) {
         if (dto.getId() == null) {
@@ -268,7 +259,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
                     .set(WmNews::getEnable, dto.getEnable())
                     .eq(WmNews::getId, dto.getId()));
         }
-        //发送消息，通知article端修改文章配置
+        // 发送消息，通知article端修改文章配置
         if (wmNews.getArticleId() != null) {
             Map<String, Object> map = new HashMap<>();
             map.put("articleId", wmNews.getArticleId());

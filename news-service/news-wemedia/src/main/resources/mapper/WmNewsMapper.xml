@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.stu.wemedia.mapper.WmNewsMapper">
 
-    <select id="newsAuthList" parameterType="com.stu.model.wemedia.dtos.NewsAuthDto"
+    <select id="listVo" parameterType="com.stu.model.wemedia.dtos.NewsAuthDto"
             resultType="com.stu.model.wemedia.vos.NewAuthVo">
         SELECT n.*,
         u.name as authorName

@@ -22,23 +22,23 @@ public interface WmNewsService extends IService<WmNews> {
     ResponseResult findAll(WmNewsPageReqDto dto);
 
     /**
-     * 发布文章或保存草稿
+     * 提交文章
      *
      * @param dto
      * @return
      */
-    ResponseResult submitNews(WmNewsDto dto);
+    ResponseResult submit(WmNewsDto dto);
 
     /**
-     * 根据id删除文章
+     * 删除文章
      *
      * @param newsId
      * @return ResponseResult
      */
-    ResponseResult deleteNewsById(Integer newsId);
+    ResponseResult delete(Integer newsId);
 
     /**
-     * 文章的上下架
+     * 文章上、下架
      *
      * @param dto
      * @return

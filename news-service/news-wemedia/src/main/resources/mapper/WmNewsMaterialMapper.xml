@@ -9,5 +9,4 @@
             (#{mid},#{newsId},#{type},#{ord})
         </foreach>
     </insert>
-
 </mapper>

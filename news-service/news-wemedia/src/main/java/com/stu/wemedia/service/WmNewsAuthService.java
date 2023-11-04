@@ -13,15 +13,15 @@ import com.stu.model.wemedia.pojos.WmNews;
 public interface WmNewsAuthService extends IService<WmNews> {
 
     /**
-     * 文章审核联合分页查询
+     * 文章列表联合查询(作者信息)
      *
      * @param dto
      * @return ResponseResult
      */
-    ResponseResult newsAuthPageQuery(NewsAuthDto dto);
+    ResponseResult listVo(NewsAuthDto dto);
 
     /**
-     * 文章联合查询
+     * 文章联合查询(作者信息)
      *
      * @param newsId
      * @return ResponseResult
@@ -35,5 +35,5 @@ public interface WmNewsAuthService extends IService<WmNews> {
      * @param status
      * @return ResponseResult
      */
-    ResponseResult updateStatus(NewsAuthDto dto, Short status);
+    ResponseResult updateAuthStatus(NewsAuthDto dto, Short status);
 }

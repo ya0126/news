@@ -17,9 +17,27 @@ import java.util.List;
 @Mapper
 public interface WmNewsMapper extends BaseMapper<WmNews> {
 
-    List<NewAuthVo> newsAuthList(@Param("dto") NewsAuthDto dto);
+    /**
+     * 文章列表联合查询(作者信息)
+     *
+     * @param dto
+     * @return List<NewAuthVo>
+     */
+    List<NewAuthVo> listVo(@Param("dto") NewsAuthDto dto);
 
+    /**
+     * 文章联合查询(作者信息)
+     *
+     * @param newsId
+     * @return NewAuthVo
+     */
     NewAuthVo getOneVo(Integer newsId);
 
+    /**
+     * count查询（配合listVo使用）
+     *
+     * @param dto
+     * @return int
+     */
     int findListCount(@Param("dto") NewsAuthDto dto);
 }

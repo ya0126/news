@@ -27,7 +27,7 @@ public class WmNewsController {
     }
 
     /**
-     * 文章列表查询
+     * 查询所有文章
      *
      * @param dto
      * @return ResponseResult
@@ -38,18 +38,18 @@ public class WmNewsController {
     }
 
     /**
-     * 文章审核联合分页查询
+     * 文章列表联合查询(作者信息)
      *
      * @param dto
      * @return ResponseResult
      */
     @PostMapping("/list_vo")
     public ResponseResult listVo(@RequestBody NewsAuthDto dto) {
-        return wmNewsAuthService.newsAuthPageQuery(dto);
+        return wmNewsAuthService.listVo(dto);
     }
 
     /**
-     * 文章联合查询
+     * 文章联合查询(作者信息)
      *
      * @param newsId
      * @return ResponseResult
@@ -59,9 +59,8 @@ public class WmNewsController {
         return wmNewsAuthService.getOneVo(newsId);
     }
 
-
     /**
-     * 根据id获取文章
+     * 查询文章
      *
      * @param newsId
      * @return ResponseResult
@@ -72,14 +71,14 @@ public class WmNewsController {
     }
 
     /**
-     * 根据id删除文章
+     * 删除文章
      *
      * @param newsId
      * @return ResponseResult
      */
     @GetMapping("/del_news/{newsId}")
     public ResponseResult delete(@PathVariable("newsId") Integer newsId) {
-        return wmNewsService.deleteNewsById(newsId);
+        return wmNewsService.delete(newsId);
     }
 
     /**
@@ -90,11 +89,11 @@ public class WmNewsController {
      */
     @PostMapping("/submit")
     public ResponseResult submit(@RequestBody WmNewsDto dto) {
-        return wmNewsService.submitNews(dto);
+        return wmNewsService.submit(dto);
     }
 
     /**
-     * 文章上下架
+     * 文章上、下架
      *
      * @param dto
      * @return ResponseResult
@@ -112,7 +111,7 @@ public class WmNewsController {
      */
     @PostMapping("/auth_fail")
     public ResponseResult authFail(@RequestBody NewsAuthDto dto) {
-        return wmNewsAuthService.updateStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
+        return wmNewsAuthService.updateAuthStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
     }
 
     /**
@@ -123,6 +122,6 @@ public class WmNewsController {
      */
     @PostMapping("/auth_pass")
     public ResponseResult authPass(@RequestBody NewsAuthDto dto) {
-        return wmNewsAuthService.updateStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
+        return wmNewsAuthService.updateAuthStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
     }
 }

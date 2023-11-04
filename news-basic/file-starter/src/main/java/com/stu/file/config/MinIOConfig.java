@@ -12,16 +12,16 @@ import org.springframework.context.annotation.Configuration;
 /**
  * minio配置
  *
- * @author yaoh
+ * @EnableConfigurationProperties：开启MinIOConfigProperties.class这个配置类，只有这样MinIOConfigProperties.class这个配置类才会生效。 当然，直接在MinIOConfigProperties.class配置类上加上@component注解也可以
+ * <p>
+ * 但是不使用component，和下面这个结合使用可以让存在FileStorageService的类才开启这两个注解
+ * @ConditionalOnClass：这个注解的意思是，只有存在file...的类MinioConfig配置类才会生效
  */
 @Data
 @Configuration
-// 开启minio...这个配置类，只有这样minio...这个配置类才会生效。当然，直接在minio...配置类上加上@component注解也可以
 @EnableConfigurationProperties(MinIOConfigProperties.class)
-// 这个注解的意思是，只有存在file...的类MinioConfig配置类才会生效
 @ConditionalOnClass(FileStorageService.class)
 public class MinIOConfig {
-
     @Autowired
     MinIOConfigProperties minIOConfigProperties;
 

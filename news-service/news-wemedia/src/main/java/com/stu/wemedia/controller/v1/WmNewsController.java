@@ -5,8 +5,8 @@ import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.dtos.NewsAuthDto;
 import com.stu.model.wemedia.dtos.WmNewsDto;
 import com.stu.model.wemedia.dtos.WmNewsPageReqDto;
+import com.stu.wemedia.service.WmNewsAuthService;
 import com.stu.wemedia.service.WmNewsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,8 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/news")
 public class WmNewsController {
 
-    @Autowired
-    private WmNewsService wmNewsService;
+    private final WmNewsService wmNewsService;
+    private final WmNewsAuthService wmNewsAuthService;
+
+    public WmNewsController(WmNewsService wmNewsService, WmNewsAuthService wmNewsAuthService) {
+        this.wmNewsService = wmNewsService;
+        this.wmNewsAuthService = wmNewsAuthService;
+    }
 
     /**
      * 文章列表查询
@@ -40,7 +45,7 @@ public class WmNewsController {
      */
     @PostMapping("/list_vo")
     public ResponseResult listVo(@RequestBody NewsAuthDto dto) {
-        return wmNewsService.newsAuthPageQuery(dto);
+        return wmNewsAuthService.newsAuthPageQuery(dto);
     }
 
     /**
@@ -51,7 +56,7 @@ public class WmNewsController {
      */
     @GetMapping("/one_vo/{id}")
     public ResponseResult getOneVo(@PathVariable("id") Integer newsId) {
-        return wmNewsService.getOneVo(newsId);
+        return wmNewsAuthService.getOneVo(newsId);
     }
 
 
@@ -73,7 +78,7 @@ public class WmNewsController {
      * @return ResponseResult
      */
     @GetMapping("/del_news/{newsId}")
-    public ResponseResult deleteNews(@PathVariable("newsId") Integer newsId) {
+    public ResponseResult delete(@PathVariable("newsId") Integer newsId) {
         return wmNewsService.deleteNewsById(newsId);
     }
 
@@ -84,7 +89,7 @@ public class WmNewsController {
      * @return ResponseResult
      */
     @PostMapping("/submit")
-    public ResponseResult submitNews(@RequestBody WmNewsDto dto) {
+    public ResponseResult submit(@RequestBody WmNewsDto dto) {
         return wmNewsService.submitNews(dto);
     }
 
@@ -107,7 +112,7 @@ public class WmNewsController {
      */
     @PostMapping("/auth_fail")
     public ResponseResult authFail(@RequestBody NewsAuthDto dto) {
-        return wmNewsService.updateStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
+        return wmNewsAuthService.updateStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
     }
 
     /**
@@ -118,6 +123,6 @@ public class WmNewsController {
      */
     @PostMapping("/auth_pass")
     public ResponseResult authPass(@RequestBody NewsAuthDto dto) {
-        return wmNewsService.updateStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
+        return wmNewsAuthService.updateStatus(dto, WemediaConstants.WM_NEWS_AUTH_FAIL);
     }
 }

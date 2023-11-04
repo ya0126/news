@@ -2,7 +2,6 @@ package com.stu.wemedia.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.stu.model.common.dtos.ResponseResult;
-import com.stu.model.wemedia.dtos.NewsAuthDto;
 import com.stu.model.wemedia.dtos.WmNewsDto;
 import com.stu.model.wemedia.dtos.WmNewsPageReqDto;
 import com.stu.model.wemedia.pojos.WmNews;
@@ -14,15 +13,6 @@ import com.stu.model.wemedia.pojos.WmNews;
  * @author yaoh
  */
 public interface WmNewsService extends IService<WmNews> {
-
-    /**
-     * 文章审核联合分页查询
-     *
-     * @param dto
-     * @return ResponseResult
-     */
-    ResponseResult newsAuthPageQuery(NewsAuthDto dto);
-
     /**
      * 查询所有文章
      *
@@ -54,21 +44,4 @@ public interface WmNewsService extends IService<WmNews> {
      * @return
      */
     ResponseResult downOrUp(WmNewsDto dto);
-
-    /**
-     * 文章联合查询
-     *
-     * @param newsId
-     * @return ResponseResult
-     */
-    ResponseResult getOneVo(Integer newsId);
-
-    /**
-     * 修改审核状态
-     *
-     * @param dto
-     * @param status
-     * @return ResponseResult
-     */
-    ResponseResult updateStatus(NewsAuthDto dto, Short status);
 }

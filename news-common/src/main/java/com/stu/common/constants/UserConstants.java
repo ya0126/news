@@ -5,15 +5,11 @@ package com.stu.common.constants;
  */
 public class UserConstants {
     /**
-     * 认证审核通过，status值
+     * 认证审核通过
      */
     public static final Short PASS_AUTH = 9;
     /**
-     * 认证审核未通过，status值
+     * 认证审核未通过
      */
     public static final Short FAIL_AUTH = 2;
-    /**
-     * 认证类型
-     */
-    public static final Integer AUTH_TYPE = 2;
 }

@@ -19,11 +19,11 @@ public class ScheduleConstants {
      */
     public static final int CANCELLED = 2;
     /**
-     * 未来数据key前缀
+     * 未来数据Key前缀
      */
     public static String FUTURE = "future_";
     /**
-     * 当前数据key前缀
+     * 当前数据Key前缀
      */
     public static String TOPIC = "topic_";
 }

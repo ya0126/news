@@ -1,7 +1,7 @@
 package com.stu.common.constants;
 
 /**
- * 用户行为 redis key前缀
+ * 用户行为Redis Key前缀
  *
  * @author yaoh
  */
@@ -23,11 +23,11 @@ public class BehaviorConstants {
      */
     public static final String READ_BEHAVIOR = "READ-BEHAVIOR-";
     /**
-     * app用户关注
+     * 用户关注
      */
-    public static final String APUSER_FOLLOW_RELATION = "APUSER-FOLLOW-";
+    public static final String APUSER_FOLLOW_RELATION = "USER-FOLLOW-";
     /**
-     * app用户粉丝
+     * 用户粉丝
      */
-    public static final String APUSER_FANS_RELATION = "APUSER-FANS-";
+    public static final String APUSER_FANS_RELATION = "USER-FANS-";
 }

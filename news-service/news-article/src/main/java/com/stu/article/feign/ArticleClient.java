@@ -4,15 +4,17 @@ import com.stu.apis.client.article.IArticleClient;
 import com.stu.article.service.ApArticleService;
 import com.stu.model.article.dtos.ArticleDto;
 import com.stu.model.common.dtos.ResponseResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ArticleClient implements IArticleClient {
 
-    @Autowired
-    private ApArticleService apArticleService;
+    private final ApArticleService apArticleService;
+
+    public ArticleClient(ApArticleService apArticleService) {
+        this.apArticleService = apArticleService;
+    }
 
     /**
      * 保存文章

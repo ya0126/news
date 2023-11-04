@@ -10,7 +10,6 @@ import com.stu.model.common.enums.AppHttpCodeEnum;
 import com.stu.utils.common.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -26,8 +25,11 @@ import java.util.Map;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
 
-    @Autowired
-    private AdUserMapper adUserMapper;
+    private final AdUserMapper adUserMapper;
+
+    public LoginServiceImpl(AdUserMapper adUserMapper) {
+        this.adUserMapper = adUserMapper;
+    }
 
     /**
      * 登录

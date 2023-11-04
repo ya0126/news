@@ -3,8 +3,8 @@ package com.stu.wemedia.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.stu.apis.client.article.IArticleClient;
-import com.stu.common.aliyun.ImageScan;
-import com.stu.common.aliyun.TextScan;
+import com.stu.common.scan.ImageScan;
+import com.stu.common.scan.TextScan;
 import com.stu.file.service.FileStorageService;
 import com.stu.model.article.dtos.ArticleDto;
 import com.stu.model.common.dtos.ResponseResult;
@@ -53,7 +53,8 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Autowired
     private ImageScan imageScan;
     @Autowired
-    private FileStorageService fileStorageService;@Autowired
+    private FileStorageService fileStorageService;
+    @Autowired
     private WmChannelMapper wmChannelMapper;
     @Autowired
     private IArticleClient articleClient;

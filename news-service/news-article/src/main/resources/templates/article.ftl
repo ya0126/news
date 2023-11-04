@@ -7,7 +7,7 @@
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
     <title>黑马头条</title>
     <!-- 引入样式文件 -->
-    <link rel="stylesheet" href="../../../plugins/css/vant.css">
+    <link rel="stylesheet" href="https://unpkg.com/vant@2.12/lib/index.css">
     <!-- 页面样式 -->
     <link rel="stylesheet" href="../../../plugins/css/index.css">
 </head>
@@ -21,7 +21,7 @@
 
         <van-row type="flex" align="center" class="article-header">
             <van-col span="3">
-                <van-image round class="article-avatar" src="../../../plugins/demo.jpg"></van-image>
+                <van-image round class="article-avatar" src="../../../plugins/image/demo.jpg"></van-image>
             </van-col>
             <van-col span="16">
                 <div v-html="authorName"></div>
@@ -172,10 +172,10 @@
         </van-row>
     </van-popup>
 </div>
-<script src=" ../../../plugins/js/vue.min.js"></script>
-<script src="../../../plugins/js/vant.min.js"></script>
+<script src="https://unpkg.com/vue@2.6/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vant@2.12/lib/vant.min.js"></script>
 <script src="../../../plugins/js/axios.min.js"></script>
 <!-- 页面逻辑 -->
-<script src="../../../plugins/js/page.js"></script>
+<script src="../../../plugins/js/index.js"></script>
 </body>
 </html>

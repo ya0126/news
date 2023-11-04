@@ -10,7 +10,6 @@ import com.stu.model.common.enums.AppHttpCodeEnum;
 import com.stu.model.user.pojos.ApUser;
 import com.stu.utils.common.AppThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ApCollectionServiceImpl implements ApCollectionService {
 
-    @Autowired
-    private CacheService cacheService;
+    private final CacheService cacheService;
+
+    public ApCollectionServiceImpl(CacheService cacheService) {
+        this.cacheService = cacheService;
+    }
 
     /**
      * 收藏、取消收藏

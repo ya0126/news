@@ -7,6 +7,10 @@ package com.stu.common.constants;
  */
 public class ArticleConstants {
     /**
+     * 单页最大加载的数字
+     */
+    public static final short MAX_PAGE_SIZE = 50;
+    /**
      * 加载更多
      */
     public static final Short LOADTYPE_LOAD_MORE = 1;

@@ -24,7 +24,7 @@ public class ApArticleConfigServiceImpl extends ServiceImpl<ApArticleConfigMappe
     /**
      * 文章上下线
      *
-     * @param map(0-下线，1上线)
+     * @param map-->enable:0-下线，1上线
      */
     @Override
     public void updateByMap(Map map) {

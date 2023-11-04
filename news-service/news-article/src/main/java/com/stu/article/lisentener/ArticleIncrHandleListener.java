@@ -6,7 +6,6 @@ import com.stu.common.constants.HotArticleConstants;
 import com.stu.model.article.mess.ArticleVisitStreamMess;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +13,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ArticleIncrHandleListener {
 
-    @Autowired
-    private ApArticleService apArticleService;
+    private final ApArticleService apArticleService;
+
+    public ArticleIncrHandleListener(ApArticleService apArticleService) {
+        this.apArticleService = apArticleService;
+    }
 
     @KafkaListener(topics = HotArticleConstants.HOT_ARTICLE_INCR_HANDLE_TOPIC)
     public void onMessage(String mess) {

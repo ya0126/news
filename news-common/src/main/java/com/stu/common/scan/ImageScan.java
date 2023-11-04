@@ -1,4 +1,4 @@
-package com.stu.common.aliyun;
+package com.stu.common.scan;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyun.green20220302.Client;

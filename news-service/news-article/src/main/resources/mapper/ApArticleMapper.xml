@@ -35,13 +35,15 @@
         <where>
             and aac.is_delete != 1
             and aac.is_down != 1
-            <!-- loadmore -->
+            <!--加载更多-->
             <if test="type != null and type == 1">
                 and aa.publish_time <![CDATA[<]]> #{dto.minBehotTime}
             </if>
+            <!--加载最新-->
             <if test="type != null and type == 2">
                 and aa.publish_time <![CDATA[>]]> #{dto.maxBehotTime}
             </if>
+            <!--根据频道加载-->
             <if test="dto.tag != '__all__'">
                 and aa.channel_id = #{dto.tag}
             </if>
@@ -49,5 +51,4 @@
         order by aa.publish_time desc
         limit #{dto.size}
     </select>
-
 </mapper>

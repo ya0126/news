@@ -41,9 +41,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle> implements ApArticleService {
 
-    // 单页最大加载的数字
-    private final static short MAX_PAGE_SIZE = 50;
-
     @Autowired
     private ApArticleMapper apArticleMapper;
     @Autowired
@@ -55,14 +52,22 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     @Autowired
     private CacheService cacheService;
 
+    /**
+     * 根据参数加载文章列表
+     *
+     * @param loadType 1-加载更多  2-加载最新
+     * @param dto
+     * @return
+     */
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short loadType) {
         Integer size = dto.getSize();
         if (size == null || size == 0) {
             size = 10;
         }
-        size = Math.min(size, MAX_PAGE_SIZE);
+        size = Math.min(size, ArticleConstants.MAX_PAGE_SIZE);
         dto.setSize(size);
+
         if (!loadType.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !loadType.equals(ArticleConstants.LOADTYPE_LOAD_NEW)) {
             loadType = ArticleConstants.LOADTYPE_LOAD_MORE;
         }
@@ -72,8 +77,8 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         if (dto.getMaxBehotTime() == null) dto.setMaxBehotTime(new Date());
         if (dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
         List<ApArticle> apArticles = apArticleMapper.loadArticleList(dto, loadType);
-        ResponseResult responseResult = ResponseResult.okResult(apArticles);
-        return responseResult;
+
+        return ResponseResult.okResult(apArticles);
     }
 
     /**
@@ -112,7 +117,6 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, dto.getId()));
             apArticleContent.setContent(dto.getContent());
             apArticleContentMapper.updateById(apArticleContent);
-
         }
 
         // 3.异步调用 生成静态文件上传到minio中
@@ -139,9 +143,15 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
         //4.替换推荐对应的热点数据
         replaceDataToRedis(apArticle, score, ArticleConstants.HOT_ARTICLE_FIRST_PAGE + ArticleConstants.DEFAULT_TAG);
-
     }
 
+    /**
+     * 替换redis中的数据
+     *
+     * @param apArticle
+     * @param score
+     * @param s
+     */
     private void replaceDataToRedis(ApArticle apArticle, Integer score, String s) {
         String articleListStr = cacheService.get(s);
         if (StringUtils.isNotBlank(articleListStr)) {

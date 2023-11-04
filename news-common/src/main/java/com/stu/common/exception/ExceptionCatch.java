@@ -20,9 +20,7 @@ public class ExceptionCatch {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseResult exception(Exception e) {
-        e.printStackTrace();
-        log.error("catch exception:{}", e.getMessage());
-
+        log.error("捕获异常:{}", e.getMessage());
         return ResponseResult.errorResult(AppHttpCodeEnum.SERVER_ERROR);
     }
 
@@ -35,7 +33,7 @@ public class ExceptionCatch {
     @ExceptionHandler(CustomException.class)
     @ResponseBody
     public ResponseResult exception(CustomException e) {
-        log.error("catch exception:{}", e);
+        log.error("捕获异常:{}", e);
         return ResponseResult.errorResult(e.getAppHttpCodeEnum());
     }
 }

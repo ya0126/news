@@ -13,7 +13,6 @@ import com.stu.schedule.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +34,17 @@ import java.util.Set;
 @Slf4j
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskInfoMapper taskInfoMapper;
-    @Autowired
-    private TaskInfoLogsMapper taskInfoLogsMapper;
-    @Autowired
-    private CacheService cacheService;
+    private final TaskInfoMapper taskInfoMapper;
+    private final TaskInfoLogsMapper taskInfoLogsMapper;
+    private final CacheService cacheService;
+
+    public TaskServiceImpl(TaskInfoMapper taskInfoMapper,
+                           TaskInfoLogsMapper taskInfoLogsMapper,
+                           CacheService cacheService) {
+        this.taskInfoMapper = taskInfoMapper;
+        this.taskInfoLogsMapper = taskInfoLogsMapper;
+        this.cacheService = cacheService;
+    }
 
     /**
      * 添加任务
@@ -50,10 +54,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public long addTask(Task task) {
-        // 添加任务至数据库
-        boolean success = addTaskToDB(task);
-        // 添加任务到redis
-        if (success) addTaskToCache(task);
+        addTaskToDB(task);
+        addTaskToCache(task);
         return task.getTaskId();
     }
 
@@ -63,29 +65,26 @@ public class TaskServiceImpl implements TaskService {
      * @param task
      * @return boolean
      */
-    private boolean addTaskToDB(Task task) {
-        boolean flag = false;
+    private void addTaskToDB(Task task) {
         try {
-            // 1.保存任务信息
+            // 保存任务信息
             TaskInfo taskInfo = new TaskInfo();
             BeanUtils.copyProperties(task, taskInfo);
             taskInfo.setExecuteTime(new Date(task.getExecuteTime()));
             taskInfoMapper.insert(taskInfo);
 
-            // 2.设置taskId
+            // 设置taskId
             task.setTaskId(taskInfo.getTaskId());
 
-            // 3.保存任务日志信息
+            // 保存任务日志信息
             TaskinfoLogs taskinfoLogs = new TaskinfoLogs();
             BeanUtils.copyProperties(taskInfo, taskinfoLogs);
             taskinfoLogs.setVersion(1);
             taskinfoLogs.setStatus(ScheduleConstants.SCHEDULED);
             taskInfoLogsMapper.insert(taskinfoLogs);
-            flag = true;
         } catch (Exception e) {
             log.error("添加任务至数据库失败", e);
         }
-        return flag;
     }
 
     /**
@@ -104,7 +103,7 @@ public class TaskServiceImpl implements TaskService {
         if (task.getExecuteTime() <= System.currentTimeMillis()) {
             cacheService.lLeftPush(ScheduleConstants.TOPIC + key, JSON.toJSONString(task));
         } else if (task.getExecuteTime() <= nextScheduleTime) {
-            // 如果任务的执行时间大于当前时间 && 小于等于预设时间（未来5分钟） 存入Zset中(存储未来任务，以执行时间排序)
+            // 如果任务的执行时间大于当前时间 && 小于等于预设时间（未来5分钟） 存入ZSet中(存储未来任务，以执行时间排序)
             cacheService.zAdd(ScheduleConstants.FUTURE + key, JSON.toJSONString(task), task.getExecuteTime());
         }
     }
@@ -193,13 +192,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 将即将执行的任务从Zset刷新到list中，每分钟执行一次
+     * 将即将执行的任务从ZSet刷新到list中，每分钟执行一次
      */
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         log.info("{}执行了定时任务", format.format(new Date()));
-
         String token = cacheService.tryLock("FUTURE_TASK_SYNC", 1000 * 30);
         if (StringUtils.isNoneBlank(token)) {
             // 获取所有未来数据集合的key值
@@ -225,11 +223,8 @@ public class TaskServiceImpl implements TaskService {
     public void reloadData() {
         clearCache();
         log.info("数据库数据同步开始：将未来5分钟任务同步到缓存");
-
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, 5);
-
-        // 查看小于未来5分钟的所有任务
         List<TaskInfo> taskInfos = taskInfoMapper.selectList(Wrappers
                 .<TaskInfo>lambdaQuery()
                 .lt(TaskInfo::getExecuteTime, calendar.getTime()));

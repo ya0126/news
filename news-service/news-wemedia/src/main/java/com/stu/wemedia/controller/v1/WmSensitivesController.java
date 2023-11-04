@@ -4,7 +4,6 @@ import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.dtos.WmSensitiveDto;
 import com.stu.model.wemedia.pojos.WmSensitive;
 import com.stu.wemedia.service.WmSensitivesService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/sensitive")
 public class WmSensitivesController {
 
-    @Autowired
-    private WmSensitivesService wmSensitivesService;
+    private final WmSensitivesService wmSensitivesService;
+
+    public WmSensitivesController(WmSensitivesService wmSensitivesService) {
+        this.wmSensitivesService = wmSensitivesService;
+    }
 
     /**
      * 条件分页查询

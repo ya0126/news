@@ -20,7 +20,7 @@ public interface WmChannelService extends IService<WmChannel> {
     ResponseResult findAll();
 
     /**
-     * 保存
+     * 保存频道
      *
      * @param wmChannel
      * @return

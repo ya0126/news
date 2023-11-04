@@ -4,7 +4,6 @@ import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.dtos.WmChannelDto;
 import com.stu.model.wemedia.pojos.WmChannel;
 import com.stu.wemedia.service.WmChannelService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -16,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/channel")
 public class WmChannelController {
 
-    @Autowired
-    private WmChannelService wmChannelService;
+    private final WmChannelService wmChannelService;
+
+    public WmChannelController(WmChannelService wmChannelService) {
+        this.wmChannelService = wmChannelService;
+    }
 
     /**
      * 条件分页查询
@@ -52,7 +54,7 @@ public class WmChannelController {
     }
 
     /**
-     * 修改
+     * 修改频道
      *
      * @param wmChannel
      * @return ResponseResult
@@ -63,7 +65,7 @@ public class WmChannelController {
     }
 
     /**
-     * 删除
+     * 删除频道
      *
      * @param channelId
      * @return ResponseResult

@@ -24,6 +24,7 @@ public class ArticleIncrHandleListener {
         if (StringUtils.isNotBlank(mess)) {
             ArticleVisitStreamMess articleVisitStreamMess = JSON.parseObject(mess, ArticleVisitStreamMess.class);
             apArticleService.updateScore(articleVisitStreamMess);
+            log.info("接收到消息，{}", articleVisitStreamMess);
         }
     }
 }

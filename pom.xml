@@ -2,29 +2,31 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.stu</groupId>
-    <artifactId>news</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>news-common</module>
-        <module>news-utils</module>
-        <module>news-model</module>
-        <module>news-service</module>
-        <module>news-gateway</module>
-        <module>news-test</module>
-        <module>news-basic</module>
-        <module>news-api</module>
-    </modules>
-
     <!-- 继承Spring boot工程 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.9.RELEASE</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.stu</groupId>
+    <artifactId>news</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>news</name>
+    <description>黑马头条微服务学习</description>
+
+    <modules>
+        <module>news-api</module>
+        <module>news-basic</module>
+        <module>news-common</module>
+        <module>news-gateway</module>
+        <module>news-model</module>
+        <module>news-service</module>
+        <module>news-utils</module>
+        <module>news-test</module>
+    </modules>
     <properties>
         <!-- 项目源码及编译输出的编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,27 +75,8 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
-            <!--内部依赖工程-->
-            <dependency>
-                <artifactId>news-api</artifactId>
-                <groupId>com.stu</groupId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>news-common</artifactId>
-                <groupId>com.stu</groupId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>news-model</artifactId>
-                <groupId>com.stu</groupId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>news-utils</artifactId>
-                <groupId>com.stu</groupId>
-                <version>${project.version}</version>
-            </dependency>
+            <!--起步依赖-->
+            <!--SpringBoot-web依赖-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
@@ -110,6 +93,7 @@
                 </exclusions>
                 <version>${spring.boot.version}</version>
             </dependency>
+            <!--SpringBoot-Starter-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
@@ -125,36 +109,147 @@
                 </exclusions>
                 <version>${spring.boot.version}</version>
             </dependency>
+            <!--SpringCloud-->
             <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons.io.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
+            <!--SpringCloud-Alibaba-->
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${lang3.version}</version>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${com.alibaba.cloud}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
+
+            <!--内部依赖工程-->
+            <!--api模块-->
+            <dependency>
+                <artifactId>news-api</artifactId>
+                <groupId>com.stu</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--common模块-->
+            <dependency>
+                <artifactId>news-common</artifactId>
+                <groupId>com.stu</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--model模块-->
+            <dependency>
+                <artifactId>news-model</artifactId>
+                <groupId>com.stu</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--utils模块-->
+            <dependency>
+                <artifactId>news-utils</artifactId>
+                <groupId>com.stu</groupId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--持久层依赖-->
+            <!--Mysql连接-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
+            <!--Mybatis-Plus-->
             <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+
+            <!--Junit-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <!--消息中间件Kafka-->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${kafka.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-spring</artifactId>
-                <version>${mybatis.spring.version}</version>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka.client.version}</version>
             </dependency>
+            <!--Kafka Stream-->
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams</artifactId>
+                <version>${kafka.client.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>connect-json</artifactId>
+                        <groupId>org.apache.kafka</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!--图片文字扫描-tess4j-->
+            <dependency>
+                <groupId>net.sourceforge.tess4j</groupId>
+                <artifactId>tess4j</artifactId>
+                <version>${tess4j.version}</version>
+            </dependency>
+            <!--阿里云OSS-->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun.oss}</version>
+            </dependency>
+            <!--分布式搜索引擎-Elasticsearch-->
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <!--分布式文件系统-Minio-->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+            <!--开发工具-->
+            <!--IO工具包-->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <!--开发工具包-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
+            </dependency>
+            <!--JWT-->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
             </dependency>
+            <!--FastJson-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
@@ -169,81 +264,6 @@
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-xml</artifactId>
                 <version>${fastjson.dataformat.xml.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${com.alibaba.cloud}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.kafka</groupId>
-                <artifactId>spring-kafka</artifactId>
-                <version>${kafka.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-streams</artifactId>
-                <version>${kafka.client.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>connect-json</artifactId>
-                        <groupId>org.apache.kafka</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-clients</artifactId>
-                <version>${kafka.client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis.plus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sourceforge.tess4j</groupId>
-                <artifactId>tess4j</artifactId>
-                <version>${tess4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.aliyun.oss</groupId>
-                <artifactId>aliyun-sdk-oss</artifactId>
-                <version>${aliyun.oss}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-client</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch</groupId>
-                <artifactId>elasticsearch</artifactId>
-                <version>${elasticsearch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.minio</groupId>
-                <artifactId>minio</artifactId>
-                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,7 +1,7 @@
 package com.stu.apis.client;
 
-import com.stu.apis.factory.IScheduleClientFallbackFactory;
 import com.stu.apis.config.DefaultFeignConfiguration;
+import com.stu.apis.factory.IScheduleClientFallbackFactory;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.schedule.dtos.Task;
 import org.springframework.cloud.openfeign.FeignClient;

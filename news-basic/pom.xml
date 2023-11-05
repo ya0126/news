@@ -11,6 +11,8 @@
 
     <artifactId>news-basic</artifactId>
     <packaging>pom</packaging>
+    <name>news-basic</name>
+    <description>basic模块</description>
 
     <modules>
         <module>file-starter</module>

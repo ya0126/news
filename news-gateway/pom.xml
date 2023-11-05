@@ -11,6 +11,8 @@
 
     <artifactId>news-gateway</artifactId>
     <packaging>pom</packaging>
+    <name>news-gateway</name>
+    <description>网关模块</description>
 
     <modules>
         <module>news-app-gateway</module>

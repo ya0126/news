@@ -10,6 +10,9 @@
     </parent>
 
     <artifactId>news-admin</artifactId>
+    <packaging>war</packaging>
+    <name>news-admin</name>
+    <description>后台服务</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

@@ -10,6 +10,9 @@
     </parent>
 
     <artifactId>news-admin-gateway</artifactId>
+    <packaging>war</packaging>
+    <name>news-admin-gateway</name>
+    <description>后台网关</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

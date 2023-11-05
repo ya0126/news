@@ -10,6 +10,9 @@
     </parent>
 
     <artifactId>news-app-gateway</artifactId>
+    <packaging>war</packaging>
+    <name>news-app-gateway</name>
+    <description>app网关</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

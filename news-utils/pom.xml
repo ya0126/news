@@ -10,6 +10,7 @@
     <artifactId>news-utils</artifactId>
     <packaging>jar</packaging>
     <name>news-utils</name>
+    <description>utils模块</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

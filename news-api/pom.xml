@@ -10,7 +10,9 @@
     </parent>
 
     <artifactId>news-api</artifactId>
+    <packaging>jar</packaging>
     <name>news-api</name>
+    <description>api模块</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

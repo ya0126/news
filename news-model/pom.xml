@@ -4,26 +4,18 @@
     <parent>
         <groupId>com.stu</groupId>
         <artifactId>news</artifactId>
-
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>news-model</artifactId>
     <packaging>jar</packaging>
     <name>news-model</name>
+    <description>model模块</description>
 
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -32,6 +24,10 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 </project>

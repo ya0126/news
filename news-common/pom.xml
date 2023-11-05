@@ -10,12 +10,9 @@
     <artifactId>news-common</artifactId>
     <packaging>jar</packaging>
     <name>news-common</name>
+    <description>common模块</description>
 
     <dependencies>
-        <dependency>
-            <groupId>com.stu</groupId>
-            <artifactId>news-utils</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -37,12 +34,10 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-        <!--Redis-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!--Redis依赖-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
@@ -51,7 +46,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <!--Kafka-->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
@@ -60,12 +54,10 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
         </dependency>
-        <!--KStream-->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
         </dependency>
-        <!--阿里内容检测相关-->
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>green20220302</artifactId>
@@ -76,15 +68,17 @@
             <artifactId>green20220302</artifactId>
             <version>1.0.7</version>
         </dependency>
-        <!--图片检测需要用到OSS-->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
         </dependency>
-        <!--识别图片文字-->
         <dependency>
             <groupId>net.sourceforge.tess4j</groupId>
             <artifactId>tess4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.stu</groupId>
+            <artifactId>news-utils</artifactId>
         </dependency>
     </dependencies>
 </project>

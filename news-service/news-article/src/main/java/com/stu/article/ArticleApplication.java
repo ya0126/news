@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @MapperScan("com.stu.article.mapper")
 public class ArticleApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(ArticleApplication.class, args);
     }

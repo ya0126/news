@@ -1,7 +1,7 @@
 package com.stu.apis.client;
 
-import com.stu.apis.factory.IWemediaClientFallbackFactory;
 import com.stu.apis.config.DefaultFeignConfiguration;
+import com.stu.apis.factory.IWemediaClientFallbackFactory;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.wemedia.pojos.WmUser;
 import org.springframework.cloud.openfeign.FeignClient;

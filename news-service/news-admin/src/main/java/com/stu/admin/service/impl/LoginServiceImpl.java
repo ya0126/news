@@ -1,6 +1,7 @@
 package com.stu.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.stu.admin.mapper.AdUserMapper;
 import com.stu.admin.service.LoginService;
 import com.stu.model.admin.dtos.LoginDto;
@@ -23,14 +24,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class LoginServiceImpl implements LoginService {
-
-    private final AdUserMapper adUserMapper;
-
-    public LoginServiceImpl(AdUserMapper adUserMapper) {
-        this.adUserMapper = adUserMapper;
-    }
-
+public class LoginServiceImpl extends ServiceImpl<AdUserMapper, AdUser> implements LoginService {
     /**
      * 登录
      *
@@ -39,16 +33,13 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public ResponseResult login(LoginDto dto) {
-        // 1.校验参数
         if (StringUtils.isBlank(dto.getName()) || StringUtils.isBlank(dto.getPassword())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "用户名或密码为空");
         }
-        // 2.查询用户
-        AdUser adUser = adUserMapper.selectOne(Wrappers.<AdUser>lambdaQuery().eq(AdUser::getName, dto.getName()));
+        AdUser adUser = getOne(Wrappers.<AdUser>lambdaQuery().eq(AdUser::getName, dto.getName()));
         if (adUser == null) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.AD_USER_DATA_NOT_EXIST);
+            return ResponseResult.errorResult(AppHttpCodeEnum.USER_DATA_NOT_EXIST);
         }
-        // 3.比对密码
         String salt = adUser.getSalt();
         String password = dto.getPassword();
         password = DigestUtils.md5DigestAsHex((password + salt).getBytes());

@@ -1,6 +1,8 @@
 package com.stu.admin.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.stu.model.admin.dtos.LoginDto;
+import com.stu.model.admin.pojos.AdUser;
 import com.stu.model.common.dtos.ResponseResult;
 
 /**
@@ -8,7 +10,7 @@ import com.stu.model.common.dtos.ResponseResult;
  *
  * @author yaoh
  */
-public interface LoginService {
+public interface LoginService extends IService<AdUser> {
 
     /**
      * 登录

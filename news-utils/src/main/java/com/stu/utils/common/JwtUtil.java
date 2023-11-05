@@ -8,27 +8,33 @@ import java.util.*;
 
 public class JwtUtil {
 
-    // TOKEN的有效期一天（S）
+    /**
+     * Token有效期
+     */
     private static final int TOKEN_TIME_OUT = 3_600;
-    // 加密KEY
-    private static final String TOKEN_ENTRY_KEY = "MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY";
-    // 最小刷新间隔(S)
+    /**
+     * 加密key，secret
+     */
+    private static final String TOKEN_ENTRY_KEY = "mySecret";
+    /**
+     * 最小刷新间隔时间
+     */
     private static final int REFRESH_TIME = 300;
 
     /**
      * 生产Token
      *
-     * @param id 用户id
+     * @param userId 用户id
      * @return String
      */
-    public static String getToken(Long id) {
+    public static String getToken(Long userId) {
         Map<String, Object> claimMaps = new HashMap<>();
-        claimMaps.put("id", id);
+        claimMaps.put("user_id", userId);
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setIssuedAt(new Date(currentTime))  //签发时间
-                .setSubject("system")  //说明
+                .setSubject("news-system")  //说明
                 .setIssuer("news") //签发者信息
                 .setAudience("newsUser")  //接收用户
                 .compressWith(CompressionCodecs.GZIP)  //数据压缩方式
@@ -44,14 +50,6 @@ public class JwtUtil {
      * @param token
      * @return String
      */
-    public static String getUserId(String token) {
-        try {
-            return (String) getJws(token).getBody().get("id");
-        } catch (ExpiredJwtException e) {
-            return null;
-        }
-    }
-
     /**
      * 获取token中的claims信息
      *
@@ -114,7 +112,7 @@ public class JwtUtil {
     }
 
     /**
-     * 由字符串生成加密key------secret
+     * 由字符串加密生成secret
      *
      * @return
      */

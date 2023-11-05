@@ -1,9 +1,9 @@
 package com.stu.search.interceptor;
 
-import com.stu.model.user.pojos.ApUser;
+import com.stu.common.constants.SecurityConstants;
+import com.stu.model.wemedia.pojos.WmUser;
 import com.stu.utils.common.AppThreadLocalUtil;
-import com.stu.utils.common.JwtUtil;
-import io.jsonwebtoken.Claims;
+import com.stu.utils.common.WmThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,18 +18,13 @@ public class AppTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("token");
-        Optional<String> optional = Optional.ofNullable(token);
+        String userId = request.getHeader(SecurityConstants.DETAILS_USER_ID);
+        Optional<String> optional = Optional.ofNullable(userId);
         if (optional.isPresent()) {
-            Claims claimsBody = JwtUtil.getClaimsBody(token);
-            int result = JwtUtil.verifyToken(claimsBody);
-            if (result != 1 && result != 2) {
-                Integer userId = claimsBody.get("id", Integer.class);
-                //把用户id存入ThreadLocal中
-                ApUser apUser = new ApUser();
-                apUser.setId(userId);
-                AppThreadLocalUtil.setUser(apUser);
-            }
+            WmUser wmUser = new WmUser();
+            Integer id = Integer.valueOf(userId);
+            wmUser.setId(id);
+            WmThreadLocalUtil.setUser(wmUser);
         }
         return true;
     }

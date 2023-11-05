@@ -11,11 +11,16 @@ public class JwtUtil {
     // TOKEN的有效期一天（S）
     private static final int TOKEN_TIME_OUT = 3_600;
     // 加密KEY
-    private static final String TOKEN_ENCRY_KEY = "MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY";
+    private static final String TOKEN_ENTRY_KEY = "MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY";
     // 最小刷新间隔(S)
     private static final int REFRESH_TIME = 300;
 
-    // 生产ID
+    /**
+     * 生产Token
+     *
+     * @param id 用户id
+     * @return String
+     */
     public static String getToken(Long id) {
         Map<String, Object> claimMaps = new HashMap<>();
         claimMaps.put("id", id);
@@ -25,12 +30,26 @@ public class JwtUtil {
                 .setIssuedAt(new Date(currentTime))  //签发时间
                 .setSubject("system")  //说明
                 .setIssuer("news") //签发者信息
-                .setAudience("app")  //接收用户
+                .setAudience("newsUser")  //接收用户
                 .compressWith(CompressionCodecs.GZIP)  //数据压缩方式
-                .signWith(SignatureAlgorithm.HS512, generalKey()) //加密方式
+                .signWith(SignatureAlgorithm.HS512, generalSecret()) //加密方式
                 .setExpiration(new Date(currentTime + TOKEN_TIME_OUT * 1000))  //过期时间戳
                 .addClaims(claimMaps) //cla信息
                 .compact();
+    }
+
+    /**
+     * 获取payload body中的用户
+     *
+     * @param token
+     * @return String
+     */
+    public static String getUserId(String token) {
+        try {
+            return (String) getJws(token).getBody().get("id");
+        } catch (ExpiredJwtException e) {
+            return null;
+        }
     }
 
     /**
@@ -41,7 +60,7 @@ public class JwtUtil {
      */
     private static Jws<Claims> getJws(String token) {
         return Jwts.parser()
-                .setSigningKey(generalKey())
+                .setSigningKey(generalSecret())
                 .parseClaimsJws(token);
     }
 
@@ -60,7 +79,7 @@ public class JwtUtil {
     }
 
     /**
-     * 获取hearder body信息
+     * 获取header body信息
      *
      * @param token
      * @return
@@ -80,8 +99,7 @@ public class JwtUtil {
             return 1;
         }
         try {
-            claims.getExpiration()
-                    .before(new Date());
+            claims.getExpiration().before(new Date());
             // 需要自动刷新TOKEN
             if ((claims.getExpiration().getTime() - System.currentTimeMillis()) > REFRESH_TIME * 1000) {
                 return -1;
@@ -96,12 +114,12 @@ public class JwtUtil {
     }
 
     /**
-     * 由字符串生成加密key
+     * 由字符串生成加密key------secret
      *
      * @return
      */
-    public static SecretKey generalKey() {
-        byte[] encodedKey = Base64.getEncoder().encode(TOKEN_ENCRY_KEY.getBytes());
+    public static SecretKey generalSecret() {
+        byte[] encodedKey = Base64.getEncoder().encode(TOKEN_ENTRY_KEY.getBytes());
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }

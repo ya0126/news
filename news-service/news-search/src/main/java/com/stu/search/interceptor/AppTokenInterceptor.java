@@ -1,9 +1,8 @@
 package com.stu.search.interceptor;
 
 import com.stu.common.constants.SecurityConstants;
-import com.stu.model.wemedia.pojos.WmUser;
+import com.stu.model.user.pojos.ApUser;
 import com.stu.utils.common.AppThreadLocalUtil;
-import com.stu.utils.common.WmThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,10 +20,10 @@ public class AppTokenInterceptor implements HandlerInterceptor {
         String userId = request.getHeader(SecurityConstants.DETAILS_USER_ID);
         Optional<String> optional = Optional.ofNullable(userId);
         if (optional.isPresent()) {
-            WmUser wmUser = new WmUser();
+            ApUser apUser = new ApUser();
             Integer id = Integer.valueOf(userId);
-            wmUser.setId(id);
-            WmThreadLocalUtil.setUser(wmUser);
+            apUser.setId(id);
+            AppThreadLocalUtil.setUser(apUser);
         }
         return true;
     }

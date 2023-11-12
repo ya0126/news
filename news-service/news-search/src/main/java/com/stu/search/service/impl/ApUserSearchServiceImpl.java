@@ -9,7 +9,6 @@ import com.stu.search.service.ApUserSearchService;
 import com.stu.utils.common.AppThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -28,8 +27,11 @@ import java.util.List;
 @Slf4j
 public class ApUserSearchServiceImpl implements ApUserSearchService {
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
+
+    public ApUserSearchServiceImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     /**
      * 保存用户搜索历史记录

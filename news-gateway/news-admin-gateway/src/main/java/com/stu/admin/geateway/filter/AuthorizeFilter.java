@@ -64,6 +64,11 @@ public class AuthorizeFilter implements Ordered, GlobalFilter {
         mutate.header(name, value);
     }
 
+    /**
+     * 返回值越小，优先级越高
+     *
+     * @return
+     */
     @Override
     public int getOrder() {
         return 0;

@@ -3,7 +3,6 @@ package com.stu.search.controller.v1;
 import com.stu.model.common.dtos.ResponseResult;
 import com.stu.model.search.dtos.UserSearchDto;
 import com.stu.search.service.ApArticleSearchService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +19,11 @@ import java.io.IOException;
 @RequestMapping("/api/v1/article/search")
 public class ArticleSearchController {
 
-    @Autowired
-    private ApArticleSearchService apArticleSearchService;
+    private final ApArticleSearchService apArticleSearchService;
+
+    public ArticleSearchController(ApArticleSearchService apArticleSearchService) {
+        this.apArticleSearchService = apArticleSearchService;
+    }
 
     /**
      * 搜索
@@ -32,7 +34,6 @@ public class ArticleSearchController {
      */
     @PostMapping("/search")
     public ResponseResult search(@RequestBody UserSearchDto dto) throws IOException {
-        System.err.println(dto);
         return apArticleSearchService.search(dto);
     }
 }
